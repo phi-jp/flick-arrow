@@ -24,7 +24,7 @@ tm.define("GameScene", {
 
     setQuestion: function() {
         var direction = ['left', 'right', 'up', 'down'].pickup();
-        var type = ['blue', 'blue', 'red'].pickup();
+        var type = ['blue', 'blue', 'red', 'green'].pickup();
         var arrow = Arrow({
             type: type,
             direction: direction
@@ -142,6 +142,14 @@ tm.define("Arrow", {
                 'up': 'down',
                 'down': 'up',
             }[this.direction] == direction;
+        }
+        else if (this.type == "green") {
+            return {
+                'left': ['up', 'down'],
+                'right': ['up', 'down'],
+                'up': ['left', 'right'],
+                'down': ['left', 'right'],
+            }[this.direction].indexOf(direction) != -1;
         }
     },
 
