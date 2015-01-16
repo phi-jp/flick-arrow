@@ -17,6 +17,9 @@ tm.define("GameScene", {
         });
 
         this.setQuestion();
+
+        this.xList = [];
+        this.yList = [];
     },
 
     setQuestion: function() {
@@ -36,6 +39,8 @@ tm.define("GameScene", {
         var d = this.getFlickDirection(app);
 
         if (d) {
+            console.log(d);
+
             if (this.arrow.check(d)) {
                 this.arrow.disappear(d);
                 this.setQuestion();
@@ -47,17 +52,23 @@ tm.define("GameScene", {
         var p = app.pointing;
 
         if (p.getPointing()) {
-            if (!this.list) this.list = [];
-            this.list.push(p.dx);
+            this.xList.push(p.dx);
+            if (this.xList.length > 10) this.xList.shift();
+            this.yList.push(p.dy);
+            if (this.yList.length > 10) this.yList.shift();
         }
 
         if (p.getPointingEnd() == true) {
-            console.log(this.list);
-            this.list.clear();
+            var delta = tm.geom.Vector2();
 
-            var delta = p.deltaPosition;
+            delta.x = this.xList.average();
+            delta.y = this.yList.average();
+
+            this.xList.clear();
+            this.yList.clear();
+
             var len = delta.lengthSquared();
-            if (len > 10) {
+            if (len > 2) {
                 if (Math.abs(delta.x) > Math.abs(delta.y)) {
                     if (delta.x < 0) {
                         return "left";
@@ -152,8 +163,6 @@ tm.define("Arrow", {
             'up': [0,-1],
             'down': [0,1],
         }[direction];
-
-        console.log(this.direction);
 
         this.tweener
             .clear()
