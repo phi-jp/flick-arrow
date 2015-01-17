@@ -15,3 +15,10 @@ QUERY.$safe({
     "scene": "title",
     "level": 0,
 });
+
+
+var ASSETS = {
+	"sounds/pinpon": "sounds/pinpon.mp3",
+	"sounds/boo": "sounds/boo.mp3",
+};
+

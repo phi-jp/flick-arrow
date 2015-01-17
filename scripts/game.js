@@ -44,6 +44,11 @@ tm.define("GameScene", {
             if (this.arrow.check(d)) {
                 this.arrow.disappear(d);
                 this.setQuestion();
+                tm.asset.Manager.get("sounds/pinpon").clone().play();
+            }
+            else {
+                this.arrow.blink();
+                tm.asset.Manager.get("sounds/boo").clone().play();
             }
         }
     },
@@ -183,4 +188,16 @@ tm.define("Arrow", {
             }, this)
             ;
     },
+
+    blink: function() {
+        this.tweener.clear();
+
+        (3).times(function() {
+            this.tweener
+                .set({alpha:0})
+                .wait(50)
+                .set({alpha:1})
+                .wait(50)
+        }, this);
+    }
 });
