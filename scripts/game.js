@@ -125,11 +125,17 @@ tm.define("Arrow", {
         this.direction = param.direction;
         this.type = param.type || "blue";
 
+        var color = {
+            'red': 'hsla(0, 70%, 60%, 1.0)',
+            'green': 'hsla(120, 70%, 60%, 1.0)',
+            'blue': 'hsla(240, 70%, 60%, 1.0)',
+        }[this.type];
+
         this.superInit({
             width: 256,
             height: 256,
             strokeStyle: "white",
-            fillStyle: this.type,
+            fillStyle: color,
             lineWidth: 8,
         });
 
@@ -210,10 +216,10 @@ tm.define("Arrow", {
         this.tweener
             .clear()
             .by({
-                x: v[0] * 500,
-                y: v[1] * 500,
+                x: v[0] * 400,
+                y: v[1] * 400,
                 alpha: -1,
-            }, 100)
+            }, 200)
             .call(function() {
                 this.remove();
             }, this)
