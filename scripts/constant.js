@@ -18,6 +18,8 @@ QUERY.$safe({
 
 
 var ASSETS = {
+	"images/arrow0": "images/arrow0.png",
+	"images/arrow1": "images/arrow1.png",
 	"sounds/pinpon": "sounds/pinpon.mp3",
 	"sounds/boo": "sounds/boo.mp3",
 };
