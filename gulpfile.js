@@ -3,9 +3,8 @@
  */
 
 var gulp = require('gulp');
-var concat = require('gulp-concat');
-var rename = require('gulp-rename');
-var uglify = require('gulp-uglify');
+var ghelper = require('gulp-helper');
+ghelper.require();
 
 gulp.task('default', ['build']);  
 
@@ -23,6 +22,15 @@ gulp.task('build', function() {
       extname: ".min.js",
     }))
     .pipe(gulp.dest('./build'))
+    ;
+});
+
+gulp.task('dev', function() {
+  gulp.src('./')
+    .pipe(webserver({
+      // livereload: true, // ライブリロードを有効に
+      open: true,       // タスク実行と同時にページを開く
+    }))
     ;
 });
 

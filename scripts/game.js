@@ -13,13 +13,41 @@ tm.define("GameScene", {
                 questionGroup: {
                     type: "tm.display.CanvasElement",
                 },
+                ui: {
+                    type: "tm.display.CanvasElement",
+                }
             }
         });
 
-        this.setQuestion();
+        this.ui.fromJSON({
+            children: {
+                scoreLabel: {
+                    type: "tm.display.Label",
+                    x: 25,
+                    y: 40,
+                    fillStyle: "#222",
+                    fontSize: 32,
+                    align: 'left',
+                    text: 'Score: 0',
+                },
+                timerLabel: {
+                    type: "tm.display.Label",
+                    x: 615,
+                    y: 40,
+                    fillStyle: "#222",
+                    fontSize: 32,
+                    align: 'right',
+                    text: 'Time:   0',
+                },
+            }
+        });
 
+        this.score = 0;
+        this.time = 10*1000;
         this.xList = [];
         this.yList = [];
+
+        this.setQuestion();
     },
 
     setQuestion: function() {
@@ -38,6 +66,8 @@ tm.define("GameScene", {
     update: function(app) {
         var d = this.getFlickDirection(app);
 
+        this.addTime(-app.deltaTime);
+
         // support keyboard
         if (!d) {
             d = this.getKeyDirection(app);
@@ -46,14 +76,20 @@ tm.define("GameScene", {
         if (d) {
             if (this.arrow.check(d)) {
                 this.arrow.disappear(d);
-                this.setQuestion();
+                this.addScore(1);
                 tm.asset.Manager.get("sounds/pinpon").clone().play();
+
+                this.setQuestion();
             }
             else {
                 this.arrow.move(SCREEN_CENTER_X, SCREEN_CENTER_Y);
                 this.arrow.blink();
                 tm.asset.Manager.get("sounds/boo").clone().play();
             }
+        }
+
+        if (this.isTimeup()) {
+            app.popScene();
         }
     },
 
@@ -112,6 +148,21 @@ tm.define("GameScene", {
         else if (key.getKeyUp('down')) { return "down"; }
 
         return null;
+    },
+
+    addScore: function(point) {
+        this.score += point;
+        this.ui.scoreLabel.text = 'Score: ' + this.score;
+    },
+
+    addTime: function(time) {
+        this.time += time;
+
+        this.ui.timerLabel.text = 'Time: ' + Math.floor(this.time/1000).padding(3, '0');
+    },
+
+    isTimeup: function() {
+        return this.time <= 0;
     },
 
 });
