@@ -85,6 +85,16 @@ tm.define("TitleScene", {
 
         this.fromJSON({
             children: {
+                bg: {
+                    type: "tm.display.Shape",
+                    init: {
+                        width: SCREEN_WIDTH,
+                        height: SCREEN_HEIGHT,
+                        bgColor: "rgb(248, 248, 248)",
+                    },
+                    originX: 0,
+                    originY: 0,
+                },
                 titleLabel: {
                     type: "tm.display.Label",
                     text: TITLE,
