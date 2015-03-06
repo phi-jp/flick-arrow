@@ -128,14 +128,14 @@ tm.define("GameScene", {
             if (this.arrow.check(d)) {
                 this.arrow.disappear(d);
                 this.addScore(1);
-                // tm.asset.Manager.get("sounds/pinpon").clone().play();
+                tm.asset.Manager.get("sounds/pinpon").clone().play();
 
                 this.setQuestion();
             }
             else {
                 this.arrow.move(SCREEN_CENTER_X, SCREEN_CENTER_Y);
                 this.arrow.blink();
-                // tm.asset.Manager.get("sounds/boo").clone().play();
+                tm.asset.Manager.get("sounds/boo").clone().play();
             }
         }
 
