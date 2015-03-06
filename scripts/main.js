@@ -52,7 +52,7 @@ tm.define("ManagerScene", {
                     nextLabel: "result",
                 },
                 {
-                    className: "tm.scene.ResultScene",
+                    className: "ResultScene",
                     label: "result",
                     nextLabel: "title",
                 },
@@ -105,7 +105,7 @@ tm.define("TitleScene", {
                     y: this.gridY(4),
                 },
                 playButton: {
-                    type: "tm.ui.FlatButton",
+                    type: "MorphingButton",
                     init: {
                         width: this.gridX(8),
                         height: this.gridY(1.5),
@@ -114,7 +114,7 @@ tm.define("TitleScene", {
                     x: this.gridX(6),
                     y: this.gridY(11),
                 },
-                helpButton: {
+                rankButton: {
                     type: "tm.ui.FlatButton",
                     init: {
                         width: this.gridX(8),
@@ -129,8 +129,14 @@ tm.define("TitleScene", {
         });
 
         this.playButton.onpush = function() {
+            this.titleLabel.tweener.fadeOut(200);
+            this.rankButton.tweener.fadeOut(200);
+        }.bind(this);
+
+        this.playButton.onpushed = function() {
             this.app.popScene();
         }.bind(this);
+
     },
 
     gridX: function(i) {
@@ -147,4 +153,76 @@ tm.define("TitleScene", {
     },
 });
 
+
+tm.define("MorphingButton", {
+    superClass: "tm.ui.FlatButton",
+    
+    init: function(param) {
+        this.superInit(param);
+        
+        this.initialWidth = this.width;
+        this.initialHeight = this.height;
+        this.initialCornerRadius = this.cornerRadius;
+        
+        this.on('push', function() {
+            this.morphCircle();
+        });
+    },
+    
+    // 円形に変形
+    morphCircle: function(radius) {
+        var circleSize = radius || 1500;
+        
+        this.setInteractive(false);
+        this.label.tweener
+            .clear()
+            .fadeOut(200)
+            ;
+        this.tweener
+            .clear()
+            .wait(300)
+            .to({
+                width: this.height,
+                cornerRadius: this.height/2
+            }, 300, 'easeOutQuint')
+            .to({
+                width: circleSize,
+                height: circleSize,
+                cornerRadius: circleSize/2
+            }, 500, 'easeOutQuint')
+            .call(function() {
+                this.flare('circled');
+                this.flare('pushed');
+                this.setInteractive(true);
+            }, this)
+            ;
+    },
+    
+    // 元の形に変形
+    morphDefault: function() {
+        this.setInteractive(false);
+        this.label.tweener
+            .clear()
+            .wait(800)
+            .fadeIn(200)
+            ;
+        
+        this.tweener
+            .clear()
+            .to({
+                width: this.initialHeight,
+                height: this.initialHeight,
+                cornerRadius: this.initialHeight/2
+            }, 500, 'easeOutQuint')
+            .to({
+                width: this.initialWidth,
+                cornerRadius: this.initialCornerRadius,
+            }, 300, 'easeOutQuint')
+            .call(function() {
+                this.flare('defaulted');
+                this.setInteractive(true);
+            }, this)
+            ;
+    },
+});
 

@@ -10,12 +10,12 @@ tm.define("GameScene", {
             	stage: {
             		type: "tm.display.CanvasElement",
             	},
-                questionGroup: {
+                arrowGroup: {
                     type: "tm.display.CanvasElement",
                 },
                 ui: {
                     type: "tm.display.CanvasElement",
-                }
+                },
             }
         });
 
@@ -25,10 +25,10 @@ tm.define("GameScene", {
                     type: "tm.display.Label",
                     x: 25,
                     y: 40,
-                    fillStyle: "#222",
+                    fillStyle: "#444",
                     fontSize: 32,
                     align: 'left',
-                    text: 'Score: 0',
+                    text: '00000000',
                 },
                 timerLabel: {
                     type: "tm.display.Label",
@@ -43,24 +43,75 @@ tm.define("GameScene", {
         });
 
         this.score = 0;
-        this.time = 10*1000;
+        this.time = 60*1000;
         this.xList = [];
         this.yList = [];
 
-        this.setQuestion();
+        this.setupArrow();
     },
 
-    setQuestion: function() {
+    onenter: function() {
+        // 
+        CircleFilterEffect().addChildTo(this);
+
+        // var scene = tm.game.CountScene();
+        // this.app.pushScene(scene);
+
+        // scene.onexit = function() {
+            this.setQuestion();
+        // }.bind(this);
+    },
+
+    createArrow: function(i) {
         var direction = ['left', 'right', 'up', 'down'].pickup();
         var type = ['blue', 'blue', 'red', 'green'].pickup();
         var arrow = Arrow({
             type: type,
             direction: direction
-        }).addChildTo(this);
-        arrow.x = SCREEN_CENTER_X;
-        arrow.y = SCREEN_CENTER_Y;
+        });
+        arrow.x = 95 + i*110;
+        arrow.y = 800;
+        arrow.scaleX = 0.4;
+        arrow.scaleY = 0.4;
 
+        return arrow;
+    },
+
+
+    setupArrow: function() {
+        (5).times(function(i) {
+            var a = this.createArrow(i).addChildTo(this.arrowGroup);
+        }, this);
+    },
+
+    // 補充
+    fillArrow: function() {
+        var a = this.createArrow(5).addChildTo(this.arrowGroup);
+
+        var arrows = this.arrowGroup.children;
+
+        arrows.each(function(arrow, i) {
+            arrow.tweener
+                .clear()
+                .to({
+                    x: 95 + i*110,
+                    y: 800,
+                }, 100)
+                ;
+        });
+    },
+
+    getArrow: function() {
+        return this.stage.addChild(this.arrowGroup.children.first);
+    },
+
+    setQuestion: function() {
+        var arrow = this.getArrow();
+        arrow.appear(SCREEN_CENTER_X, SCREEN_CENTER_Y);
         this.arrow = arrow;
+
+        // 補充
+        this.fillArrow();
     },
 
     update: function(app) {
@@ -77,14 +128,14 @@ tm.define("GameScene", {
             if (this.arrow.check(d)) {
                 this.arrow.disappear(d);
                 this.addScore(1);
-                tm.asset.Manager.get("sounds/pinpon").clone().play();
+                // tm.asset.Manager.get("sounds/pinpon").clone().play();
 
                 this.setQuestion();
             }
             else {
                 this.arrow.move(SCREEN_CENTER_X, SCREEN_CENTER_Y);
                 this.arrow.blink();
-                tm.asset.Manager.get("sounds/boo").clone().play();
+                // tm.asset.Manager.get("sounds/boo").clone().play();
             }
         }
 
@@ -152,7 +203,7 @@ tm.define("GameScene", {
 
     addScore: function(point) {
         this.score += point;
-        this.ui.scoreLabel.text = 'Score: ' + this.score;
+        this.ui.scoreLabel.text = this.score.padding(8);
     },
 
     addTime: function(time) {
@@ -177,9 +228,9 @@ tm.define("Arrow", {
         this.type = param.type || "blue";
 
         var color = {
-            'red': 'hsla(0, 70%, 60%, 1.0)',
-            'green': 'hsla(120, 70%, 60%, 1.0)',
-            'blue': 'hsla(240, 70%, 60%, 1.0)',
+            'red': 'hsla(0, 80%, 65%, 1.0)',
+            'green': 'hsla(120, 80%, 65%, 1.0)',
+            'blue': 'hsla(240, 80%, 65%, 1.0)',
         }[this.type];
 
         this.superInit({
@@ -220,7 +271,7 @@ tm.define("Arrow", {
             },
         });
 
-        this.appear();
+        // this.appear();
     },
 
     check: function(direction) {
@@ -245,14 +296,16 @@ tm.define("Arrow", {
         }
     },
 
-    appear: function() {
+    appear: function(x, y) {
         this.scale.set(0.5, 0.5);
 
         this.tweener
             .clear()
             .to({
+                x: x, y: y,
                 scaleX: 1, scaleY: 1,
-            }, 1000, "easeOutElastic")
+
+            }, 500, "easeOutCubic")
             ;
     },
 
@@ -306,4 +359,38 @@ tm.define("Arrow", {
                 .wait(70)
         }, this);
     }
+});
+
+
+/*
+ * 最初の円のフィルター
+ */
+tm.define("CircleFilterEffect", {
+    superClass: "tm.display.Shape",
+
+    init: function() {
+        this.superInit({
+            width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT,
+        });
+
+        this.origin.set(0, 0);
+
+        var c = this.canvas;
+
+        c.clearColor("hsl(180, 60%, 50%)");
+        c.setTransformCenter();
+
+        this.circleRadius = 0;
+        this.tweener.to({
+            circleRadius: 1000,
+        });
+    },
+
+    update: function() {
+        var c = this.canvas;
+
+        c.globalCompositeOperation = "destination-out";
+        c.fillCircle(0, 0, this.circleRadius);
+    },
 });
