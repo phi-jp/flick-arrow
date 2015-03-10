@@ -69,12 +69,6 @@ tm.define("TitleScene", {
     superClass: "tm.app.Scene",
 
     init: function() {
-        // this.superInit({
-        //     width: SCREEN_WIDTH,
-        //     height: SCREEN_HEIGHT,
-        //     title: TITLE,
-        //     message: "青 - 矢印の方向にフリック\n赤 - 矢印と反対の方向にフリック\n緑 - 矢印を左右どちらかに90度傾けた方向にフリック",
-        // });
         this.superInit();
 
         // grid

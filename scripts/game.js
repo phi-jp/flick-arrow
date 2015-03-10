@@ -54,12 +54,12 @@ tm.define("GameScene", {
         // 
         CircleFilterEffect().addChildTo(this);
 
-        // var scene = tm.game.CountScene();
-        // this.app.pushScene(scene);
+        var scene = tm.game.CountScene();
+        this.app.pushScene(scene);
 
-        // scene.onexit = function() {
+        scene.onexit = function() {
             this.setQuestion();
-        // }.bind(this);
+        }.bind(this);
     },
 
     createArrow: function(i) {
