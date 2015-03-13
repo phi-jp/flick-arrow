@@ -27,7 +27,6 @@ tm.main(function() {
     };
     app.replaceScene(loading);
 
-
     // 実行
     app.run();
 });
@@ -99,41 +98,56 @@ tm.define("TitleScene", {
                     y: this.gridY(4),
                 },
                 playButton: {
-                    type: "MorphingButton",
+                    type: "CircleButton",
                     init: {
-                        width: this.gridX(8),
-                        height: this.gridY(1.5),
-                        fontFamily: SUB_FONT,
+                        size: this.gridX(3),
+                        text: String.fromCharCode('0xe80d'),
                     },
                     x: this.gridX(6),
                     y: this.gridY(11),
                 },
                 rankButton: {
-                    type: "tm.ui.FlatButton",
+                    type: "CircleButton",
                     init: {
-                        width: this.gridX(8),
-                        height: this.gridY(1.5),
-                        text: "RANKING",
-                        fontFamily: SUB_FONT,
+                        size: this.gridX(2),
+                        text: String.fromCharCode('0xe800'),
+                        bgColor: "white",
+                        fontColor: "black",
+                        strokeColor: "black",
                     },
-                    x: this.gridX(6),
+                    x: this.gridX(-2),
+                    y: this.gridY(13),
+                },
+                reviewButton: {
+                    type: "CircleButton",
+                    init: {
+                        size: this.gridX(2),
+                        text: String.fromCharCode('0xe810'),
+                        text: String.fromCharCode('0xe80f'),
+                        bgColor: "white",
+                        fontColor: "black",
+                        strokeColor: "black",
+                    },
+                    x: this.gridX(2),
                     y: this.gridY(13),
                 },
             },
         });
 
         this.playButton.onpush = function() {
-            this.titleLabel.tweener.fadeOut(200);
-            this.rankButton.tweener.fadeOut(200);
-        }.bind(this);
-
-        this.playButton.onpushed = function() {
+            this.parent.children.each(function(elm) {
+                elm.tweener.clear().fadeOut(200)
+            });
+            this.fill();
+        };
+        this.playButton.onfilled = function() {
             this.app.popScene();
         }.bind(this);
-
     },
 
     gridX: function(i) {
+        i+=this.col;
+        i%=this.col;
         return (this.width/this.col)*i;
     },
     gridY: function(i) {
@@ -147,76 +161,98 @@ tm.define("TitleScene", {
     },
 });
 
+tm.define("CircleButton", {
+    superClass: "tm.display.CanvasElement",
 
-tm.define("MorphingButton", {
-    superClass: "tm.ui.FlatButton",
-    
     init: function(param) {
-        this.superInit(param);
-        
-        this.initialWidth = this.width;
-        this.initialHeight = this.height;
-        this.initialCornerRadius = this.cornerRadius;
-        
-        this.on('push', function() {
-            this.morphCircle();
+        this.superInit();
+
+        param = param || {};
+
+        param.$safe({
+            size: 150,
+            text: 'A',
+            fontFamily: 'share',
+            fontColor: "white",
+            bgColor: "hsl(180, 60%, 50%)",
+            strokeColor: "transparent",
+            lineWidth: 4,
         });
+
+        this.fromJSON({
+            children: {
+                bg: {
+                    type: "tm.display.Shape",
+                    init: {
+                        width: param.size,
+                        height: param.size,
+                    }
+                },
+                label: {
+                    type: "tm.display.Label",
+                    init: param.text,
+                    fillStyle: param.fontColor,
+                    fontFamily: param.fontFamily,
+                    fontSize: param.size/2,
+                }
+            }
+        });
+
+        this.setInteractive(true, "circle");
+        this.on("pointingend", function() {
+            this.flare('push');
+        });
+
+        this.lineWidth = param.lineWidth;
+        this.strokeColor = param.strokeColor;
+        this.bgColor = param.bgColor;
+        this.radius = param.size/2;
+        this._render();
+
     },
-    
-    // 円形に変形
-    morphCircle: function(radius) {
-        var circleSize = radius || 1500;
-        
+    _render: function() {
+        var c = this.bg.canvas;
+        c.setTransformCenter();
+        c.fillStyle = this.bgColor;
+        c.fillCircle(0, 0, this.radius);
+
+        c.lineWidth = this.lineWidth;
+        c.strokeStyle = this.strokeColor;
+        c.strokeCircle(0, 0, this.radius-this.lineWidth/2-1);
+    },
+
+    fill: function() {
+        var c = this.bg.canvas;
+        this.bg.width = SCREEN_WIDTH;
+        this.bg.height= SCREEN_HEIGHT;
+        this._render();
+
         this.setInteractive(false);
+
         this.label.tweener
             .clear()
             .fadeOut(200)
             ;
+
         this.tweener
             .clear()
             .wait(300)
             .to({
-                width: this.height,
-                cornerRadius: this.height/2
+                x: SCREEN_CENTER_X,
+                y: SCREEN_CENTER_Y,
             }, 300, 'easeOutQuint')
             .to({
-                width: circleSize,
-                height: circleSize,
-                cornerRadius: circleSize/2
+                radius: 600,
             }, 500, 'easeOutQuint')
             .call(function() {
-                this.flare('circled');
-                this.flare('pushed');
-                this.setInteractive(true);
+                this.flare('filled');
             }, this)
             ;
-    },
-    
-    // 元の形に変形
-    morphDefault: function() {
-        this.setInteractive(false);
-        this.label.tweener
-            .clear()
-            .wait(800)
-            .fadeIn(200)
-            ;
-        
-        this.tweener
-            .clear()
-            .to({
-                width: this.initialHeight,
-                height: this.initialHeight,
-                cornerRadius: this.initialHeight/2
-            }, 500, 'easeOutQuint')
-            .to({
-                width: this.initialWidth,
-                cornerRadius: this.initialCornerRadius,
-            }, 300, 'easeOutQuint')
-            .call(function() {
-                this.flare('defaulted');
-                this.setInteractive(true);
-            }, this)
-            ;
+
+        this.update = function() {
+            this._render();
+        };
     },
 });
+
 

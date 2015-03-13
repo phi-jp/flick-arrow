@@ -20,12 +20,13 @@ QUERY.$safe({
     "level": 0,
 });
 
-
 var ASSETS = {
 	"images/arrow0": "images/arrow0.png",
 	"images/arrow1": "images/arrow1.png",
 	"sounds/bgm": "sounds/bgm.wav",
 	"sounds/pinpon": "sounds/pinpon.mp3",
 	"sounds/boo": "sounds/boo.mp3",
+
+    // "fonts/fontello": "fonts/fontello/font/share.woff",
 };
 
