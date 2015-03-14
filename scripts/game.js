@@ -7,6 +7,9 @@ tm.define("GameScene", {
         
         this.fromJSON({
             children: {
+                shapeGauge: {
+                    type: "ShapeGauge",
+                },
             	stage: {
             		type: "tm.display.CanvasElement",
             	},
@@ -23,27 +26,19 @@ tm.define("GameScene", {
             children: {
                 scoreLabel: {
                     type: "tm.display.Label",
-                    x: 25,
+                    x: 620,
                     y: 40,
                     fillStyle: "#444",
                     fontSize: 32,
-                    align: 'left',
+                    align: 'right',
                     text: '00000000',
                 },
-                timerLabel: {
-                    type: "tm.display.Label",
-                    x: 615,
-                    y: 40,
-                    fillStyle: "#222",
-                    fontSize: 32,
-                    align: 'right',
-                    text: 'Time:   0',
-                },
-            }
+            },
         });
 
         this.score = 0;
-        this.time = 60*1000;
+        this.timer = 0;
+        this.limitTime = TIME;
         this.xList = [];
         this.yList = [];
 
@@ -51,6 +46,10 @@ tm.define("GameScene", {
     },
 
     onenter: function() {
+        // // debug:
+        // this.setQuestion();
+        // return ;
+
         // 
         CircleFilterEffect().addChildTo(this);
 
@@ -70,7 +69,7 @@ tm.define("GameScene", {
             direction: direction
         });
         arrow.x = 95 + i*110;
-        arrow.y = 800;
+        arrow.y = 280;
         arrow.scaleX = 0.4;
         arrow.scaleY = 0.4;
 
@@ -95,7 +94,7 @@ tm.define("GameScene", {
                 .clear()
                 .to({
                     x: 95 + i*110,
-                    y: 800,
+                    y: 280,
                 }, 100)
                 ;
         });
@@ -107,7 +106,7 @@ tm.define("GameScene", {
 
     setQuestion: function() {
         var arrow = this.getArrow();
-        arrow.appear(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+        arrow.appear(SCREEN_CENTER_X, SCREEN_CENTER_Y+120);
         this.arrow = arrow;
 
         // 補充
@@ -117,7 +116,7 @@ tm.define("GameScene", {
     update: function(app) {
         var d = this.getFlickDirection(app);
 
-        this.addTime(-app.deltaTime);
+        this.addTime(app.deltaTime);
 
         // support keyboard
         if (!d) {
@@ -133,9 +132,12 @@ tm.define("GameScene", {
                 this.setQuestion();
             }
             else {
-                this.arrow.move(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+                this.arrow.move(SCREEN_CENTER_X, SCREEN_CENTER_Y+120);
                 this.arrow.blink();
                 tm.asset.Manager.get("sounds/boo").clone().play();
+
+                // penalty
+                this.addTime(PENALTY);
             }
         }
 
@@ -207,13 +209,12 @@ tm.define("GameScene", {
     },
 
     addTime: function(time) {
-        this.time += time;
-
-        this.ui.timerLabel.text = 'Time: ' + Math.floor(this.time/1000).padding(3, '0');
+        this.timer += time;
+        this.shapeGauge.setValue( this.timer/(this.limitTime) );
     },
 
     isTimeup: function() {
-        return this.time <= 0;
+        return this.timer >= this.limitTime;
     },
 
 });
@@ -394,3 +395,54 @@ tm.define("CircleFilterEffect", {
         c.fillCircle(0, 0, this.circleRadius);
     },
 });
+
+
+
+
+tm.define("ShapeGauge", {
+    superClass: "tm.display.Shape",
+
+    init: function() {
+        this.superInit({
+            width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT,
+            bgColor: "hsla(0, 0%, 50%, 0.5)",
+        });
+
+        this.origin.y = 1;
+        this.setPosition(SCREEN_CENTER_X, SCREEN_HEIGHT);
+
+        this.value = 0;
+    },
+
+    update: function() {
+        if (this.value >= 0.9) {
+            var rate = 1-((1.0-this.value)/0.1);
+            var s = rate*100;
+            var color = "hsla(0, {0}%, 50%, 0.5)".format(s);
+            this.bgColor = color;
+        }
+    },
+
+    setValue: function(rate) {
+        this.value = Math.clamp(rate, 0, 1);
+        this.scaleY = this.value;
+    },
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

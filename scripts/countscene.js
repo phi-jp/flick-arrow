@@ -16,7 +16,7 @@
                     label: {
                         type: "tm.display.Label",
                         fillStyle: "white",
-                        fontSize: 256,
+                        fontSize: 200,
                         x: SCREEN_CENTER_X,
                         y: SCREEN_CENTER_Y,
                     },
@@ -38,7 +38,7 @@
                 this.label.text = this.counter--;
             }
 
-            this.label.scale.set(0.5, 0.5);
+            this.label.scale.set(1, 1);
             this.label.tweener
                 .clear()
                 .to({

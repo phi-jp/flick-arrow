@@ -184,6 +184,7 @@
         _back: function() {
             this.flare("finish");
 
+            this.nextLabel = 'game';
             if (this.autopop) {
                 this.app.popScene();
             }
