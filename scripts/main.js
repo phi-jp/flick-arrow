@@ -105,8 +105,8 @@ tm.define("TitleScene", {
                         text: String.fromCharCode('0xe80d'),
                         fillFlag: true,
                     },
-                    x: this.gridX(7),
-                    y: this.gridY(6),
+                    x: this.gridX(6),
+                    y: this.gridY(7),
                 },
                 reviewButton: {
                     type: "CircleButton",
@@ -137,7 +137,7 @@ tm.define("TitleScene", {
                     init: {
                         size: this.gridX(2),
                         text: String.fromCharCode('0xe800'),
-                        bgColor: "hsl(200, 100%, 64%)",
+                        bgColor: "hsl(200, 100%, 50%)",
                     },
                     x: this.gridX(6),
                     y: this.gridY(10),
