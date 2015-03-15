@@ -55,15 +55,15 @@
                 children: {
                     scoreText: baseLabelParam.$extend({
                         text: "score",
-                        x: this._toGridX(4),
-                        y: this._toGridY(2),
+                        x: this.gridX(4),
+                        y: this.gridY(2),
                         fontSize: param.fontSize*0.5,
                     }),
                     scoreLabel: {
                         type: "Label",
                         text: param.score,
-                        x: this._toGridX(4),
-                        y: this._toGridY(3),
+                        x: this.gridX(4),
+                        y: this.gridY(3),
                         fillStyle: param.fontColor,
                         fontSize: param.fontSize,
                         fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
@@ -71,8 +71,8 @@
                     bestText: {
                         type: "Label",
                         text: "best",
-                        x: this._toGridX(8),
-                        y: this._toGridY(2),
+                        x: this.gridX(8),
+                        y: this.gridY(2),
                         fillStyle: param.fontColor,
                         fontSize: param.fontSize*0.5,
                         fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
@@ -80,8 +80,8 @@
                     bestLabel: {
                         type: "Label",
                         text: bestScore,
-                        x: this._toGridX(8),
-                        y: this._toGridY(3),
+                        x: this.gridX(8),
+                        y: this.gridY(3),
                         fillStyle: param.fontColor,
                         fontSize: param.fontSize,
                         fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
@@ -90,8 +90,8 @@
                     newRecordText: {
                         type: "Label",
                         text: "new record!",
-                        x: this._toGridX(6),
-                        y: this._toGridY(6),
+                        x: this.gridX(6),
+                        y: this.gridY(6),
                         fillStyle: param.fontColor,
                         fontSize: param.fontSize*0.5,
                         fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
@@ -101,44 +101,44 @@
                     playButton: {
                         type: "CircleButton",
                         init: {
-                            size: this._toGridX(3),
+                            size: this.gridX(3),
                             text: String.fromCharCode('0xe80d'),
                             fillFlag: true,
                         },
-                        x: this._toGridX(6),
-                        y: this._toGridY(6),
+                        x: this.gridX(6),
+                        y: this.gridY(6),
                     },
 
                     shareButton: {
                         type: "CircleButton",
                         init: {
-                            size: this._toGridX(2),
+                            size: this.gridX(2),
                             text: String.fromCharCode('0xe810'),
                             bgColor: "hsl(240, 100%, 64%)",
                         },
-                        x: this._toGridX(3),
-                        y: this._toGridY(9),
+                        x: this.gridX(3),
+                        y: this.gridY(9),
                     },
                     homeButton: {
                         type: "CircleButton",
                         init: {
-                            size: this._toGridX(2),
+                            size: this.gridX(2),
                             text: String.fromCharCode('0xe80c'),
                             bgColor: HOME_COLOR,
                             fillFlag: true,
                         },
-                        x: this._toGridX(6),
-                        y: this._toGridY(9),
+                        x: this.gridX(6),
+                        y: this.gridY(10),
                     },
                     adButton: {
                         type: "CircleButton",
                         init: {
-                            size: this._toGridX(2),
+                            size: this.gridX(2),
                             text: 'Ad',
                             bgColor: "hsl(0, 100%, 64%)",
                         },
-                        x: this._toGridX(9),
-                        y: this._toGridY(9),
+                        x: this.gridX(9),
+                        y: this.gridY(9),
                     },
                 }
             });
@@ -183,11 +183,11 @@
             return this;
         },
 
-        _toGridX: function(index) {
+        gridX: function(index) {
             return this.param.width/12*index;
         },
 
-        _toGridY: function(index) {
+        gridY: function(index) {
             return this.param.height/12*index;
         },
 

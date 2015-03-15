@@ -73,8 +73,8 @@ tm.define("TitleScene", {
         // grid
         this.width = SCREEN_WIDTH;
         this.height = SCREEN_HEIGHT;
-        this.col = 12;  // x
-        this.row = 16; // y
+        this.col = 12; // x
+        this.row = 12; // y
 
         this.fromJSON({
             children: {
@@ -95,8 +95,9 @@ tm.define("TitleScene", {
                     fontFamily: MAIN_FONT,
                     fontSize: 112,
                     x: this.gridX(6),
-                    y: this.gridY(3),
+                    y: this.gridY(2),
                 },
+
                 playButton: {
                     type: "CircleButton",
                     init: {
@@ -105,19 +106,7 @@ tm.define("TitleScene", {
                         fillFlag: true,
                     },
                     x: this.gridX(6),
-                    y: this.gridY(10),
-                },
-                rankButton: {
-                    type: "CircleButton",
-                    init: {
-                        size: this.gridX(2),
-                        text: String.fromCharCode('0xe800'),
-                        bgColor: "white",
-                        fontColor: "black",
-                        strokeColor: "black",
-                    },
-                    x: this.gridX(-2),
-                    y: this.gridY(13),
+                    y: this.gridY(6),
                 },
                 reviewButton: {
                     type: "CircleButton",
@@ -130,13 +119,55 @@ tm.define("TitleScene", {
                         strokeColor: "black",
                     },
                     x: this.gridX(2),
-                    y: this.gridY(13),
+                    y: this.gridY(10),
                 },
+
+                reviewButton: {
+                    type: "CircleButton",
+                    init: {
+                        size: this.gridX(2),
+                        text: String.fromCharCode('0xe804'),
+                        bgColor: "hsl(60, 100%, 64%)",
+                    },
+                    x: this.gridX(3),
+                    y: this.gridY(9),
+                },
+                rankButton: {
+                    type: "CircleButton",
+                    init: {
+                        size: this.gridX(2),
+                        text: String.fromCharCode('0xe800'),
+                        bgColor: "hsl(200, 100%, 64%)",
+                    },
+                    x: this.gridX(6),
+                    y: this.gridY(10),
+                },
+                adButton: {
+                    type: "CircleButton",
+                    init: {
+                        size: this.gridX(2),
+                        text: 'Ad',
+                        bgColor: "hsl(0, 100%, 64%)",
+                    },
+                    x: this.gridX(9),
+                    y: this.gridY(9),
+                },
+
             },
         });
         this.playButton.onfilled = function() {
             this.app.popScene();
         }.bind(this);
+
+        this.reviewButton.onpush = function() {
+            alert('go to review page in app store.');
+        };
+        this.rankButton.onpush = function() {
+            alert('open ranking page.');
+        };
+        this.adButton.onpush = function() {
+            alert('open ad.');
+        };
     },
 
     onenter: function() {
