@@ -38,7 +38,10 @@
                         },
                         originX: 0,
                         originY: 0,
-                    }
+                    },
+                    stage: {
+                        type: "tm.display.CanvasElement",
+                    },
                 }
             });
 
@@ -48,19 +51,19 @@
                 fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
             };
 
-            this.fromJSON({
+            this.stage.fromJSON({
                 children: {
                     scoreText: baseLabelParam.$extend({
                         text: "score",
                         x: this._toGridX(4),
-                        y: this._toGridY(3),
+                        y: this._toGridY(2),
                         fontSize: param.fontSize*0.5,
                     }),
                     scoreLabel: {
                         type: "Label",
                         text: param.score,
                         x: this._toGridX(4),
-                        y: this._toGridY(4),
+                        y: this._toGridY(3),
                         fillStyle: param.fontColor,
                         fontSize: param.fontSize,
                         fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
@@ -69,7 +72,7 @@
                         type: "Label",
                         text: "best",
                         x: this._toGridX(8),
-                        y: this._toGridY(3),
+                        y: this._toGridY(2),
                         fillStyle: param.fontColor,
                         fontSize: param.fontSize*0.5,
                         fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
@@ -78,7 +81,7 @@
                         type: "Label",
                         text: bestScore,
                         x: this._toGridX(8),
-                        y: this._toGridY(4),
+                        y: this._toGridY(3),
                         fillStyle: param.fontColor,
                         fontSize: param.fontSize,
                         fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
@@ -95,41 +98,48 @@
                         visible: false,
                     },
 
-                    messageText: {
-                        type: "Label",
-                        text: param.message,
+                    playButton: {
+                        type: "CircleButton",
+                        init: {
+                            size: this._toGridX(3),
+                            text: String.fromCharCode('0xe80d'),
+                            fillFlag: true,
+                        },
                         x: this._toGridX(6),
-                        y: this._toGridY(7),
-                        fillStyle: param.fontColor,
-                        fontSize: param.fontSize*0.5,
-                        fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
+                        y: this._toGridY(6),
                     },
 
                     shareButton: {
-                        type: "FlatButton",
+                        type: "CircleButton",
                         init: {
-                            text: "★",
-                            width: 150,
-                            height: 150,
-                            cornerRadius: 75,
-                            fontSize: 64,
-                            fillStyle: "hsl(240, 100%, 64%)",
+                            size: this._toGridX(2),
+                            text: String.fromCharCode('0xe810'),
+                            bgColor: "hsl(240, 100%, 64%)",
                         },
                         x: this._toGridX(3),
                         y: this._toGridY(9),
                     },
-                    backButton: {
-                        type: "FlatButton",
+                    homeButton: {
+                        type: "CircleButton",
                         init: {
-                            text: "▶",
-                            width: 150,
-                            height: 150,
-                            cornerRadius: 75,
-                            fontSize: 64,
+                            size: this._toGridX(2),
+                            text: String.fromCharCode('0xe80c'),
+                            bgColor: HOME_COLOR,
+                            fillFlag: true,
+                        },
+                        x: this._toGridX(6),
+                        y: this._toGridY(9),
+                    },
+                    adButton: {
+                        type: "CircleButton",
+                        init: {
+                            size: this._toGridX(2),
+                            text: 'Ad',
+                            bgColor: "hsl(0, 100%, 64%)",
                         },
                         x: this._toGridX(9),
                         y: this._toGridY(9),
-                    }
+                    },
                 }
             });
 
@@ -141,13 +151,13 @@
                 hashtags: param.hashtags,
                 url     : param.url, // or window.document.location.href
             });
-            this.shareButton.onclick = function() {
-                window.open(twitterURL, 'share window', 'width=400, height=300');
-            };
+
+            this.twitterURL = twitterURL;
+            this.stage.shareButton.onclick = this._tweet.bind(this);            
 
             // setup back
-            this.backButton.onpointingstart = this._back.bind(this);
-            this.autopop = param.autopop;
+            this.stage.playButton.onfilled = this._play.bind(this);
+            this.stage.homeButton.onfilled = this._toHome.bind(this);
 
             // setup record
             if (highScoreFlag) {
@@ -181,13 +191,18 @@
             return this.param.height/12*index;
         },
 
-        _back: function() {
-            this.flare("finish");
+        _toHome: function() {
+            this.nextLabel = 'title';
+            this.app.popScene();
+        },
 
+        _play: function() {
             this.nextLabel = 'game';
-            if (this.autopop) {
-                this.app.popScene();
-            }
+            this.app.popScene();
+        },
+
+        _tweet: function() {
+            window.open(this.twitterURL, 'share window', 'width=400, height=300');
         },
     });
 

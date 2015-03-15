@@ -10,9 +10,10 @@ var SCREEN_CENTER   = tm.geom.Vector2(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 var SCREEN_RECT     = tm.geom.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 var TITLE = "Arrow Flick";
-var TIME = 30*1000;
+var TIME = 16*1000;
 var PENALTY = 2*1000;
 
+var HOME_COLOR = "hsl(60, 100%, 64%)";
 var MAIN_FONT = "Gloria Hallelujah";
 var MAIN_FONT = "Kaushan Script";
 var SUB_FONT = "Open Sans";

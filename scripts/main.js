@@ -95,16 +95,17 @@ tm.define("TitleScene", {
                     fontFamily: MAIN_FONT,
                     fontSize: 112,
                     x: this.gridX(6),
-                    y: this.gridY(4),
+                    y: this.gridY(3),
                 },
                 playButton: {
                     type: "CircleButton",
                     init: {
                         size: this.gridX(3),
                         text: String.fromCharCode('0xe80d'),
+                        fillFlag: true,
                     },
                     x: this.gridX(6),
-                    y: this.gridY(11),
+                    y: this.gridY(10),
                 },
                 rankButton: {
                     type: "CircleButton",
@@ -133,16 +134,15 @@ tm.define("TitleScene", {
                 },
             },
         });
-
-        this.playButton.onpush = function() {
-            this.parent.children.each(function(elm) {
-                elm.tweener.clear().fadeOut(200)
-            });
-            this.fill();
-        };
         this.playButton.onfilled = function() {
             this.app.popScene();
         }.bind(this);
+    },
+
+    onenter: function() {
+        CircleFilterEffect({
+            color: HOME_COLOR,
+        }).addChildTo(this);
     },
 
     gridX: function(i) {
@@ -201,14 +201,22 @@ tm.define("CircleButton", {
         this.setInteractive(true, "circle");
         this.on("pointingend", function() {
             this.flare('push');
+
+            if (this.fillFlag === true) {
+                this.parent.children.each(function(elm) {
+                    elm.tweener.clear().fadeOut(200)
+                });
+                this.fill();
+            }
         });
+
+        this.fillFlag = param.fillFlag;
 
         this.lineWidth = param.lineWidth;
         this.strokeColor = param.strokeColor;
         this.bgColor = param.bgColor;
         this.radius = param.size/2;
         this._render();
-
     },
     _render: function() {
         var c = this.bg.canvas;
@@ -254,5 +262,7 @@ tm.define("CircleButton", {
         };
     },
 });
+
+
 
 

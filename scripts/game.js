@@ -142,6 +142,9 @@ tm.define("GameScene", {
         }
 
         if (this.isTimeup()) {
+            this.nextArguments = {
+                score: this.score
+            };
             app.popScene();
         }
     },
@@ -369,7 +372,12 @@ tm.define("Arrow", {
 tm.define("CircleFilterEffect", {
     superClass: "tm.display.Shape",
 
-    init: function() {
+    init: function(param) {
+        param = param || {};
+        param.$safe({
+            color: "hsl(180, 60%, 50%)",
+        });
+
         this.superInit({
             width: SCREEN_WIDTH,
             height: SCREEN_HEIGHT,
@@ -379,7 +387,7 @@ tm.define("CircleFilterEffect", {
 
         var c = this.canvas;
 
-        c.clearColor("hsl(180, 60%, 50%)");
+        c.clearColor(param.color);
         c.setTransformCenter();
 
         this.circleRadius = 0;
