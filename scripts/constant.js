@@ -13,7 +13,7 @@ var TITLE = "Arrow Flick";
 var TIME = 16*1000;
 var PENALTY = 2*1000;
 
-var HOME_COLOR = "hsl(60, 100%, 64%)";
+var HOME_COLOR = "hsl(60, 100%, 50%)";
 var MAIN_FONT = "Gloria Hallelujah";
 var MAIN_FONT = "Kaushan Script";
 var SUB_FONT = "Open Sans";

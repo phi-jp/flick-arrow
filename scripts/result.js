@@ -105,7 +105,7 @@
                             text: String.fromCharCode('0xe80d'),
                             fillFlag: true,
                         },
-                        x: this.gridX(6),
+                        x: this.gridX(7),
                         y: this.gridY(6),
                     },
 
