@@ -48,18 +48,20 @@ var showAd = function() {
     }
 };
 
+var clickAdCallback = function() {
+    alert('onInterstitialLeaveApp');
+};
+
 document.addEventListener('onInterstitialLeaveApp', function(){
-    // 広告を押した際のコールバック
-    // TODO: ライフ回復
-    alert('hoge2');
+    clickAdCallback && clickAdCallback();
 });
+
 
 document.addEventListener('onInterstitialDismiss', function(){
     // 広告を閉じた際のコールバック
     // alert('onInterstitialDismiss');
     // AdMob.prepareInterstitial( {adId:admobid.interstitial, autoShow:false} );
 });
-
 
 var UserData = {
     init: function(strong) {

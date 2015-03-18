@@ -47,31 +47,7 @@ tm.define("TitleScene", {
                     x: this.gridX(6),
                     y: this.gridY(7),
                 },
-                reviewButton: {
-                    type: "CircleButton",
-                    init: {
-                        size: this.gridX(2),
-                        text: String.fromCharCode('0xe810'),
-                        text: String.fromCharCode('0xe80f'),
-                        bgColor: "white",
-                        fontColor: "black",
-                        strokeColor: "black",
-                    },
-                    x: this.gridX(2),
-                    y: this.gridY(10),
-                },
 
-                // レビューボタン
-                reviewButton: {
-                    type: "CircleButton",
-                    init: {
-                        size: this.gridX(2),
-                        text: String.fromCharCode('0xe804'),
-                        bgColor: "hsl(60, 100%, 64%)",
-                    },
-                    x: this.gridX(3),
-                    y: this.gridY(9),
-                },
                 // シェアボタン
                 shareButton: {
                     type: "CircleButton",
@@ -118,7 +94,7 @@ tm.define("TitleScene", {
                 this.life.decriment();
             }
             else {
-                this.reviewButton.blink();
+                this.shareButton.blink();
                 this.adButton.blink();
             }
         }.bind(this);
@@ -129,18 +105,9 @@ tm.define("TitleScene", {
         this.rankButton.onpush = function() {
             alert('open ranking page.');
         };
-        this.adButton.onpush = function() {
-            showAd();
-        };
+        this.adButton.onpush = this._showAd.bind(this);
 
-        this.shareButton.onclick = this._review.bind(this);
-
-        if (isNative()) {
-            this.shareButton.hide().sleep();
-        }
-        else {
-            this.reviewButton.hide().sleep();
-        }
+        this.shareButton.onclick = this._share.bind(this);
     },
 
     onenter: function() {
@@ -164,21 +131,40 @@ tm.define("TitleScene", {
         }
     },
 
-    _review: function() {
-        var text = "『ArrowFlick』矢印をフリックするシンプルなゲームです♪";
-        var twitterURL = tm.social.Twitter.createURL({
-            type    : "tweet",
-            text    : text,
-            hashtags: "ArrowFlick,tmlib",
-            url     : window.document.location.href,
-        });
+    _showAd: function() {
+        clickAdCallback = function() {
+            this.life.recovery();
+        }.bind(this);
 
-        var win = window.open(twitterURL, 'share window', 'width=400, height=300');
-        var timer = setInterval(function() {   
-            if(win.closed) {
-                this.life.recovery();
-                clearInterval(timer);  
-            }
-        }.bind(this), 100);
+        showAd();
+    },
+
+    _share: function() {
+        var text = "『ArrowFlick』矢印をフリックするシンプルなゲームです♪";
+
+        if (isNative()) {
+            var message = {
+                text: text,
+                activityTypes: ["Mail", "Facebook", "PostToFacebook", "PostToTwitter"],
+                url: 'http://gotoapp',
+            };
+            window.socialmessage.send(message);
+            this.life.recovery();
+        }
+        else {
+            var twitterURL = tm.social.Twitter.createURL({
+                type    : "tweet",
+                text    : text,
+                hashtags: "ArrowFlick,tmlib",
+                url     : window.document.location.href,
+            });
+            var win = window.open(twitterURL, 'share window', 'width=400, height=300');
+            var timer = setInterval(function() {   
+                if(win.closed) {
+                    this.life.recovery();
+                    clearInterval(timer);  
+                }
+            }.bind(this), 100);
+        }
     },
 });
