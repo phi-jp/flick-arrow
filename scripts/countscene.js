@@ -30,13 +30,7 @@
         _updateCount: function() {
             var endFlag = this.counter <= 0;
 
-            if (endFlag) {
-                this.label.fontSize *= 0.5;
-                this.label.text = 'START';
-            }
-            else {
-                this.label.text = this.counter--;
-            }
+            this.label.text = this.counter--;
 
             this.label.scale.set(1, 1);
             this.label.tweener
@@ -53,7 +47,7 @@
                     alpha: 0.0
                 }, 250)
                 .call(function() {
-                    if (endFlag) {
+                    if (this.counter <= 0) {
                         this.app.popScene();
                     }
                     else {

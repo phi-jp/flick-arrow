@@ -46,9 +46,9 @@ tm.define("GameScene", {
     },
 
     onenter: function() {
-        // debug:
-        this.setQuestion();
-        return ;
+        // // debug:
+        // this.setQuestion();
+        // return ;
 
         // 
         CircleFilterEffect().addChildTo(this);
