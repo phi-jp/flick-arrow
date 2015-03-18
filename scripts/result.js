@@ -15,14 +15,15 @@
             param = {}.$extend(tm.scene.ResultScene.default, param);
             this.param = param;
 
-            var userData = this._getUserData();
+            var userData = UserData.get();
             var bestScore = (userData.bestScore) ? userData.bestScore : 0;
             var highScoreFlag = (param.score > bestScore);
 
             if (param.record) {
                 if (highScoreFlag) {
                     userData.bestScore = param.score;
-                    this._record(userData);
+
+                    UserData.set(userData);
                 }
             }
 
@@ -86,12 +87,18 @@
                         fontSize: param.fontSize,
                         fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
                     },
+                    // ライフ
+                    life: {
+                        type: "Life",
+                        x: 180,
+                        y: this.gridY(5),
+                    },
 
                     newRecordText: {
                         type: "Label",
                         text: "new record!",
                         x: this.gridX(6),
-                        y: this.gridY(6),
+                        y: this.gridY(4),
                         fillStyle: param.fontColor,
                         fontSize: param.fontSize*0.5,
                         fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
@@ -103,7 +110,6 @@
                         init: {
                             size: this.gridX(3),
                             text: String.fromCharCode('0xe80d'),
-                            fillFlag: true,
                         },
                         x: this.gridX(6),
                         y: this.gridY(7),
@@ -125,7 +131,6 @@
                             size: this.gridX(2),
                             text: String.fromCharCode('0xe80c'),
                             bgColor: HOME_COLOR,
-                            fillFlag: true,
                         },
                         x: this.gridX(6),
                         y: this.gridY(10),
@@ -155,32 +160,42 @@
             this.twitterURL = twitterURL;
             this.stage.shareButton.onclick = this._tweet.bind(this);            
 
-            // setup back
+            // setup
+            var life = this.stage.life;
+            var playButton = this.stage.playButton;
+            var shareButton = this.stage.shareButton;
+            var adButton = this.stage.adButton;
+            playButton.onpush = function() {
+                if (UserData.hasLife()) {
+                    life.ondecrimented = function() {
+                        playButton.fill();
+                    }.bind(this);
+                    life.decriment();
+                }
+                else {
+                    shareButton.blink();
+                    adButton.blink();
+                }
+            }.bind(this);
             this.stage.playButton.onfilled = this._play.bind(this);
+            this.stage.homeButton.onpush = function() { this.fill(); };
             this.stage.homeButton.onfilled = this._toHome.bind(this);
 
             // setup record
             if (highScoreFlag) {
-                this.newRecordText.show();
-                this.newRecordText.tweener
+                this.stage.newRecordText.show();
+                this.stage.newRecordText.tweener
                     .set({alpha:0.0})
                     .fadeIn(2000)
                     .setLoop(true)
                     ;
             }
-        },
 
-        _getUserData: function() {
-            var key = location.pathname.toCRC32();
-            var data = localStorage.getItem(key);
-            return (data) ? JSON.parse(data) : {};
-        },
-
-        _record: function(data) {
-            var key = location.pathname.toCRC32();
-            var dataString = JSON.stringify(data);
-            localStorage.setItem(key, dataString);
-            return this;
+            // fade
+            this.bg.alpha = 0;
+            this.bg.tweener.wait(100).fadeIn(200);
+            this.stage.alpha = 0;
+            this.stage.tweener.wait(500).fadeIn(200);
         },
 
         gridX: function(index) {

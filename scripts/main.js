@@ -64,133 +64,6 @@ tm.define("ManagerScene", {
 
 
 
-tm.define("TitleScene", {
-    superClass: "tm.app.Scene",
-
-    init: function() {
-        this.superInit();
-
-        // grid
-        this.width = SCREEN_WIDTH;
-        this.height = SCREEN_HEIGHT;
-        this.col = 12; // x
-        this.row = 12; // y
-
-        this.fromJSON({
-            children: {
-                bg: {
-                    type: "tm.display.Shape",
-                    init: {
-                        width: SCREEN_WIDTH,
-                        height: SCREEN_HEIGHT,
-                        bgColor: "rgb(248, 248, 248)",
-                    },
-                    originX: 0,
-                    originY: 0,
-                },
-                titleLabel: {
-                    type: "tm.display.Label",
-                    text: TITLE,
-                    fillStyle: "#222",
-                    fontFamily: MAIN_FONT,
-                    fontSize: 112,
-                    x: this.gridX(6),
-                    y: this.gridY(2),
-                },
-
-                playButton: {
-                    type: "CircleButton",
-                    init: {
-                        size: this.gridX(3),
-                        text: String.fromCharCode('0xe80d'),
-                        fillFlag: true,
-                    },
-                    x: this.gridX(6),
-                    y: this.gridY(7),
-                },
-                reviewButton: {
-                    type: "CircleButton",
-                    init: {
-                        size: this.gridX(2),
-                        text: String.fromCharCode('0xe810'),
-                        text: String.fromCharCode('0xe80f'),
-                        bgColor: "white",
-                        fontColor: "black",
-                        strokeColor: "black",
-                    },
-                    x: this.gridX(2),
-                    y: this.gridY(10),
-                },
-
-                reviewButton: {
-                    type: "CircleButton",
-                    init: {
-                        size: this.gridX(2),
-                        text: String.fromCharCode('0xe804'),
-                        bgColor: "hsl(60, 100%, 64%)",
-                    },
-                    x: this.gridX(3),
-                    y: this.gridY(9),
-                },
-                rankButton: {
-                    type: "CircleButton",
-                    init: {
-                        size: this.gridX(2),
-                        text: String.fromCharCode('0xe800'),
-                        bgColor: "hsl(200, 100%, 50%)",
-                    },
-                    x: this.gridX(6),
-                    y: this.gridY(10),
-                },
-                adButton: {
-                    type: "CircleButton",
-                    init: {
-                        size: this.gridX(2),
-                        text: 'Ad',
-                        bgColor: "hsl(0, 100%, 64%)",
-                    },
-                    x: this.gridX(9),
-                    y: this.gridY(9),
-                },
-
-            },
-        });
-        this.playButton.onfilled = function() {
-            this.app.popScene();
-        }.bind(this);
-
-        this.reviewButton.onpush = function() {
-            alert('go to review page in app store.');
-        };
-        this.rankButton.onpush = function() {
-            alert('open ranking page.');
-        };
-        this.adButton.onpush = function() {
-            alert('open ad.');
-        };
-    },
-
-    onenter: function() {
-        CircleFilterEffect({
-            color: HOME_COLOR,
-        }).addChildTo(this);
-    },
-
-    gridX: function(i) {
-        i+=this.col;
-        i%=this.col;
-        return (this.width/this.col)*i;
-    },
-    gridY: function(i) {
-        return (this.height/this.row)*i;
-    },
-
-    update: function(app) {
-        if (app.keyboard.getKey('space')) {
-            this.app.popScene();
-        }
-    },
-});
 
 tm.define("CircleButton", {
     superClass: "tm.display.CanvasElement",
@@ -232,13 +105,6 @@ tm.define("CircleButton", {
         this.setInteractive(true, "circle");
         this.on("pointingend", function() {
             this.flare('push');
-
-            if (this.fillFlag === true) {
-                this.parent.children.each(function(elm) {
-                    elm.tweener.clear().fadeOut(200)
-                });
-                this.fill();
-            }
         });
 
         this.fillFlag = param.fillFlag;
@@ -261,6 +127,10 @@ tm.define("CircleButton", {
     },
 
     fill: function() {
+        this.parent.children.each(function(elm) {
+            elm.tweener.clear().fadeOut(200)
+        });
+
         var c = this.bg.canvas;
         this.bg.width = SCREEN_WIDTH;
         this.bg.height= SCREEN_HEIGHT;
@@ -292,8 +162,108 @@ tm.define("CircleButton", {
             this._render();
         };
     },
+
+    blink: function() {
+        this.tweener
+            .clear()
+            .set({alpha:0})
+            .wait(100)
+            .set({alpha:1})
+            .wait(100)
+            .set({alpha:0})
+            .wait(100)
+            .set({alpha:1})
+            .wait(100)
+            .set({alpha:0})
+            .wait(100)
+            .set({alpha:1})
+            .wait(100)
+            .set({alpha:0})
+            .wait(100)
+            .set({alpha:1})
+            .wait(100);
+    }
 });
 
 
 
+tm.define("Life", {
+    superClass: "tm.display.CanvasElement",
+
+    init: function() {
+        this.superInit();
+
+        var data = UserData.get();
+
+        this.backGroup = tm.display.CanvasElement().addChildTo(this);
+        this.frontGroup = tm.display.CanvasElement().addChildTo(this);
+        (5).times(function(i) {
+            var h = tm.display.HeartShape({
+                width: 40,
+                height: 40,
+                fillStyle: "gray",
+            }).addChildTo(this.backGroup);
+            h.x = i*70;
+            h.y = 0;
+        }, this);
+        (5).times(function(i) {
+            var h = tm.display.HeartShape({
+                width: 40,
+                height: 40,
+            }).addChildTo(this.frontGroup);
+            h.x = i*70;
+            h.y = 0;
+
+            h.hide();
+
+            if (data.life>i) {
+                h.show();
+            }
+        }, this);
+    },
+    decriment: function() {
+        var data = UserData.get();
+        data.life--;
+        UserData.set(data);
+
+        var hearts = this.frontGroup.children;
+        hearts[data.life].tweener
+            .clear()
+            .by({
+                y: -100,
+                alpha: -1,
+            }, 200)
+            .call(function() {
+                this.flare('decrimented');
+            }, this)
+            ;
+    },
+
+    recovery: function() {
+        var data = UserData.get();
+        var fronts = this.frontGroup.children;
+
+        (5-data.life).times(function(i) {
+            var h = fronts[data.life+i];
+
+            h.show();
+            h.alpha = 0;
+            h.scale.set(2, 2);
+
+            h.tweener
+                .clear()
+                .wait(i*250)
+                .to({
+                    alpha: 1,
+                    scaleX: 1,
+                    scaleY: 1,
+                }, 500)
+                ;
+        }, this);
+
+        data.life = 5;
+        UserData.set(data);
+    },
+
+});
 

@@ -46,9 +46,9 @@ tm.define("GameScene", {
     },
 
     onenter: function() {
-        // // debug:
-        // this.setQuestion();
-        // return ;
+        // debug:
+        this.setQuestion();
+        return ;
 
         // 
         CircleFilterEffect().addChildTo(this);
@@ -142,11 +142,24 @@ tm.define("GameScene", {
         }
 
         if (this.isTimeup()) {
-            this.nextArguments = {
-                score: this.score
-            };
-            app.popScene();
+
+            this.gameover();
         }
+    },
+
+    gameover: function() {
+        var app = this.app;
+        this.nextLabel = 'game';
+
+        var s = ResultScene({
+            score: this.score,
+            bgColor: 'rgba(255, 255, 255, 0.95)',
+        });
+        s.onexit = function() {
+            this.nextLabel = s.nextLabel;
+            app.popScene();
+        }.bind(this);
+        app.pushScene(s);
     },
 
     getFlickDirection: function(app) {
@@ -241,6 +254,7 @@ tm.define("Arrow", {
             width: 256,
             height: 256,
             strokeStyle: "white",
+            strokeStyle: "transparent",
             fillStyle: color,
             lineWidth: 8,
         });
@@ -414,7 +428,7 @@ tm.define("ShapeGauge", {
         this.superInit({
             width: SCREEN_WIDTH,
             height: SCREEN_HEIGHT,
-            bgColor: "hsla(0, 0%, 50%, 0.5)",
+            bgColor: "hsla(0, 0%, 80%, 0.5)",
         });
 
         this.origin.y = 1;
@@ -427,7 +441,7 @@ tm.define("ShapeGauge", {
         if (this.value >= 0.9) {
             var rate = 1-((1.0-this.value)/0.1);
             var s = rate*100;
-            var color = "hsla(0, {0}%, 50%, 0.5)".format(s);
+            var color = "hsla(0, {0}%, 80%, 0.5)".format(s);
             this.bgColor = color;
         }
     },
@@ -436,12 +450,40 @@ tm.define("ShapeGauge", {
         this.value = Math.clamp(rate, 0, 1);
         this.scaleY = this.value;
     },
-
 });
 
 
 
+tm.define("FadeScene", {
+    superClass: "tm.app.Scene",
 
+    init: function() {
+        this.superInit();
+
+        this.fromJSON({
+            children: {
+                filiter: {
+                    type: "tm.display.Shape",
+                    init: {
+                        width: SCREEN_WIDTH,
+                        height: SCREEN_HEIGHT,
+                        bgColor: "white",
+                        alpha: 0,
+                    },
+                    originX: 0,
+                    originY: 0,
+                    blendMode: "lighter",
+                }
+            }
+        });
+
+        this.filiter.tweener.fadeIn(1000)
+            .wait(500)
+                .call(function() {
+                this.app.popScene();
+            }, this);
+    },
+});
 
 
 
