@@ -195,7 +195,28 @@
             this.bg.alpha = 0;
             this.bg.tweener.wait(100).fadeIn(200);
             this.stage.alpha = 0;
-            this.stage.tweener.wait(500).fadeIn(200);
+            this.stage.children.each(function(elm) { elm.sleep(); });
+            this.stage.tweener
+                .wait(500)
+                .call(function() {
+                    this.stage.children.each(function(elm) { elm.wakeUp(); });
+                }, this)
+                .fadeIn(200);
+
+
+            if (window.gamecenter) {
+                alert('send');
+                var data = {
+                    score: param.score,
+                    leaderboardId: BOARD_ID,
+                };
+
+                gamecenter.submitScore(function() {
+                    alert('success');
+                }, function() {
+                    alert('failure');
+                }, data);
+            }
         },
 
         gridX: function(index) {

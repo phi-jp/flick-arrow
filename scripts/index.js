@@ -46,6 +46,11 @@ document.addEventListener('deviceready', function() {
         }, 2000);
     }
 
+    // login gamecenter
+    if (window.gamecenter) {
+        gamecenter.auth();
+    }
+
 }, false);
 
 /*

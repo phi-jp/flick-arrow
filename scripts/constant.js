@@ -9,15 +9,16 @@ var SCREEN_CENTER_Y = SCREEN_HEIGHT/2;  // スクリーン高さの半分
 var SCREEN_CENTER   = tm.geom.Vector2(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 var SCREEN_RECT     = tm.geom.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-var TITLE = "Arrow Flick";
+var TITLE = "Flick Arrow";
 var TIME = 20*1000;
 var PENALTY = 2*1000;
 
-var BASE_PATH = window.cordovaFlag ? 'http://junk.tmlife.net/arrow-flick/' : "./";
+var BASE_PATH = window.cordovaFlag ? 'http://junk.tmlife.net/flick-arrow/' : "./";
 var HOME_COLOR = "hsl(60, 100%, 50%)";
 var MAIN_FONT = "Gloria Hallelujah";
 var MAIN_FONT = "Kaushan Script";
 var SUB_FONT = "Open Sans";
+var BOARD_ID = "board_normal";
 
 var QUERY = tm.util.QueryString.parse(location.search.substr(1));
 QUERY.$safe({

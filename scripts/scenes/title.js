@@ -103,7 +103,10 @@ tm.define("TitleScene", {
         }.bind(this);
 
         this.rankButton.onpush = function() {
-            alert('open ranking page.');
+            var data = {
+                leaderboardId: BOARD_ID
+            };
+            gamecenter.showLeaderboard(null, null, data);
         };
         this.adButton.onpush = this._showAd.bind(this);
 
@@ -140,12 +143,14 @@ tm.define("TitleScene", {
     },
 
     _share: function() {
-        var text = "『ArrowFlick』矢印をフリックするシンプルなゲームです♪";
+        var text = "『FlickArrow』矢印をフリックするシンプルなゲームです♪";
 
         if (isNative()) {
             var message = {
                 text: text,
-                activityTypes: ["Mail", "Facebook", "PostToFacebook", "PostToTwitter"],
+                activityTypes: ['PostToFacebook'],
+                // activityTypes: ["PostToFacebook", "PostToTwitter", "PostToWeibo", "Message", "Mail", "Print", "CopyToPasteboard", "AssignToContact", "SaveToCameraRoll", "AddToReadingList", "PostToFlickr", "PostToVimeo", "TencentWeibo", "AirDrop"];
+                activityTypes: ["Mail", "PostToFacebook", "PostToTwitter"],
                 url: 'http://gotoapp',
             };
             window.socialmessage.send(message);
@@ -155,7 +160,7 @@ tm.define("TitleScene", {
             var twitterURL = tm.social.Twitter.createURL({
                 type    : "tweet",
                 text    : text,
-                hashtags: "ArrowFlick,tmlib",
+                hashtags: "FlickArrow,tmlib",
                 url     : window.document.location.href,
             });
             var win = window.open(twitterURL, 'share window', 'width=400, height=300');

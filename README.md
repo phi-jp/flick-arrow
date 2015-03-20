@@ -1,5 +1,4 @@
-# arrow-flick
-arrow-flick
+# Flick Arrow
 
 
 ## Scene
