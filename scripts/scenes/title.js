@@ -50,11 +50,10 @@ tm.define("TitleScene", {
 
                 // シェアボタン
                 shareButton: {
-                    type: "CircleButton",
+                    type: "ShareButton",
                     init: {
                         size: this.gridX(2),
-                        text: String.fromCharCode('0xe810'),
-                        bgColor: "hsl(240, 100%, 64%)",
+                        message: "『FlickArrow』矢印をフリックするシンプルなゲームです♪",
                     },
                     x: this.gridX(3),
                     y: this.gridY(9),
@@ -100,7 +99,9 @@ tm.define("TitleScene", {
 
         this.adButton.onpush = this._showAd.bind(this);
 
-        this.shareButton.onclick = this._share.bind(this);
+        this.shareButton.onshared = function() {
+            this.life.recovery();
+        }.bind(this);
     },
 
     onenter: function() {
@@ -132,34 +133,4 @@ tm.define("TitleScene", {
         showAd();
     },
 
-    _share: function() {
-        var text = "『FlickArrow』矢印をフリックするシンプルなゲームです♪";
-
-        if (isNative()) {
-            var message = {
-                text: text,
-                activityTypes: ['PostToFacebook'],
-                // activityTypes: ["PostToFacebook", "PostToTwitter", "PostToWeibo", "Message", "Mail", "Print", "CopyToPasteboard", "AssignToContact", "SaveToCameraRoll", "AddToReadingList", "PostToFlickr", "PostToVimeo", "TencentWeibo", "AirDrop"];
-                activityTypes: ["Mail", "PostToFacebook", "PostToTwitter"],
-                url: 'http://gotoapp',
-            };
-            window.socialmessage.send(message);
-            this.life.recovery();
-        }
-        else {
-            var twitterURL = tm.social.Twitter.createURL({
-                type    : "tweet",
-                text    : text,
-                hashtags: "FlickArrow,tmlib",
-                url     : window.document.location.href,
-            });
-            var win = window.open(twitterURL, 'share window', 'width=400, height=300');
-            var timer = setInterval(function() {   
-                if(win.closed) {
-                    this.life.recovery();
-                    clearInterval(timer);  
-                }
-            }.bind(this), 100);
-        }
-    },
 });

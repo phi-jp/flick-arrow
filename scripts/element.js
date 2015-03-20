@@ -146,6 +146,67 @@ tm.define("RankingButton", {
     },
 });
 
+tm.define("ShareButton", {
+    superClass: "CircleButton",
+
+    init: function(param) {
+        this.superInit({
+            text: String.fromCharCode('0xe810'),
+            bgColor: "hsl(240, 100%, 64%)",
+        }.$extend(param));
+
+        this.on('push', function() {
+            if (window.gamecenter) {
+                var data = {
+                    leaderboardId: BOARD_ID
+                };
+                gamecenter.showLeaderboard(null, null, data);
+            }
+            else {
+                console.log('show gamecenter');
+            }
+        });
+
+        this.on('push', function() {
+            this._share();
+        });
+
+        this.message = param.message;
+    },
+
+    _share: function() {
+        var text = this.message;
+
+        if (isNative()) {
+            var message = {
+                text: text,
+                activityTypes: ['PostToFacebook'],
+                // activityTypes: ["PostToFacebook", "PostToTwitter", "PostToWeibo", "Message", "Mail", "Print", "CopyToPasteboard", "AssignToContact", "SaveToCameraRoll", "AddToReadingList", "PostToFlickr", "PostToVimeo", "TencentWeibo", "AirDrop"];
+                activityTypes: ["Mail", "PostToFacebook", "PostToTwitter"],
+                url: 'http://gotoapp',
+            };
+            window.socialmessage.send(message);
+            this.flare('shared');
+        }
+        else {
+            var twitterURL = tm.social.Twitter.createURL({
+                type    : "tweet",
+                text    : text,
+                hashtags: "FlickArrow,tmlib",
+                url     : window.document.location.href,
+            });
+            var win = window.open(twitterURL, 'share window', 'width=400, height=300');
+            var timer = setInterval(function() {   
+                if(win.closed) {
+                    this.flare('shared');
+                    clearInterval(timer);  
+                }
+            }.bind(this), 100);
+        }
+
+    },
+});
+
 
 tm.define("Life", {
     superClass: "tm.display.CanvasElement",
