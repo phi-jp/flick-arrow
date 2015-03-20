@@ -61,12 +61,8 @@ tm.define("TitleScene", {
                 },
 
                 rankButton: {
-                    type: "CircleButton",
-                    init: {
-                        size: this.gridX(2),
-                        text: String.fromCharCode('0xe800'),
-                        bgColor: "hsl(200, 100%, 50%)",
-                    },
+                    type: "RankingButton",
+                    init: { size: this.gridX(2), },
                     x: this.gridX(6),
                     y: this.gridY(10),
                 },
@@ -102,12 +98,6 @@ tm.define("TitleScene", {
             this.app.popScene();
         }.bind(this);
 
-        this.rankButton.onpush = function() {
-            var data = {
-                leaderboardId: BOARD_ID
-            };
-            gamecenter.showLeaderboard(null, null, data);
-        };
         this.adButton.onpush = this._showAd.bind(this);
 
         this.shareButton.onclick = this._share.bind(this);
