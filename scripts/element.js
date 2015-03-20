@@ -146,6 +146,28 @@ tm.define("RankingButton", {
     },
 });
 
+
+tm.define("AdButton", {
+    superClass: "CircleButton",
+
+    init: function(param) {
+        this.superInit({
+            text: 'Ad',
+            bgColor: "hsl(0, 100%, 64%)",
+        }.$extend(param));
+
+        this.on('push', this._showAd);
+    },
+
+    _showAd: function() {
+        clickAdCallback = function() {
+            this.flare('aded');
+        }.bind(this);
+
+        showAd();
+    },
+});
+
 tm.define("ShareButton", {
     superClass: "CircleButton",
 
@@ -155,23 +177,8 @@ tm.define("ShareButton", {
             bgColor: "hsl(240, 100%, 64%)",
         }.$extend(param));
 
-        this.on('push', function() {
-            if (window.gamecenter) {
-                var data = {
-                    leaderboardId: BOARD_ID
-                };
-                gamecenter.showLeaderboard(null, null, data);
-            }
-            else {
-                console.log('show gamecenter');
-            }
-        });
-
-        this.on('push', function() {
-            this._share();
-        });
-
         this.message = param.message;
+        this.on('push', this._share);
     },
 
     _share: function() {

@@ -50,6 +50,9 @@ tm.define("ResultScene", {
             fontFamily: "'Helvetica-Light' 'Meiryo' sans-serif",
         };
 
+        // setup tweet
+        var text = "SCORE: {score}, {message}".format(param);
+
         this.stage.fromJSON({
             children: {
                 scoreText: baseLabelParam.$extend({
@@ -114,16 +117,17 @@ tm.define("ResultScene", {
                     y: this.gridY(7),
                 },
 
+                // シェアボタン
                 shareButton: {
-                    type: "CircleButton",
+                    type: "ShareButton",
                     init: {
                         size: this.gridX(2),
-                        text: String.fromCharCode('0xe810'),
-                        bgColor: "hsl(240, 100%, 64%)",
+                        message: text,
                     },
                     x: this.gridX(3),
                     y: this.gridY(9),
                 },
+
                 rankButton: {
                     type: "RankingButton",
                     init: { size: this.gridX(2), },
@@ -131,29 +135,15 @@ tm.define("ResultScene", {
                     y: this.gridY(10),
                 },
                 adButton: {
-                    type: "CircleButton",
+                    type: "AdButton",
                     init: {
                         size: this.gridX(2),
-                        text: 'Ad',
-                        bgColor: "hsl(0, 100%, 64%)",
                     },
                     x: this.gridX(9),
                     y: this.gridY(9),
                 },
             }
         });
-
-        // setup tweet
-        var text = "SCORE: {score}, {message}".format(param);
-        var twitterURL = tm.social.Twitter.createURL({
-            type    : "tweet",
-            text    : text,
-            hashtags: param.hashtags,
-            url     : param.url, // or window.document.location.href
-        });
-
-        this.twitterURL = twitterURL;
-        this.stage.shareButton.onclick = this._tweet.bind(this);            
 
         // setup
         var life = this.stage.life;
@@ -164,6 +154,14 @@ tm.define("ResultScene", {
             homeButton.fill();
         }.bind(this);
         homeButton.onfilled = this._toHome.bind(this);
+
+        adButton.onaded = function() {
+            life.recovery();
+        }.bind(this);
+        
+        shareButton.onshared = function() {
+            life.recovery();
+        }.bind(this);
 
         // setup record
         if (highScoreFlag) {
@@ -189,7 +187,6 @@ tm.define("ResultScene", {
 
 
         if (window.gamecenter) {
-            alert('send');
             var data = {
                 score: param.score,
                 leaderboardId: BOARD_ID,
@@ -214,10 +211,6 @@ tm.define("ResultScene", {
     _toHome: function() {
         this.nextLabel = 'title';
         this.app.popScene();
-    },
-
-    _tweet: function() {
-        window.open(this.twitterURL, 'share window', 'width=400, height=300');
     },
 });
 

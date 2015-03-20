@@ -66,11 +66,9 @@ tm.define("TitleScene", {
                     y: this.gridY(10),
                 },
                 adButton: {
-                    type: "CircleButton",
+                    type: "AdButton",
                     init: {
                         size: this.gridX(2),
-                        text: 'Ad',
-                        bgColor: "hsl(0, 100%, 64%)",
                     },
                     x: this.gridX(9),
                     y: this.gridY(9),
@@ -97,7 +95,9 @@ tm.define("TitleScene", {
             this.app.popScene();
         }.bind(this);
 
-        this.adButton.onpush = this._showAd.bind(this);
+        this.adButton.onaded = function() {
+            this.life.recovery();
+        }.bind(this);
 
         this.shareButton.onshared = function() {
             this.life.recovery();
@@ -123,14 +123,6 @@ tm.define("TitleScene", {
         if (app.keyboard.getKey('space')) {
             this.app.popScene();
         }
-    },
-
-    _showAd: function() {
-        clickAdCallback = function() {
-            this.life.recovery();
-        }.bind(this);
-
-        showAd();
     },
 
 });
