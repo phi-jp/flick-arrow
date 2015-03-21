@@ -15,9 +15,7 @@ var PENALTY = 2*1000;
 
 var BASE_PATH = window.cordovaFlag ? 'http://junk.tmlife.net/flick-arrow/' : "./";
 var HOME_COLOR = "hsl(60, 100%, 50%)";
-var MAIN_FONT = "Gloria Hallelujah";
 var MAIN_FONT = "Kaushan Script";
-var SUB_FONT = "Open Sans";
 var BOARD_ID = "board_normal";
 var FONT_CODE = {
     play: '0xf04b',
@@ -48,8 +46,6 @@ var ASSETS = {
 	"sounds/bgm": BASE_PATH + "sounds/bgm.wav",
 	"sounds/pinpon": BASE_PATH + "sounds/pinpon.mp3",
 	"sounds/boo": BASE_PATH + "sounds/boo.mp3",
-
-    // "fonts/fontello": BASE_PATH + "fonts/fontello/font/share.woff",
 };
 
 
