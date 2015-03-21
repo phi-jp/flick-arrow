@@ -26,17 +26,17 @@ tm.define("GameScene", {
             children: {
                 scoreLabel: {
                     type: "tm.display.Label",
-                    x: 620,
-                    y: 40,
+                    x: SCREEN_CENTER_X,
+                    y: 115,
                     fillStyle: "#444",
-                    fontSize: 32,
-                    align: 'right',
-                    text: '00000000',
+                    fontSize: 64,
+                    text: '0',
                 },
             },
         });
 
         this.score = 0;
+        this.combo = 0;
         this.timer = 0;
         this.limitTime = TIME;
         this.xList = [];
@@ -46,9 +46,9 @@ tm.define("GameScene", {
     },
 
     onenter: function() {
-        // // debug:
-        // this.setQuestion();
-        // return ;
+        // debug:
+        this.setQuestion();
+        return ;
 
         // 
         CircleFilterEffect().addChildTo(this);
@@ -62,8 +62,9 @@ tm.define("GameScene", {
     },
 
     createArrow: function(i) {
-        var direction = ['left', 'right', 'up', 'down'].pickup();
         var type = ['blue', 'blue', 'red', 'green'].pickup();
+        var type = this.getArrowType();
+        var direction = ['left', 'right', 'up', 'down'].pickup();
         var arrow = Arrow({
             type: type,
             direction: direction
@@ -76,6 +77,20 @@ tm.define("GameScene", {
         return arrow;
     },
 
+    getArrowType: function() {
+    	var score = this.score;
+    	var table = QUESTION_TABLE[0];
+    	Object.keys(QUESTION_TABLE).some(function(value) {
+    		if (score <= value) {
+    			return true;
+    		}
+			table = QUESTION_TABLE[value];
+    	});
+
+    	console.log(table);
+
+    	return table.pickup();
+    },
 
     setupArrow: function() {
         (5).times(function(i) {
@@ -130,6 +145,14 @@ tm.define("GameScene", {
                 tm.asset.Manager.get("sounds/pinpon").clone().play();
 
                 this.setQuestion();
+
+                // ボーナス
+                this.combo++;
+                if (this.combo % 10 === 0) {
+                	var time = (this.combo * this.combo);
+                	time = Math.min(MAX_RECOVERY, time);
+                	this.addTime(-time);
+                }
             }
             else {
                 this.arrow.move(SCREEN_CENTER_X, SCREEN_CENTER_Y+120);
@@ -138,6 +161,8 @@ tm.define("GameScene", {
 
                 // penalty
                 this.addTime(PENALTY);
+                
+                this.combo = 0;
             }
         }
 
@@ -221,7 +246,7 @@ tm.define("GameScene", {
 
     addScore: function(point) {
         this.score += point;
-        this.ui.scoreLabel.text = this.score.padding(8);
+        this.ui.scoreLabel.text = this.score;
     },
 
     addTime: function(time) {
@@ -261,6 +286,19 @@ tm.define("Arrow", {
 
         this.fromJSON({
             children: {
+            	arrow: {
+            		type: "tm.display.Sprite",
+            		init: "images/arrow0",
+            		width: 200,
+            		height: 200,
+                    rotation: {
+                        'left': 180,
+                        'right': 0,
+                        'up': -90,
+                        'down': 90,
+                    }[this.direction],
+            	},
+            	/*
                 arrow: {
                     type: "tm.display.Label",
                     init: String.fromCharCode(FONT_CODE.longArrowRight),
@@ -273,6 +311,7 @@ tm.define("Arrow", {
                         'down': 90,
                     }[this.direction],
                 },
+                */
             },
         });
 

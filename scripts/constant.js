@@ -10,8 +10,9 @@ var SCREEN_CENTER   = tm.geom.Vector2(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 var SCREEN_RECT     = tm.geom.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 var TITLE = "Flick Arrow";
-var TIME = 20*1000;
+var TIME = 20*1000; // 50flick/20sec はいける!
 var PENALTY = 2*1000;
+var MAX_RECOVERY = 2*1000; // 回復量のマックス値
 
 var BASE_PATH = window.cordovaFlag ? 'http://junk.tmlife.net/flick-arrow/' : "./";
 var HOME_COLOR = "hsl(60, 100%, 50%)";
@@ -32,6 +33,14 @@ var FONT_CODE = {
     longArrowRight: '0xf178',
     handORight: '0xf0a4',
     angleRight: '0xf106',
+};
+
+var QUESTION_TABLE = {
+    0: ['blue'],
+    10: ['blue', 'blue', 'red'],
+    20: ['blue', 'red'],
+    30: ['blue', 'blue', 'blue', 'red', 'red', 'green'],
+    40: ['blue', 'red', 'green'],
 };
 
 var QUERY = tm.util.QueryString.parse(location.search.substr(1));
