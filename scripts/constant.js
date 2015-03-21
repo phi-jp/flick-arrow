@@ -15,7 +15,7 @@ var PENALTY = 2*1000;
 var MAX_RECOVERY = 2*1000; // 回復量のマックス値
 
 var BASE_PATH = window.cordovaFlag ? 'http://junk.tmlife.net/flick-arrow/' : "./";
-var HOME_COLOR = "hsl(60, 100%, 50%)";
+var HOME_COLOR = "hsl(60, 90%, 50%)";
 var MAIN_FONT = "Kaushan Script";
 var BOARD_ID = "board_normal";
 var FONT_CODE = {
