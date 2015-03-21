@@ -42,7 +42,7 @@ tm.define("TitleScene", {
                     type: "CircleButton",
                     init: {
                         size: this.gridX(3),
-                        text: String.fromCharCode('0xe80d'),
+                        text: String.fromCharCode(FONT_CODE.play),
                     },
                     x: this.gridX(6),
                     y: this.gridY(7),
@@ -108,6 +108,11 @@ tm.define("TitleScene", {
         CircleFilterEffect({
             color: HOME_COLOR,
         }).addChildTo(this);
+    },
+
+    onpointingstart: function(e) {
+        var p = e.app.pointing;
+        WaveEffect().addChildTo(this).setPosition(p.x, p.y);
     },
 
     gridX: function(i) {

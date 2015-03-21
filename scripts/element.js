@@ -11,7 +11,7 @@ tm.define("CircleButton", {
         param.$safe({
             size: 150,
             text: 'A',
-            fontFamily: 'share',
+            fontFamily: 'FontAwesome',
             fontColor: "white",
             bgColor: "hsl(180, 60%, 50%)",
             strokeColor: "transparent",
@@ -128,7 +128,7 @@ tm.define("RankingButton", {
 
     init: function(param) {
         this.superInit({
-            text: String.fromCharCode('0xe800'),
+            text: String.fromCharCode(FONT_CODE.trophy),
             bgColor: "hsl(200, 100%, 50%)",
         }.$extend(param));
 
@@ -152,7 +152,7 @@ tm.define("AdButton", {
 
     init: function(param) {
         this.superInit({
-            text: 'Ad',
+            text: String.fromCharCode(FONT_CODE.buysellads),
             bgColor: "hsl(0, 100%, 64%)",
         }.$extend(param));
 
@@ -173,7 +173,7 @@ tm.define("ShareButton", {
 
     init: function(param) {
         this.superInit({
-            text: String.fromCharCode('0xe810'),
+            text: String.fromCharCode(FONT_CODE.comment),
             bgColor: "hsl(240, 100%, 64%)",
         }.$extend(param));
 
@@ -294,4 +294,27 @@ tm.define("Life", {
     },
 
 });
+
+tm.define("WaveEffect", {
+    superClass: "tm.display.CircleShape",
+
+    init: function() {
+        this.superInit({
+            fillStyle: "white",
+            strokeStyle: "transparent",
+        });
+
+        this.tweener.to({
+            scaleX: 2,
+            scaleY: 2,
+            alpha: 0,
+        }, 250).call(function() {
+            this.remove();
+        }, this)
+    }
+});
+
+
+
+
 

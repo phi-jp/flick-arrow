@@ -259,33 +259,20 @@ tm.define("Arrow", {
             lineWidth: 8,
         });
 
-        var arrowChar = {
-            'left': '←',
-            'right': '→',
-            'up': '↑',
-            'down': '↓',
-        }[this.direction];
-
         this.fromJSON({
             children: {
-                // label: {
-                //     type: "tm.display.Label",
-                //     text: arrowChar,
-                //     fontWeight: "bold",
-                //     fontSize: 160,
-                // },
                 arrow: {
-                    type: "tm.display.Sprite",
-                    init: "images/arrow0",
-                    width: 200,
-                    height: 200,
+                    type: "tm.display.Label",
+                    init: String.fromCharCode(FONT_CODE.longArrowRight),
+                    fontSize: 150,
+                    fontFamily: 'FontAwesome',
                     rotation: {
                         'left': 180,
                         'right': 0,
                         'up': -90,
                         'down': 90,
                     }[this.direction]
-                }
+                },
             },
         });
 

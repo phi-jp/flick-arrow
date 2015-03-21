@@ -19,6 +19,22 @@ var MAIN_FONT = "Gloria Hallelujah";
 var MAIN_FONT = "Kaushan Script";
 var SUB_FONT = "Open Sans";
 var BOARD_ID = "board_normal";
+var FONT_CODE = {
+    play: '0xf04b',
+    home: '0xf015',
+    comment: '0xf075',
+    apple: '0xf179',
+    android: '0xf17b',
+    trophy: '0xf091',
+    gamepad: '0xf11b',
+    shareAlt: '0xf1e0',
+    buysellads: '0xf20d',
+
+    arrowRight: '0xf061',
+    longArrowRight: '0xf178',
+    handORight: '0xf0a4',
+    angleRight: '0xf106',
+};
 
 var QUERY = tm.util.QueryString.parse(location.search.substr(1));
 QUERY.$safe({

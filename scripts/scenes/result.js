@@ -110,7 +110,7 @@ tm.define("ResultScene", {
                     type: "CircleButton",
                     init: {
                         size: this.gridX(3),
-                        text: String.fromCharCode('0xe80c'),
+                        text: String.fromCharCode(FONT_CODE.home),
                         bgColor: HOME_COLOR,
                     },
                     x: this.gridX(6),
