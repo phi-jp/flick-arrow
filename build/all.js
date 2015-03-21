@@ -10,8 +10,9 @@ var SCREEN_CENTER   = tm.geom.Vector2(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 var SCREEN_RECT     = tm.geom.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 var TITLE = "Flick Arrow";
-var TIME = 20*1000;
+var TIME = 20*1000; // 50flick/20sec はいける!
 var PENALTY = 2*1000;
+var MAX_RECOVERY = 2*1000; // 回復量のマックス値
 
 var BASE_PATH = window.cordovaFlag ? 'http://junk.tmlife.net/flick-arrow/' : "./";
 var HOME_COLOR = "hsl(60, 100%, 50%)";
@@ -27,11 +28,20 @@ var FONT_CODE = {
     gamepad: '0xf11b',
     shareAlt: '0xf1e0',
     buysellads: '0xf20d',
+    pause: '0xf04c',
 
     arrowRight: '0xf061',
     longArrowRight: '0xf178',
     handORight: '0xf0a4',
     angleRight: '0xf106',
+};
+
+var QUESTION_TABLE = {
+    0: ['blue'],
+    10: ['blue', 'blue', 'red'],
+    20: ['blue', 'red'],
+    30: ['blue', 'blue', 'blue', 'red', 'red', 'green'],
+    40: ['blue', 'red', 'green'],
 };
 
 var QUERY = tm.util.QueryString.parse(location.search.substr(1));
@@ -334,6 +344,39 @@ tm.define("ShareButton", {
     },
 });
 
+tm.define("PauseButton", {
+    superClass: "CircleButton",
+
+    init: function(param) {
+        this.superInit({
+            text: String.fromCharCode(FONT_CODE.pause),
+            bgColor: "hsl(0, 0%, 50%)",
+        }.$extend(param));
+    },
+});
+
+tm.define("PlayButton", {
+    superClass: "CircleButton",
+
+    init: function(param) {
+        this.superInit({
+            text: String.fromCharCode(FONT_CODE.play),
+        }.$extend(param));
+    },
+});
+
+tm.define("HomeButton", {
+    superClass: "CircleButton",
+
+    init: function(param) {
+        this.superInit({
+            text: String.fromCharCode(FONT_CODE.home),
+            bgColor: HOME_COLOR,
+        }.$extend(param));
+    },
+});
+
+
 
 tm.define("Life", {
     superClass: "tm.display.CanvasElement",
@@ -480,10 +523,9 @@ tm.define("TitleScene", {
                 },
 
                 playButton: {
-                    type: "CircleButton",
+                    type: "PlayButton",
                     init: {
                         size: this.gridX(3),
-                        text: String.fromCharCode(FONT_CODE.play),
                     },
                     x: this.gridX(6),
                     y: this.gridY(7),
@@ -601,23 +643,35 @@ tm.define("GameScene", {
             children: {
                 scoreLabel: {
                     type: "tm.display.Label",
-                    x: 620,
-                    y: 40,
+                    x: SCREEN_CENTER_X,
+                    y: 115,
                     fillStyle: "#444",
-                    fontSize: 32,
-                    align: 'right',
-                    text: '00000000',
+                    fontSize: 64,
+                    text: '0',
+                },
+                pauseButton: {
+                    type: "PauseButton",
+                    init: {
+                        size: 60,
+                    },
+                    x: 590,
+                    y: 50,
                 },
             },
         });
 
         this.score = 0;
+        this.combo = 0;
         this.timer = 0;
         this.limitTime = TIME;
         this.xList = [];
         this.yList = [];
 
         this.setupArrow();
+
+        this.ui.pauseButton.onpush = function() {
+            this.pause();
+        }.bind(this);
     },
 
     onenter: function() {
@@ -637,8 +691,9 @@ tm.define("GameScene", {
     },
 
     createArrow: function(i) {
-        var direction = ['left', 'right', 'up', 'down'].pickup();
         var type = ['blue', 'blue', 'red', 'green'].pickup();
+        var type = this.getArrowType();
+        var direction = ['left', 'right', 'up', 'down'].pickup();
         var arrow = Arrow({
             type: type,
             direction: direction
@@ -651,6 +706,18 @@ tm.define("GameScene", {
         return arrow;
     },
 
+    getArrowType: function() {
+    	var score = this.score;
+    	var table = QUESTION_TABLE[0];
+    	Object.keys(QUESTION_TABLE).some(function(value) {
+    		if (score <= value) {
+    			return true;
+    		}
+			table = QUESTION_TABLE[value];
+    	});
+
+    	return table.pickup();
+    },
 
     setupArrow: function() {
         (5).times(function(i) {
@@ -705,6 +772,14 @@ tm.define("GameScene", {
                 tm.asset.Manager.get("sounds/pinpon").clone().play();
 
                 this.setQuestion();
+
+                // ボーナス
+                this.combo++;
+                if (this.combo % 10 === 0) {
+                	var time = (this.combo * this.combo);
+                	time = Math.min(MAX_RECOVERY, time);
+                	this.addTime(-time);
+                }
             }
             else {
                 this.arrow.move(SCREEN_CENTER_X, SCREEN_CENTER_Y+120);
@@ -713,6 +788,8 @@ tm.define("GameScene", {
 
                 // penalty
                 this.addTime(PENALTY);
+                
+                this.combo = 0;
             }
         }
 
@@ -796,7 +873,7 @@ tm.define("GameScene", {
 
     addScore: function(point) {
         this.score += point;
-        this.ui.scoreLabel.text = this.score.padding(8);
+        this.ui.scoreLabel.text = this.score;
     },
 
     addTime: function(time) {
@@ -806,6 +883,22 @@ tm.define("GameScene", {
 
     isTimeup: function() {
         return this.timer >= this.limitTime;
+    },
+
+    pause: function() {
+        var app = this.app;
+
+        var s = PauseScene({
+            score: this.score,
+            bgColor: 'rgba(0, 0, 0, 0.95)',
+        });
+        s.onexit = function() {
+            if (s.nextLabel === 'title') {
+                this.nextLabel = 'title';
+                app.popScene();
+            }
+        }.bind(this);
+        app.pushScene(s);
     },
 
 });
@@ -836,6 +929,19 @@ tm.define("Arrow", {
 
         this.fromJSON({
             children: {
+            	arrow: {
+            		type: "tm.display.Sprite",
+            		init: "images/arrow0",
+            		width: 200,
+            		height: 200,
+                    rotation: {
+                        'left': 180,
+                        'right': 0,
+                        'up': -90,
+                        'down': 90,
+                    }[this.direction],
+            	},
+            	/*
                 arrow: {
                     type: "tm.display.Label",
                     init: String.fromCharCode(FONT_CODE.longArrowRight),
@@ -848,6 +954,7 @@ tm.define("Arrow", {
                         'down': 90,
                     }[this.direction],
                 },
+                */
             },
         });
 
@@ -1168,11 +1275,9 @@ tm.define("ResultScene", {
                 },
 
                 homeButton: {
-                    type: "CircleButton",
+                    type: "HomeButton",
                     init: {
                         size: this.gridX(3),
-                        text: String.fromCharCode(FONT_CODE.home),
-                        bgColor: HOME_COLOR,
                     },
                     x: this.gridX(6),
                     y: this.gridY(7),
@@ -1272,6 +1377,88 @@ tm.define("ResultScene", {
     _toHome: function() {
         this.nextLabel = 'title';
         this.app.popScene();
+    },
+});
+
+
+/*
+ * PauseScene
+ */
+
+
+tm.define("PauseScene", {
+    superClass: "tm.app.Scene",
+
+    init: function(param) {
+        this.superInit();
+
+        param = {
+        	bgColor: 'rgba(0, 0, 0, 0.95)',
+        }.$extend(param);
+
+        this.fromJSON({
+            children: {
+                bg: {
+                    type: "tm.display.RectangleShape",
+                    init: {
+                        width: SCREEN_WIDTH,
+                        height: SCREEN_HEIGHT,
+                        fillStyle: param.bgColor,
+                        strokeStyle: "transparent",
+                    },
+                    originX: 0,
+                    originY: 0,
+                },
+                stage: {
+                    type: "tm.display.CanvasElement",
+                },
+            }
+        });
+
+        this.stage.fromJSON({
+        	children: {
+                homeButton: {
+                    type: "HomeButton",
+                    init: {
+                        size: 140,
+                    },
+                    x: 160,
+                    y: SCREEN_CENTER_Y,
+                },
+                playButton: {
+                    type: "PlayButton",
+                    init: {
+                        size: 140,
+                    },
+                    x: SCREEN_WIDTH - 160,
+                    y: SCREEN_CENTER_Y,
+                },
+        	}
+        });
+
+        this.stage.homeButton.onpush = function() {
+            this.fill();
+        };
+        this.stage.homeButton.onfilled = function() {
+	        this.nextLabel = 'title';
+	        this.app.popScene();
+        }.bind(this);
+
+        this.stage.playButton.onpush = function() {
+	        this.app.popScene();
+        }.bind(this);
+
+        // fade
+        this.bg.alpha = 0;
+        this.bg.tweener.wait(100).fadeIn(200);
+        this.stage.alpha = 0;
+        this.stage.children.each(function(elm) { elm.sleep(); });
+        this.stage.tweener
+            .wait(500)
+            .call(function() {
+                this.stage.children.each(function(elm) { elm.wakeUp(); });
+            }, this)
+            .fadeIn(200);
     },
 });
 
@@ -1392,6 +1579,11 @@ tm.define("ManagerScene", {
                     className: "ResultScene",
                     label: "result",
                     nextLabel: "title",
+                },
+
+                {
+                    className: "PauseScene",
+                    label: "pause",
                 },
             ],
         });

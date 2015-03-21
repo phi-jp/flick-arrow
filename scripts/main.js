@@ -55,6 +55,11 @@ tm.define("ManagerScene", {
                     label: "result",
                     nextLabel: "title",
                 },
+
+                {
+                    className: "PauseScene",
+                    label: "pause",
+                },
             ],
         });
 

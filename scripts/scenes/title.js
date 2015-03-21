@@ -39,10 +39,9 @@ tm.define("TitleScene", {
                 },
 
                 playButton: {
-                    type: "CircleButton",
+                    type: "PlayButton",
                     init: {
                         size: this.gridX(3),
-                        text: String.fromCharCode(FONT_CODE.play),
                     },
                     x: this.gridX(6),
                     y: this.gridY(7),

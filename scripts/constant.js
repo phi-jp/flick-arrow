@@ -28,6 +28,7 @@ var FONT_CODE = {
     gamepad: '0xf11b',
     shareAlt: '0xf1e0',
     buysellads: '0xf20d',
+    pause: '0xf04c',
 
     arrowRight: '0xf061',
     longArrowRight: '0xf178',

@@ -2,6 +2,7 @@
  *
  */
 
+var pkg = require('./package.json');
 var gulp = require('gulp');
 var ghelper = require('gulp-helper');
 ghelper.require();
@@ -9,15 +10,8 @@ ghelper.require();
 gulp.task('default', ['build']);  
 
 gulp.task('build', function() {  
-  var scripts = [
-    './scripts/constant.js',
-    './scripts/element.js',
-    './scripts/scenes/title.js',
-    './scripts/scenes/game.js',
-    './scripts/scenes/result.js',
-    './scripts/countscene.js',
-    './scripts/main.js',
-  ];
+  var scripts = pkg.scripts;
+  
   gulp.src(scripts)
     .pipe(concat('all.js'))
     .pipe(gulp.dest('./build'))

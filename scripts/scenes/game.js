@@ -32,6 +32,14 @@ tm.define("GameScene", {
                     fontSize: 64,
                     text: '0',
                 },
+                pauseButton: {
+                    type: "PauseButton",
+                    init: {
+                        size: 60,
+                    },
+                    x: 590,
+                    y: 50,
+                },
             },
         });
 
@@ -43,12 +51,16 @@ tm.define("GameScene", {
         this.yList = [];
 
         this.setupArrow();
+
+        this.ui.pauseButton.onpush = function() {
+            this.pause();
+        }.bind(this);
     },
 
     onenter: function() {
-        // debug:
-        this.setQuestion();
-        return ;
+        // // debug:
+        // this.setQuestion();
+        // return ;
 
         // 
         CircleFilterEffect().addChildTo(this);
@@ -86,8 +98,6 @@ tm.define("GameScene", {
     		}
 			table = QUESTION_TABLE[value];
     	});
-
-    	console.log(table);
 
     	return table.pickup();
     },
@@ -256,6 +266,22 @@ tm.define("GameScene", {
 
     isTimeup: function() {
         return this.timer >= this.limitTime;
+    },
+
+    pause: function() {
+        var app = this.app;
+
+        var s = PauseScene({
+            score: this.score,
+            bgColor: 'rgba(0, 0, 0, 0.95)',
+        });
+        s.onexit = function() {
+            if (s.nextLabel === 'title') {
+                this.nextLabel = 'title';
+                app.popScene();
+            }
+        }.bind(this);
+        app.pushScene(s);
     },
 
 });

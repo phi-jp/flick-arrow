@@ -214,6 +214,39 @@ tm.define("ShareButton", {
     },
 });
 
+tm.define("PauseButton", {
+    superClass: "CircleButton",
+
+    init: function(param) {
+        this.superInit({
+            text: String.fromCharCode(FONT_CODE.pause),
+            bgColor: "hsl(0, 0%, 50%)",
+        }.$extend(param));
+    },
+});
+
+tm.define("PlayButton", {
+    superClass: "CircleButton",
+
+    init: function(param) {
+        this.superInit({
+            text: String.fromCharCode(FONT_CODE.play),
+        }.$extend(param));
+    },
+});
+
+tm.define("HomeButton", {
+    superClass: "CircleButton",
+
+    init: function(param) {
+        this.superInit({
+            text: String.fromCharCode(FONT_CODE.home),
+            bgColor: HOME_COLOR,
+        }.$extend(param));
+    },
+});
+
+
 
 tm.define("Life", {
     superClass: "tm.display.CanvasElement",
