@@ -11,7 +11,11 @@ gulp.task('default', ['build']);
 gulp.task('build', function() {  
   var scripts = [
     './scripts/constant.js',
-    './scripts/game.js',
+    './scripts/element.js',
+    './scripts/scenes/title.js',
+    './scripts/scenes/game.js',
+    './scripts/scenes/result.js',
+    './scripts/countscene.js',
     './scripts/main.js',
   ];
   gulp.src(scripts)
