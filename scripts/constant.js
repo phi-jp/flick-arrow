@@ -10,7 +10,7 @@ var SCREEN_CENTER   = tm.geom.Vector2(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 var SCREEN_RECT     = tm.geom.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 var TITLE = "Flick Arrow";
-var TIME = 20*1000; // 50flick/20sec はいける!
+var TIME = 30*1000; // 50flick/20sec はいける!
 var PENALTY = 2*1000;
 var MAX_RECOVERY = 2*1000; // 回復量のマックス値
 
@@ -56,6 +56,14 @@ var ASSETS = {
 	"sounds/bgm": BASE_PATH + "sounds/bgm.wav",
 	"sounds/pinpon": BASE_PATH + "sounds/pinpon.mp3",
 	"sounds/boo": BASE_PATH + "sounds/boo.mp3",
+
+    "sounds/touch": BASE_PATH + "sounds/cursor21.wav",
+    "sounds/touch": BASE_PATH + "sounds/cursor34.wav",
+    "sounds/touch": BASE_PATH + "sounds/fm006.wav",
+    "sounds/warp": BASE_PATH + "sounds/power16.wav",
+
+    "sounds/bgm/title": BASE_PATH + "sounds/bgm/title.wav",
+    "sounds/bgm/game": BASE_PATH + "sounds/bgm/game.wav",
 };
 
 

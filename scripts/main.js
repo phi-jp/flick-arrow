@@ -5,8 +5,7 @@
  */
 
 
-// main
-tm.main(function() {
+var main = function() {
     // キャンバスアプリケーションを生成
     var app = tm.display.CanvasApp("#world");
     app.background = "#eee";
@@ -29,7 +28,15 @@ tm.main(function() {
 
     // 実行
     app.run();
-});
+};
+
+// main
+if (window.target === 'debug') {
+    main();
+}
+else {
+    tm.main(main);
+}
 
 tm.define("ManagerScene", {
     superClass: "tm.scene.ManagerScene",

@@ -85,6 +85,9 @@ tm.define("CircleButton", {
                 x: SCREEN_CENTER_X,
                 y: SCREEN_CENTER_Y,
             }, 300, 'easeOutQuint')
+            .call(function() {
+                tm.asset.Manager.get("sounds/warp").clone().play();
+            })
             .to({
                 radius: 600,
             }, 500, 'easeOutQuint')
@@ -343,7 +346,9 @@ tm.define("WaveEffect", {
             alpha: 0,
         }, 250).call(function() {
             this.remove();
-        }, this)
+        }, this);
+
+        tm.asset.Manager.get("sounds/touch").clone().play();
     }
 });
 

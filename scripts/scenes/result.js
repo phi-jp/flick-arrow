@@ -191,9 +191,9 @@ tm.define("ResultScene", {
             };
 
             gamecenter.submitScore(function() {
-                alert('success');
+                // alert('success');
             }, function() {
-                alert('failure');
+                // alert('failure');
             }, data);
         }
     },

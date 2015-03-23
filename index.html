@@ -14,6 +14,8 @@
         <script src="http://rawgit.com/phi-jp/tmlib.js/2a672bea8245a54d735b8d396372eab993803e7d/build/tmlib.js"></script>
 
         <script>
+        window.target = 'debug';
+        
         var pkg = tm.util.File({
             url: './package.json',
             dataType: 'json',
@@ -21,8 +23,10 @@
         pkg.onload = function() {
             var scripts = pkg.data.scripts;
 
-            scripts.each(function(src) {
-                tm.util.Script(src);
+            scripts.each(function(src, i) {
+                setTimeout(function() {
+                    tm.util.Script(src);
+                }, 10*i);
             });
         };
         </script>

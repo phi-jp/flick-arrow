@@ -55,6 +55,9 @@ tm.define("GameScene", {
         this.ui.pauseButton.onpush = function() {
             this.pause();
         }.bind(this);
+
+        this.bgm = tm.asset.Manager.get("sounds/bgm/game").clone().setLoop(true);
+        this.bgm.play();
     },
 
     onenter: function() {
@@ -69,8 +72,13 @@ tm.define("GameScene", {
         this.app.pushScene(scene);
 
         scene.onexit = function() {
+
             this.setQuestion();
         }.bind(this);
+    },
+
+    onexit: function() {
+        this.bgm.stop();
     },
 
     createArrow: function(i) {

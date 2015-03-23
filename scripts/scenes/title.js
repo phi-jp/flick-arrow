@@ -101,12 +101,18 @@ tm.define("TitleScene", {
         this.shareButton.onshared = function() {
             this.life.recovery();
         }.bind(this);
+
+        this.bgm = tm.asset.Manager.get("sounds/bgm/title").clone().setVolume(0.5).setLoop(true);
+        this.bgm.play();
     },
 
     onenter: function() {
         CircleFilterEffect({
             color: HOME_COLOR,
         }).addChildTo(this);
+    },
+    onexit: function() {
+        this.bgm.stop();
     },
 
     onpointingstart: function(e) {
