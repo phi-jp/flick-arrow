@@ -17,7 +17,7 @@ tm.define("TitleScene", {
                     init: {
                         width: SCREEN_WIDTH,
                         height: SCREEN_HEIGHT,
-                        bgColor: "rgb(248, 248, 248)",
+                        bgColor: BACKGROUND_COLOR,
                     },
                     originX: 0,
                     originY: 0,

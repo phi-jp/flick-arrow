@@ -10,6 +10,7 @@ var SCREEN_CENTER   = tm.geom.Vector2(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 var SCREEN_RECT     = tm.geom.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 var TITLE = "Flick Arrow";
+var BACKGROUND_COLOR = 'rgb(248, 248, 248)';
 var TIME = 30*1000; // 50flick/20sec はいける!
 var PENALTY = 2*1000;
 var MAX_RECOVERY = 2*1000; // 回復量のマックス値

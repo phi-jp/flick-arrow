@@ -47,4 +47,9 @@ document.addEventListener('deviceready', function() {
         gamecenter.auth();
     }
 
+    // // ステータスバーを非表示
+    // if (window.StatusBar) {
+    //     window.StatusBar.hide();
+    // }
+
 }, false);
