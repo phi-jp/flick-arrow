@@ -10,7 +10,8 @@ var SCREEN_CENTER   = tm.geom.Vector2(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 var SCREEN_RECT     = tm.geom.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 var TITLE = "Flick Arrow";
-var TIME = 20*1000; // 50flick/20sec はいける!
+var BACKGROUND_COLOR = 'rgb(248, 248, 248)';
+var TIME = 30*1000; // 50flick/20sec はいける!
 var PENALTY = 2*1000;
 var MAX_RECOVERY = 2*1000; // 回復量のマックス値
 
@@ -56,6 +57,14 @@ var ASSETS = {
 	"sounds/bgm": BASE_PATH + "sounds/bgm.wav",
 	"sounds/pinpon": BASE_PATH + "sounds/pinpon.mp3",
 	"sounds/boo": BASE_PATH + "sounds/boo.mp3",
+
+    "sounds/touch": BASE_PATH + "sounds/cursor21.wav",
+    "sounds/touch": BASE_PATH + "sounds/cursor34.wav",
+    "sounds/touch": BASE_PATH + "sounds/fm006.wav",
+    "sounds/warp": BASE_PATH + "sounds/power16.wav",
+
+    "sounds/bgm/title": BASE_PATH + "sounds/bgm/title.wav",
+    "sounds/bgm/game": BASE_PATH + "sounds/bgm/game.wav",
 };
 
 
@@ -215,6 +224,9 @@ tm.define("CircleButton", {
                 x: SCREEN_CENTER_X,
                 y: SCREEN_CENTER_Y,
             }, 300, 'easeOutQuint')
+            .call(function() {
+                tm.asset.Manager.get("sounds/warp").clone().play();
+            })
             .to({
                 radius: 600,
             }, 500, 'easeOutQuint')
@@ -473,7 +485,9 @@ tm.define("WaveEffect", {
             alpha: 0,
         }, 250).call(function() {
             this.remove();
-        }, this)
+        }, this);
+
+        tm.asset.Manager.get("sounds/touch").clone().play();
     }
 });
 
@@ -501,7 +515,7 @@ tm.define("TitleScene", {
                     init: {
                         width: SCREEN_WIDTH,
                         height: SCREEN_HEIGHT,
-                        bgColor: "rgb(248, 248, 248)",
+                        bgColor: BACKGROUND_COLOR,
                     },
                     originX: 0,
                     originY: 0,
@@ -585,12 +599,18 @@ tm.define("TitleScene", {
         this.shareButton.onshared = function() {
             this.life.recovery();
         }.bind(this);
+
+        this.bgm = tm.asset.Manager.get("sounds/bgm/title").clone().setVolume(0.5).setLoop(true);
+        this.bgm.play();
     },
 
     onenter: function() {
         CircleFilterEffect({
             color: HOME_COLOR,
         }).addChildTo(this);
+    },
+    onexit: function() {
+        this.bgm.stop();
     },
 
     onpointingstart: function(e) {
@@ -672,6 +692,9 @@ tm.define("GameScene", {
         this.ui.pauseButton.onpush = function() {
             this.pause();
         }.bind(this);
+
+        this.bgm = tm.asset.Manager.get("sounds/bgm/game").clone().setLoop(true);
+        this.bgm.play();
     },
 
     onenter: function() {
@@ -686,8 +709,13 @@ tm.define("GameScene", {
         this.app.pushScene(scene);
 
         scene.onexit = function() {
+
             this.setQuestion();
         }.bind(this);
+    },
+
+    onexit: function() {
+        this.bgm.stop();
     },
 
     createArrow: function(i) {
@@ -1359,9 +1387,9 @@ tm.define("ResultScene", {
             };
 
             gamecenter.submitScore(function() {
-                alert('success');
+                // alert('success');
             }, function() {
-                alert('failure');
+                // alert('failure');
             }, data);
         }
     },
@@ -1530,11 +1558,10 @@ tm.define("PauseScene", {
  */
 
 
-// main
-tm.main(function() {
+var main = function() {
     // キャンバスアプリケーションを生成
     var app = tm.display.CanvasApp("#world");
-    app.background = "#eee";
+    app.background = BACKGROUND_COLOR;
     // リサイズ
     app.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
     // ウィンドウにフィットさせる
@@ -1554,7 +1581,15 @@ tm.main(function() {
 
     // 実行
     app.run();
-});
+};
+
+// main
+if (window.target === 'debug') {
+    main();
+}
+else {
+    tm.main(main);
+}
 
 tm.define("ManagerScene", {
     superClass: "tm.scene.ManagerScene",
