@@ -39,10 +39,10 @@ var FONT_CODE = {
 
 var QUESTION_TABLE = {
     0: ['blue'],
-    10: ['blue', 'blue', 'red'],
-    20: ['blue', 'red'],
-    30: ['blue', 'blue', 'blue', 'red', 'red', 'green'],
-    40: ['blue', 'red', 'green'],
+    8: ['blue', 'blue', 'red'],
+    16: ['blue', 'red'],
+    24: ['blue', 'blue', 'blue', 'red', 'red', 'green'],
+    32: ['blue', 'red', 'green'],
 };
 
 var QUERY = tm.util.QueryString.parse(location.search.substr(1));

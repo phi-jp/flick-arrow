@@ -5,13 +5,7 @@
 
 
 document.addEventListener('deviceready', function() {
-
-    // var message = {
-    //     text: "This is a test message",
-    //     activityTypes: ["Mail", "Facebook", "PostToFacebook", "PostToTwitter"]
-    // };
-    // window.socialmessage.send(message);
-
+    
     var admobid = {};
     // select the right Ad Id according to platform
     if( /(android)/i.test(navigator.userAgent) ) { 
