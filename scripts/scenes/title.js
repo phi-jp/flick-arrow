@@ -52,7 +52,8 @@ tm.define("TitleScene", {
                     type: "ShareButton",
                     init: {
                         size: this.gridX(2),
-                        message: "『FlickArrow』矢印をフリックするシンプルなゲームです♪",
+                        message: TITLE_TWEET,
+                        url: APP_URL,
                     },
                     x: this.gridX(3),
                     y: this.gridY(9),
@@ -80,10 +81,17 @@ tm.define("TitleScene", {
 
         this.playButton.onpush = function() {
             if (UserData.hasLife()) {
-                this.life.ondecrimented = function() {
+                if (TARGET === 'release') {
+                    // ライフを減らすやつ
+                    this.life.ondecrimented = function() {
+                        this.playButton.fill();
+                    }.bind(this);
+                    this.life.decriment();
+                }
+                else {
                     this.playButton.fill();
-                }.bind(this);
-                this.life.decriment();
+                }
+
             }
             else {
                 this.shareButton.blink();

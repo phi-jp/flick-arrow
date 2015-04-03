@@ -181,6 +181,7 @@ tm.define("ShareButton", {
         }.$extend(param));
 
         this.message = param.message;
+        this.url = param.url || "http://twitter.com/phi_jp";
         this.on('push', this._share);
     },
 
@@ -193,7 +194,7 @@ tm.define("ShareButton", {
                 activityTypes: ['PostToFacebook'],
                 // activityTypes: ["PostToFacebook", "PostToTwitter", "PostToWeibo", "Message", "Mail", "Print", "CopyToPasteboard", "AssignToContact", "SaveToCameraRoll", "AddToReadingList", "PostToFlickr", "PostToVimeo", "TencentWeibo", "AirDrop"];
                 activityTypes: ["Mail", "PostToFacebook", "PostToTwitter"],
-                url: 'http://gotoapp',
+                url: this.url,
             };
             window.socialmessage.send(message);
             this.flare('shared');
@@ -203,7 +204,7 @@ tm.define("ShareButton", {
                 type    : "tweet",
                 text    : text,
                 hashtags: "FlickArrow,tmlib",
-                url     : window.document.location.href,
+                url     : this.url,
             });
             var win = window.open(twitterURL, 'share window', 'width=400, height=300');
             var timer = setInterval(function() {   

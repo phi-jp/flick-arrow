@@ -51,7 +51,7 @@ tm.define("ResultScene", {
         };
 
         // setup tweet
-        var text = "SCORE: {score}, {message}".format(param);
+        var text = RESULT_URL.format(param);
 
         this.stage.fromJSON({
             children: {
@@ -121,6 +121,7 @@ tm.define("ResultScene", {
                     init: {
                         size: this.gridX(2),
                         message: text,
+                        url: APP_URL,
                     },
                     x: this.gridX(3),
                     y: this.gridY(9),

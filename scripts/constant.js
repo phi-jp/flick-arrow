@@ -9,6 +9,7 @@ var SCREEN_CENTER_Y = SCREEN_HEIGHT/2;  // スクリーン高さの半分
 var SCREEN_CENTER   = tm.geom.Vector2(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 var SCREEN_RECT     = tm.geom.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+var TARGET = 'release';
 var TITLE = "Flick Arrow";
 var BACKGROUND_COLOR = 'rgb(248, 248, 248)';
 var TIME = 30*1000; // 50flick/20sec はいける!
@@ -36,6 +37,9 @@ var FONT_CODE = {
     handORight: '0xf0a4',
     angleRight: '0xf106',
 };
+var APP_URL = "http://twitter.com/phi_jp";
+var TITLE_TWEET = "『FlickArrow』超簡単♪ 矢印をフリックするだけのカジュアルゲーム";
+var RESULT_URL = TITLE_TWEET + " SCORE: {score} flick";
 
 var QUESTION_TABLE = {
     0: ['blue'],
