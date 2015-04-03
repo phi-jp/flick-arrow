@@ -197,6 +197,12 @@ tm.define("ResultScene", {
                 // alert('failure');
             }, data);
         }
+
+        if (tm.util.Random.randint(0, 5) === 0) {
+            setTimeout(function() {
+                showAd();
+            }, 1000);
+        }
     },
 
     gridX: function(index) {

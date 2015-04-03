@@ -58,17 +58,17 @@ QUERY.$safe({
 var ASSETS = {
 	"images/arrow0": BASE_PATH + "images/arrow0.png",
 	"images/arrow1": BASE_PATH + "images/arrow1.png",
-	"sounds/bgm": BASE_PATH + "sounds/bgm.wav",
+	"sounds/bgm": BASE_PATH + "sounds/bgm.m4a",
 	"sounds/pinpon": BASE_PATH + "sounds/pinpon.mp3",
 	"sounds/boo": BASE_PATH + "sounds/boo.mp3",
 
-    "sounds/touch": BASE_PATH + "sounds/cursor21.wav",
-    "sounds/touch": BASE_PATH + "sounds/cursor34.wav",
-    "sounds/touch": BASE_PATH + "sounds/fm006.wav",
-    "sounds/warp": BASE_PATH + "sounds/power16.wav",
+    "sounds/touch": BASE_PATH + "sounds/cursor21.m4a",
+    "sounds/touch": BASE_PATH + "sounds/cursor34.m4a",
+    "sounds/touch": BASE_PATH + "sounds/fm006.m4a",
+    "sounds/warp": BASE_PATH + "sounds/power16.m4a",
 
-    "sounds/bgm/title": BASE_PATH + "sounds/bgm/title.wav",
-    "sounds/bgm/game": BASE_PATH + "sounds/bgm/game.wav",
+    "sounds/bgm/title": BASE_PATH + "sounds/bgm/title.m4a",
+    "sounds/bgm/game": BASE_PATH + "sounds/bgm/game.m4a",
 };
 
 
