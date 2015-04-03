@@ -190,10 +190,10 @@ tm.define("ShareButton", {
 
         if (isNative()) {
             var message = {
-                text: text,
+                text: text + " #FlickArrow #tmlib",
                 activityTypes: ['PostToFacebook'],
                 // activityTypes: ["PostToFacebook", "PostToTwitter", "PostToWeibo", "Message", "Mail", "Print", "CopyToPasteboard", "AssignToContact", "SaveToCameraRoll", "AddToReadingList", "PostToFlickr", "PostToVimeo", "TencentWeibo", "AirDrop"];
-                activityTypes: ["Mail", "PostToFacebook", "PostToTwitter"],
+                activityTypes: ["Message", "Mail", "PostToFacebook", "PostToTwitter"],
                 url: this.url,
             };
             window.socialmessage.send(message);

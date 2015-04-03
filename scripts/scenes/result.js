@@ -204,6 +204,11 @@ tm.define("ResultScene", {
             }, 1000);
         }
     },
+    
+    onpointingstart: function(e) {
+        var p = e.app.pointing;
+        WaveEffect().addChildTo(this).setPosition(p.x, p.y);
+    },
 
     gridX: function(index) {
         return this.param.width/12*index;
