@@ -9,6 +9,7 @@ var SCREEN_CENTER_Y = SCREEN_HEIGHT/2;  // スクリーン高さの半分
 var SCREEN_CENTER   = tm.geom.Vector2(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 var SCREEN_RECT     = tm.geom.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+var TARGET = 'release';
 var TITLE = "Flick Arrow";
 var BACKGROUND_COLOR = 'rgb(248, 248, 248)';
 var TIME = 30*1000; // 50flick/20sec はいける!
@@ -36,6 +37,9 @@ var FONT_CODE = {
     handORight: '0xf0a4',
     angleRight: '0xf106',
 };
+var APP_URL = "http://twitter.com/phi_jp";
+var TITLE_TWEET = "『FlickArrow』超簡単♪ 矢印をフリックするだけのカジュアルゲーム";
+var RESULT_URL = TITLE_TWEET + " SCORE: {score} flick";
 
 var QUESTION_TABLE = {
     0: ['blue'],
@@ -54,17 +58,17 @@ QUERY.$safe({
 var ASSETS = {
 	"images/arrow0": BASE_PATH + "images/arrow0.png",
 	"images/arrow1": BASE_PATH + "images/arrow1.png",
-	"sounds/bgm": BASE_PATH + "sounds/bgm.wav",
+	"sounds/bgm": BASE_PATH + "sounds/bgm.m4a",
 	"sounds/pinpon": BASE_PATH + "sounds/pinpon.mp3",
 	"sounds/boo": BASE_PATH + "sounds/boo.mp3",
 
-    "sounds/touch": BASE_PATH + "sounds/cursor21.wav",
-    "sounds/touch": BASE_PATH + "sounds/cursor34.wav",
-    "sounds/touch": BASE_PATH + "sounds/fm006.wav",
-    "sounds/warp": BASE_PATH + "sounds/power16.wav",
+    "sounds/touch": BASE_PATH + "sounds/cursor21.m4a",
+    "sounds/touch": BASE_PATH + "sounds/cursor34.m4a",
+    "sounds/touch": BASE_PATH + "sounds/fm006.m4a",
+    "sounds/warp": BASE_PATH + "sounds/power16.m4a",
 
-    "sounds/bgm/title": BASE_PATH + "sounds/bgm/title.wav",
-    "sounds/bgm/game": BASE_PATH + "sounds/bgm/game.wav",
+    "sounds/bgm/title": BASE_PATH + "sounds/bgm/title.m4a",
+    "sounds/bgm/game": BASE_PATH + "sounds/bgm/game.m4a",
 };
 
 
@@ -320,6 +324,7 @@ tm.define("ShareButton", {
         }.$extend(param));
 
         this.message = param.message;
+        this.url = param.url || "http://twitter.com/phi_jp";
         this.on('push', this._share);
     },
 
@@ -332,7 +337,7 @@ tm.define("ShareButton", {
                 activityTypes: ['PostToFacebook'],
                 // activityTypes: ["PostToFacebook", "PostToTwitter", "PostToWeibo", "Message", "Mail", "Print", "CopyToPasteboard", "AssignToContact", "SaveToCameraRoll", "AddToReadingList", "PostToFlickr", "PostToVimeo", "TencentWeibo", "AirDrop"];
                 activityTypes: ["Mail", "PostToFacebook", "PostToTwitter"],
-                url: 'http://gotoapp',
+                url: this.url,
             };
             window.socialmessage.send(message);
             this.flare('shared');
@@ -342,7 +347,7 @@ tm.define("ShareButton", {
                 type    : "tweet",
                 text    : text,
                 hashtags: "FlickArrow,tmlib",
-                url     : window.document.location.href,
+                url     : this.url,
             });
             var win = window.open(twitterURL, 'share window', 'width=400, height=300');
             var timer = setInterval(function() {   
@@ -550,7 +555,8 @@ tm.define("TitleScene", {
                     type: "ShareButton",
                     init: {
                         size: this.gridX(2),
-                        message: "『FlickArrow』矢印をフリックするシンプルなゲームです♪",
+                        message: TITLE_TWEET,
+                        url: APP_URL,
                     },
                     x: this.gridX(3),
                     y: this.gridY(9),
@@ -578,10 +584,17 @@ tm.define("TitleScene", {
 
         this.playButton.onpush = function() {
             if (UserData.hasLife()) {
-                this.life.ondecrimented = function() {
+                if (TARGET === 'release') {
+                    // ライフを減らすやつ
+                    this.life.ondecrimented = function() {
+                        this.playButton.fill();
+                    }.bind(this);
+                    this.life.decriment();
+                }
+                else {
                     this.playButton.fill();
-                }.bind(this);
-                this.life.decriment();
+                }
+
             }
             else {
                 this.shareButton.blink();
@@ -1247,7 +1260,7 @@ tm.define("ResultScene", {
         };
 
         // setup tweet
-        var text = "SCORE: {score}, {message}".format(param);
+        var text = RESULT_URL.format(param);
 
         this.stage.fromJSON({
             children: {
@@ -1317,6 +1330,7 @@ tm.define("ResultScene", {
                     init: {
                         size: this.gridX(2),
                         message: text,
+                        url: APP_URL,
                     },
                     x: this.gridX(3),
                     y: this.gridY(9),
@@ -1391,6 +1405,12 @@ tm.define("ResultScene", {
             }, function() {
                 // alert('failure');
             }, data);
+        }
+
+        if (tm.util.Random.randint(0, 5) === 0) {
+            setTimeout(function() {
+                showAd();
+            }, 1000);
         }
     },
 
