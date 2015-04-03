@@ -37,7 +37,7 @@ var FONT_CODE = {
     handORight: '0xf0a4',
     angleRight: '0xf106',
 };
-var APP_URL = "http://twitter.com/phi_jp";
+var APP_URL = "https://itunes.apple.com/us/app/flick-arrow/id978643804?l=ja&ls=1&mt=8";
 var TITLE_TWEET = "『FlickArrow』超簡単♪ 矢印をフリックするだけのカジュアルゲーム";
 var RESULT_URL = TITLE_TWEET + " SCORE: {score} flick";
 
@@ -1379,8 +1379,12 @@ tm.define("ResultScene", {
                 .fadeIn(2000)
                 .setLoop(true)
                 ;
+
         }
 
+        // gamecenter にスコアを送る
+        this.sendHighScore(userData.bestScore);
+        
         // fade
         this.bg.alpha = 0;
         this.bg.tweener.wait(100).fadeIn(200);
@@ -1393,10 +1397,17 @@ tm.define("ResultScene", {
             }, this)
             .fadeIn(200);
 
+        if (tm.util.Random.randint(0, 5) === 0) {
+            setTimeout(function() {
+                showAd();
+            }, 1000);
+        }
+    },
 
+    sendHighScore: function(score) {
         if (window.gamecenter) {
             var data = {
-                score: param.score,
+                score: score,
                 leaderboardId: BOARD_ID,
             };
 
@@ -1406,14 +1417,8 @@ tm.define("ResultScene", {
                 // alert('failure');
             }, data);
         }
-
-        if (tm.util.Random.randint(0, 5) === 0) {
-            setTimeout(function() {
-                showAd();
-            }, 1000);
-        }
     },
-    
+
     onpointingstart: function(e) {
         var p = e.app.pointing;
         WaveEffect().addChildTo(this).setPosition(p.x, p.y);

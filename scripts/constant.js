@@ -37,7 +37,7 @@ var FONT_CODE = {
     handORight: '0xf0a4',
     angleRight: '0xf106',
 };
-var APP_URL = "http://twitter.com/phi_jp";
+var APP_URL = "https://itunes.apple.com/us/app/flick-arrow/id978643804?l=ja&ls=1&mt=8";
 var TITLE_TWEET = "『FlickArrow』超簡単♪ 矢印をフリックするだけのカジュアルゲーム";
 var RESULT_URL = TITLE_TWEET + " SCORE: {score} flick";
 
