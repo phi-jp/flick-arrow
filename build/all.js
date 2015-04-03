@@ -1,4 +1,89 @@
 /*
+ * sound
+ */
+
+;(function() {
+
+    if (tm.sound.NullAudio) {
+        // すでに定義済みだったら無視
+        return ;
+    }
+
+    /**
+     *
+     */
+    tm.sound.WebAudio.isSupport = function() {
+        return tm.sound.WebAudio.context != null;
+    };
+
+    if (tm.sound.WebAudio.isSupport() == true) {
+        return ;
+    }
+
+    tm.define("tm.sound.NullAudio", {
+        
+        superClass: "tm.event.EventDispatcher",
+        
+        src: "",
+        loaded: false,
+        loopFlag: false,
+        volume: 1.0,
+        
+        init: function(src) {
+            this.superInit();
+            
+            this.loaded = true;
+        },
+        
+        play: function() {
+            return this;
+        },
+        
+        stop: function() {
+            return this;
+        },
+        
+        setLoop: function(flag) {
+            return this;
+        },
+        
+        setVolume: function(volume) {
+            return this;
+        },
+        
+        clone: function() {
+            var audio = tm.sound.NullAudio(this.src);
+            
+            return audio;
+        },
+    });
+
+    tm.asset.Loader.register("m4a", function(path) {
+        return tm.sound.NullAudio(path);
+    });
+    tm.asset.Loader.register("mp3", function(path) {
+        return tm.sound.NullAudio(path);
+    });
+    tm.asset.Loader.register("wav", function(path) {
+        return tm.sound.NullAudio(path);
+    });
+    tm.asset.Loader.register("ogg", function(path) {
+        return tm.sound.NullAudio(path);
+    });
+
+})();
+
+
+
+
+
+
+
+
+
+
+
+/*
  * constant.js
  */
 
