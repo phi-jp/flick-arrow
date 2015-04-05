@@ -3,13 +3,13 @@
  * ResultScene
  */
 
-
 tm.define("ResultScene", {
     superClass: "tm.app.Scene",
 
     init: function(param) {
         this.superInit();
 
+        tm.scene.ResultScene.default.score = 0;
         param = {}.$extend(tm.scene.ResultScene.default, param);
         this.param = param;
 

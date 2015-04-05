@@ -200,6 +200,12 @@ var UserData = {
             data.$safe(defaults);
         }
 
+
+        // for @simiraaaa
+        if (data.bestScore >= 256) {
+            data.bestScore = 159;
+        }
+
         this.set(data);
     },
     get: function() {
