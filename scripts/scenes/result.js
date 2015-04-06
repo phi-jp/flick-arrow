@@ -133,8 +133,8 @@ tm.define("ResultScene", {
                     x: this.gridX(6),
                     y: this.gridY(10),
                 },
-                adButton: {
-                    type: "AdButton",
+                storeButton: {
+                    type: "AppleButton",
                     init: {
                         size: this.gridX(2),
                     },
@@ -148,13 +148,13 @@ tm.define("ResultScene", {
         var life = this.stage.life;
         var homeButton = this.stage.homeButton;
         var shareButton = this.stage.shareButton;
-        var adButton = this.stage.adButton;
+        var storeButton = this.stage.storeButton;
         homeButton.onpush = function() {
             homeButton.fill();
         }.bind(this);
         homeButton.onfilled = this._toHome.bind(this);
 
-        adButton.onaded = function() {
+        storeButton.onpush = function() {
             life.recovery();
         }.bind(this);
         
@@ -188,10 +188,8 @@ tm.define("ResultScene", {
             }, this)
             .fadeIn(200);
 
-        if (tm.util.Random.randint(0, 5) === 0) {
-            setTimeout(function() {
-                showAd();
-            }, 1000);
+        if (tm.util.Random.randint(0, 3) === 0) {
+            showAd();
         }
     },
 

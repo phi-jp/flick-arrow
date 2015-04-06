@@ -171,6 +171,23 @@ tm.define("AdButton", {
     },
 });
 
+tm.define("AppleButton", {
+    superClass: "CircleButton",
+
+    init: function(param) {
+        this.superInit({
+            text: String.fromCharCode(FONT_CODE.apple),
+            bgColor: "hsl(0, 100%, 64%)",
+        }.$extend(param));
+
+        this.on('click', this._open);
+    },
+
+    _open: function() {
+        window.open(ITUNES_URL);
+    },
+});
+
 tm.define("ShareButton", {
     superClass: "CircleButton",
 

@@ -65,8 +65,8 @@ tm.define("TitleScene", {
                     x: this.gridX(6),
                     y: this.gridY(10),
                 },
-                adButton: {
-                    type: "AdButton",
+                storeButton: {
+                    type: "AppleButton",
                     init: {
                         size: this.gridX(2),
                     },
@@ -95,14 +95,14 @@ tm.define("TitleScene", {
             }
             else {
                 this.shareButton.blink();
-                this.adButton.blink();
+                this.storeButton.blink();
             }
         }.bind(this);
         this.playButton.onfilled = function() {
             this.app.popScene();
         }.bind(this);
 
-        this.adButton.onaded = function() {
+        this.storeButton.onpush = function() {
             this.life.recovery();
         }.bind(this);
 
