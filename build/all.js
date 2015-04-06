@@ -116,6 +116,7 @@ var FONT_CODE = {
     shareAlt: '0xf1e0',
     buysellads: '0xf20d',
     pause: '0xf04c',
+    apple: '0xf179',
 
     arrowRight: '0xf061',
     longArrowRight: '0xf178',
@@ -123,8 +124,12 @@ var FONT_CODE = {
     angleRight: '0xf106',
 };
 var APP_URL = "https://itunes.apple.com/us/app/flick-arrow/id978643804?l=ja&ls=1&mt=8";
+var ITUNES_URL = "itms-apps://itunes.apple.com/app/id978643804";
 var TITLE_TWEET = "『FlickArrow』超簡単♪ 矢印をフリックするだけのカジュアルゲーム";
 var RESULT_URL = TITLE_TWEET + " SCORE: {score} flick";
+
+
+
 
 var QUESTION_TABLE = {
     0: ['blue'],
@@ -399,6 +404,23 @@ tm.define("AdButton", {
     },
 });
 
+tm.define("AppleButton", {
+    superClass: "CircleButton",
+
+    init: function(param) {
+        this.superInit({
+            text: String.fromCharCode(FONT_CODE.apple),
+            bgColor: "hsl(0, 100%, 64%)",
+        }.$extend(param));
+
+        this.on('click', this._open);
+    },
+
+    _open: function() {
+        window.open(ITUNES_URL);
+    },
+});
+
 tm.define("ShareButton", {
     superClass: "CircleButton",
 
@@ -653,8 +675,8 @@ tm.define("TitleScene", {
                     x: this.gridX(6),
                     y: this.gridY(10),
                 },
-                adButton: {
-                    type: "AdButton",
+                storeButton: {
+                    type: "AppleButton",
                     init: {
                         size: this.gridX(2),
                     },
@@ -683,14 +705,14 @@ tm.define("TitleScene", {
             }
             else {
                 this.shareButton.blink();
-                this.adButton.blink();
+                this.storeButton.blink();
             }
         }.bind(this);
         this.playButton.onfilled = function() {
             this.app.popScene();
         }.bind(this);
 
-        this.adButton.onaded = function() {
+        this.storeButton.onpush = function() {
             this.life.recovery();
         }.bind(this);
 
@@ -1427,8 +1449,8 @@ tm.define("ResultScene", {
                     x: this.gridX(6),
                     y: this.gridY(10),
                 },
-                adButton: {
-                    type: "AdButton",
+                storeButton: {
+                    type: "AppleButton",
                     init: {
                         size: this.gridX(2),
                     },
@@ -1442,13 +1464,13 @@ tm.define("ResultScene", {
         var life = this.stage.life;
         var homeButton = this.stage.homeButton;
         var shareButton = this.stage.shareButton;
-        var adButton = this.stage.adButton;
+        var storeButton = this.stage.storeButton;
         homeButton.onpush = function() {
             homeButton.fill();
         }.bind(this);
         homeButton.onfilled = this._toHome.bind(this);
 
-        adButton.onaded = function() {
+        storeButton.onpush = function() {
             life.recovery();
         }.bind(this);
         
@@ -1482,10 +1504,8 @@ tm.define("ResultScene", {
             }, this)
             .fadeIn(200);
 
-        if (tm.util.Random.randint(0, 5) === 0) {
-            setTimeout(function() {
-                showAd();
-            }, 1000);
+        if (tm.util.Random.randint(0, 3) === 0) {
+            showAd();
         }
     },
 
