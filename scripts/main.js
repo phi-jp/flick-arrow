@@ -28,6 +28,8 @@ var main = function() {
 
     // 実行
     app.run();
+
+    document.body.style.background = '#222';
 };
 
 // main

@@ -188,7 +188,7 @@ tm.define("ResultScene", {
             }, this)
             .fadeIn(200);
 
-        if (tm.util.Random.randint(0, 3) === 0) {
+        if (tm.util.Random.randbool()) {
             showAd();
         }
     },
