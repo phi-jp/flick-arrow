@@ -1504,7 +1504,7 @@ tm.define("ResultScene", {
             }, this)
             .fadeIn(200);
 
-        if (tm.util.Random.randint(0, 3) === 0) {
+        if (tm.util.Random.randbool()) {
             showAd();
         }
     },
@@ -1716,6 +1716,8 @@ var main = function() {
 
     // 実行
     app.run();
+
+    document.body.style.background = '#222';
 };
 
 // main
