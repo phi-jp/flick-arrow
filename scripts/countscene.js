@@ -16,21 +16,22 @@
                     label: {
                         type: "tm.display.Label",
                         fillStyle: "white",
-                        fontSize: 200,
+                        fontSize: 100,
                         x: SCREEN_CENTER_X,
                         y: SCREEN_CENTER_Y,
                     },
                 }
             });
 
-            this.counter = 3;
+            this.counter = 1;
             this._updateCount();
         },
 
         _updateCount: function() {
             var endFlag = this.counter <= 0;
 
-            this.label.text = this.counter--;
+            this.counter-=1;
+            this.label.text = "Ready";
 
             this.label.scale.set(1, 1);
             this.label.tweener
