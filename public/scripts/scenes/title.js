@@ -18,6 +18,7 @@ phina.define('TitleScene', {
           className: 'Label',
           arguments: [TITLE, {
             fontSize: 64,
+            fontFamily: MAIN_FONT,
           }],
           x: this.gridX.span(8),
           y: this.gridY.span(4),

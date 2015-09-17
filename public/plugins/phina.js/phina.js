@@ -6072,7 +6072,8 @@ phina.namespace(function() {
       var context = canvas.context;
 
       var fontSize = this.style.fontSize;
-      var font = "{fontWeight} {fontSize}px {fontFamily}".format(this.style);
+      var font = "{fontWeight} {fontSize}px '{fontFamily}'".format(this.style);
+      debugger;
       var lines = this._lines;
       canvas.context.font = font;
 
