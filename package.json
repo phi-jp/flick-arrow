@@ -16,13 +16,6 @@
     "url": "https://github.com/phi-jp/flick-arrow/issues"
   },
   "homepage": "https://github.com/phi-jp/flick-arrow",
-  "dependencies": {
-    "debug": "^2.2.0",
-    "less-middleware": "1.0.x",
-    "express": "^4.13.1",
-    "morgan": "^1.6.1",
-    "jade": "^1.9.2"
-  },
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-util": "^3.0.3",

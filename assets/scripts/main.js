@@ -52,7 +52,7 @@ var RESULT_URL = TITLE_TWEET + " SCORE: {score} flick";
 window.onload = function() {
   var flow = AssetLoader().load({
     script: {
-      titlescene: 'scripts/scenes/title.js',
+      titlescene: 'assets/scripts/scenes/title.js',
       // mainscene: 'scripts/scenes/main.js',
       // resultscene: 'scripts/scenes/result.js',
       // piece: 'scripts/elements/piece.js',
