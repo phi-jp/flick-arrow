@@ -4,13 +4,23 @@
 
 phina.globalize();
 
-var SCREEN_WIDTH  = 640;
-var SCREEN_HEIGHT = 960;
-var MAX_PER_LINE    = 5;                            // ピースの横に並ぶ最大数
-var MAX_NUM         = MAX_PER_LINE*MAX_PER_LINE;    // ピース全体の数
+/*
+ * constant.js
+ */
+var SCREEN_WIDTH    = 640;              // スクリーン幅
+var SCREEN_HEIGHT   = 960;              // スクリーン高さ
+var SCREEN_CENTER_X = SCREEN_WIDTH/2;   // スクリーン幅の半分
+var SCREEN_CENTER_Y = SCREEN_HEIGHT/2;  // スクリーン高さの半分
+var SCREEN_CENTER   = Vector2(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+var SCREEN_RECT     = Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-var BACKGROUND_COLOR = '#fec';
-var COLOR_BASE_HSL = 'hsl({0}, 80%, 60%)';
+var TARGET = 'release';
+var TITLE = "Flick Arrow";
+var BACKGROUND_COLOR = 'rgb(248, 248, 248)';
+var TIME = 30*1000; // 50flick/20sec はいける!
+var PENALTY = 2*1000;
+var MAX_RECOVERY = 2*1000; // 回復量のマックス値
+
 
 window.onload = function() {
   var flow = AssetLoader().load({
