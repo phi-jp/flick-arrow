@@ -1,35 +1,26 @@
 /*
- *
+ * gulpfile.js
  */
 
-var pkg = require('./package.json');
 var gulp = require('gulp');
+var gutil = require('gulp-util');
 var ghelper = require('gulp-helper');
 ghelper.require();
 
-gulp.task('default', ['build']);  
+var pkg = require('./package.json');
+var ip = require('ip');
 
-gulp.task('build', function() {  
-  var scripts = pkg.scripts;
-  
-  gulp.src(scripts)
-    .pipe(concat('all.js'))
-    .pipe(gulp.dest('./build'))
-    .pipe(uglify())
-    .pipe(rename({
-      extname: ".min.js",
-    }))
-    .pipe(gulp.dest('./build'))
-    ;
+gulp.task('download', function() {
+  var files = [
+    'https://raw.githubusercontent.com/phi-jp/phina.js/develop/build/phina.js',
+    'https://raw.githubusercontent.com/phi-jp/phina.js/develop/build/phina.min.js',
+  ];
+  download(files)
+    .pipe(gulp.dest('public/plugins/phina.js/'));
 });
 
-gulp.task('dev', function() {
-  gulp.src('./')
-    .pipe(webserver({
-      // livereload: true, // ライブリロードを有効に
-      open: true,       // タスク実行と同時にページを開く
-    }))
-    ;
+gulp.task('server', function() {
+  express.run(['src/index.js']);
 });
 
-
+gulp.task('default', ['server']);
