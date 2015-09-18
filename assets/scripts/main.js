@@ -23,7 +23,7 @@ var MAX_RECOVERY = 2*1000; // 回復量のマックス値
 
 var BASE_PATH = window.cordovaFlag ? 'http://junk.tmlife.net/flick-arrow/' : "./";
 var HOME_COLOR = "hsl(60, 90%, 50%)";
-var MAIN_FONT = "Kaushan Script";
+var MAIN_FONT = "KaushanScript";
 var BOARD_ID = "board_normal";
 var FONT_CODE = {
     play: '0xf04b',
@@ -57,6 +57,10 @@ window.onload = function() {
       // resultscene: 'scripts/scenes/result.js',
       // piece: 'scripts/elements/piece.js',
     },
+    font: {
+      FontAwesome: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.woff2',
+      KaushanScript: 'http://fonts.gstatic.com/s/kaushanscript/v4/qx1LSqts-NtiKcLw4N03IJsM3FTMmj2kTPH3yX99Yaw.woff2',
+    }
   });
 
   flow.then(function() {

@@ -16,7 +16,7 @@ gulp.task('download', function() {
     'https://raw.githubusercontent.com/phi-jp/phina.js/develop/build/phina.min.js',
   ];
   download(files)
-    .pipe(gulp.dest('public/plugins/phina.js/'));
+    .pipe(gulp.dest('assets/plugins/phina.js/'));
 });
 
 gulp.task('server', function() {
