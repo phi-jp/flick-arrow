@@ -58,7 +58,13 @@ phina.define('TitleScene', {
       },
     });
 
+    var self = this;
+
     this.playButton.onpush = function() {
+
+      [self.shareButton, self.rankingButton, self.storeButton].each(function(b) {
+        b.tweener.clear().fadeOut(200);
+      });
       this.fill();
 
       this.onfilled = function() {
