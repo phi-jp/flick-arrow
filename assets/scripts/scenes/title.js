@@ -33,43 +33,18 @@ phina.define('TitleScene', {
             backgroundColor: 'hsl(180, 60%, 50%)',
           },
           x: this.gridX.span(8),
-          y: this.gridY.span(8),
+          y: this.gridY.span(9),
         },
-
-      }
+      },
     });
+
+    this.playButton.onpush = function() {
+      this.fill();
+
+      this.onfilled = function() {
+        this.getRoot().exit();
+      }
+    };
   },
 });
-
-
-phina.define('CircleButton', {
-  superClass: 'CanvasElement',
-
-  init: function(options) {
-    this.superInit();
-
-    this.fromJSON({
-      children: {
-        bg: {
-          className: "CircleShape",
-          arguments: {
-            radius: options.radius,
-            stroke: false,
-            color: options.backgroundColor,
-          },
-        },
-        label: {
-          className: "Label",
-          arguments: [options.text, {
-            color: 'white',
-            fontFamily: options.fontFamily,
-            fontSize: options.radius,
-            stroke: false,
-          }],
-        },
-      }
-    });
-  },
-});
-
 
