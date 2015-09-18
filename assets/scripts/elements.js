@@ -8,7 +8,7 @@ phina.define('CircleButton', {
     this.fromJSON({
       children: {
         bg: {
-          className: "CircleShape",
+          className: 'CircleShape',
           arguments: {
             radius: options.radius,
             stroke: false,
@@ -16,7 +16,7 @@ phina.define('CircleButton', {
           },
         },
         label: {
-          className: "Label",
+          className: 'Label',
           arguments: [options.text, {
             color: 'white',
             fontFamily: options.fontFamily,
@@ -50,7 +50,7 @@ phina.define('CircleButton', {
           y: SCREEN_CENTER_Y,
       }, 300, 'easeOutQuint')
       .call(function() {
-          // tm.asset.Manager.get("sounds/warp").clone().play();
+          // tm.asset.Manager.get('sounds/warp').clone().play();
       })
       .call(function() {
         this.bg.tweener
@@ -66,5 +66,75 @@ phina.define('CircleButton', {
 
   },
 });
+
+
+phina.define('PlayButton', {
+  superClass: 'CircleButton',
+
+  init: function(options) {
+    options = (options || {}).$safe({
+      text: FONT_CODE.play,
+      fontFamily: 'FontAwesome',
+      backgroundColor: 'hsl(180, 60%, 50%)',
+    });
+
+    this.superInit(options);
+  }
+});
+
+
+
+
+
+phina.define('RankingButton', {
+  superClass: 'CircleButton',
+
+  init: function(options) {
+    options = (options || {}).$safe({
+      text: FONT_CODE.trophy,
+      fontFamily: 'FontAwesome',
+      backgroundColor: 'hsl(200, 100%, 50%)',
+    });
+
+    this.superInit(options);
+  }
+});
+
+
+
+
+
+phina.define('ShareButton', {
+  superClass: 'CircleButton',
+
+  init: function(options) {
+    options = (options || {}).$safe({
+      text: FONT_CODE.comment,
+      fontFamily: 'FontAwesome',
+      backgroundColor: 'hsl(240, 100%, 64%)',
+    });
+
+    this.superInit(options);
+  }
+});
+
+
+
+
+
+phina.define('AdButton', {
+  superClass: 'CircleButton',
+
+  init: function(options) {
+    options = (options || {}).$safe({
+      text: FONT_CODE.buysellads,
+      fontFamily: 'FontAwesome',
+      backgroundColor: 'hsl(0, 100%, 64%)',
+    });
+
+    this.superInit(options);
+  }
+});
+
 
 

@@ -24,16 +24,36 @@ phina.define('TitleScene', {
           y: this.gridY.span(3),
         },
         playButton: {
-          className: 'CircleButton',
+          className: 'PlayButton',
           arguments: {
-            text: FONT_CODE.play,
-            text: String.fromCharCode(FONT_CODE.play),
-            fontFamily: 'FontAwesome',
             radius: this.gridX.span(2),
-            backgroundColor: 'hsl(180, 60%, 50%)',
           },
           x: this.gridX.span(8),
           y: this.gridY.span(9),
+        },
+        shareButton: {
+          className: 'ShareButton',
+          arguments: {
+            radius: this.gridX.span(1),
+          },
+          x: this.gridX.span(4),
+          y: this.gridY.span(11),
+        },
+        rankingButton: {
+          className: 'RankingButton',
+          arguments: {
+            radius: this.gridX.span(1),
+          },
+          x: this.gridX.span(8),
+          y: this.gridY.span(12),
+        },
+        storeButton: {
+          className: 'AdButton',
+          arguments: {
+            radius: this.gridX.span(1),
+          },
+          x: this.gridX.span(12),
+          y: this.gridY.span(11),
         },
       },
     });
