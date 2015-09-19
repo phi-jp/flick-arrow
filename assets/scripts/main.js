@@ -71,10 +71,11 @@ window.onload = function() {
 
 var init = function() {
   var app = GameApp({
-    query: '#world',
     startLabel: location.search.substr(1).toObject().scene || 'title',
   });
+  document.body.appendChild( app.domElement );
 
+  app.backgroundColor = BACKGROUND_COLOR;
   app.enableStats();
 
   app.run();
