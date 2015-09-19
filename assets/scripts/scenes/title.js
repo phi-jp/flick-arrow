@@ -62,9 +62,11 @@ phina.define('TitleScene', {
 
     this.playButton.onpush = function() {
 
-      [self.shareButton, self.rankingButton, self.storeButton].each(function(b) {
-        b.tweener.clear().fadeOut(200);
-      });
+      this.parent.children.each(function(child) {
+        if (child === this) return ;
+        child.tweener.clear().fadeOut(200);
+      }, this);
+      
       this.fill();
 
       this.onfilled = function() {
