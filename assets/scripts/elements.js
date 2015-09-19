@@ -100,10 +100,6 @@ phina.define('RankingButton', {
   }
 });
 
-
-
-
-
 phina.define('ShareButton', {
   superClass: 'CircleButton',
 
@@ -117,10 +113,6 @@ phina.define('ShareButton', {
     this.superInit(options);
   }
 });
-
-
-
-
 
 phina.define('AdButton', {
   superClass: 'CircleButton',

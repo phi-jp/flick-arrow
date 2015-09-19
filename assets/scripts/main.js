@@ -49,7 +49,7 @@ var TITLE_TWEET = "『FlickArrow』超簡単♪ 矢印をフリックするだ�
 var RESULT_URL = TITLE_TWEET + " SCORE: {score} flick";
 
 
-window.onload = function() {
+phina.main(function() {
   var flow = AssetLoader().load({
     script: {
       elements: 'assets/scripts/elements.js',
@@ -67,7 +67,7 @@ window.onload = function() {
   flow.then(function() {
     init();
   });
-};
+});
 
 var init = function() {
   var app = GameApp({
