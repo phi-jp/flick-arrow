@@ -120,15 +120,10 @@ phina.define('GaugeShape', {
         return this._value;
       },
       set: function(v) {
-        this._value = v;
+        this._value = Math.clamp(v, 0, 1);
         this.scaleY = this.value;
       },
     },
   },
-
-  // setValue: function(rate) {
-  //     this.value = Math.clamp(rate, 0, 1);
-  //     this.scaleY = this.value;
-  // },
 });
 
