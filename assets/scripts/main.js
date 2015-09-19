@@ -54,7 +54,7 @@ phina.main(function() {
     script: {
       elements: 'assets/scripts/elements.js',
       titlescene: 'assets/scripts/scenes/title.js',
-      // mainscene: 'scripts/scenes/main.js',
+      mainscene: 'assets/scripts/scenes/main.js',
       // resultscene: 'scripts/scenes/result.js',
       // piece: 'scripts/elements/piece.js',
     },

@@ -19,6 +19,7 @@ phina.define('TitleScene', {
           arguments: [TITLE, {
             fontSize: 112,
             fontFamily: MAIN_FONT,
+            padding: 16,
           }],
           x: this.gridX.span(8),
           y: this.gridY.span(3),
@@ -66,7 +67,7 @@ phina.define('TitleScene', {
         if (child === this) return ;
         child.tweener.clear().fadeOut(200);
       }, this);
-      
+
       this.fill();
 
       this.onfilled = function() {
