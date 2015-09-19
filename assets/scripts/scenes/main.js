@@ -14,6 +14,17 @@ phina.define('MainScene', {
 
   onenter: function() {
     CircleFilterEffect().addChildTo(this);
+
+    var scene = CountScene({
+      count: ['Ready'],
+      fontSize: 100,
+    });
+
+    this.app.pushScene(scene);
+
+    scene.onexit = function() {
+      // this.setQuestion();
+    }.bind(this);
   }
 });
 
