@@ -48,6 +48,15 @@ var ITUNES_URL = "itms-apps://itunes.apple.com/app/id978643804";
 var TITLE_TWEET = "『FlickArrow』超簡単♪ 矢印をフリックするだけのカジュアルゲーム";
 var RESULT_URL = TITLE_TWEET + " SCORE: {score} flick";
 
+var QUESTION_TABLE = {
+    0: ['blue'],
+    8: ['blue', 'blue', 'red'],
+    16: ['blue', 'red'],
+    24: ['blue', 'blue', 'blue', 'red', 'red', 'green'],
+    32: ['blue', 'red', 'green'],
+};
+
+
 
 phina.main(function() {
   var flow = AssetLoader().load({
@@ -57,6 +66,9 @@ phina.main(function() {
       mainscene: 'assets/scripts/scenes/main.js',
       // resultscene: 'scripts/scenes/result.js',
       // piece: 'scripts/elements/piece.js',
+    },
+    image: {
+      arrow: 'assets/images/arrow0.png',
     },
     font: {
       FontAwesome: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.woff2',

@@ -129,4 +129,152 @@ phina.define('AdButton', {
 });
 
 
+phina.define('Arrow', {
+    superClass: 'CircleShape',
+
+    init: function(param) {
+      this.direction = param.direction;
+      this.type = param.type || 'blue';
+
+      var color = {
+        'red': 'hsla(0, 80%, 65%, 1.0)',
+        'green': 'hsla(120, 80%, 65%, 1.0)',
+        'blue': 'hsla(240, 80%, 65%, 1.0)',
+      }[this.type];
+
+      this.superInit({
+        radius: 128,
+        stroke: false,
+        color: color,
+        lineWidth: 8,
+      });
+
+      this.fromJSON({
+        children: {
+          arrow: {
+            className: 'Sprite',
+            arguments: 'arrow',
+            width: 200,
+            height: 200,
+            rotation: {
+              'left': 180,
+              'right': 0,
+              'up': -90,
+              'down': 90
+            }[this.direction],
+          },
+        },
+      });
+    },
+
+    appear: function(x, y) {
+      this.scale.set(0.5, 0.5);
+
+      this.tweener
+        .clear()
+        .to({
+          x: x, y: y,
+          scaleX: 1, scaleY: 1,
+        }, 500, 'easeOutCubic')
+        ;
+    },
+
+    check: function(direction) {
+      if (this.type == 'blue') {
+        return this.direction == direction;
+      }
+      else if (this.type == 'red') {
+        return {
+          'left': 'right',
+          'right': 'left',
+          'up': 'down',
+          'down': 'up',
+        }[this.direction] == direction;
+      }
+      else if (this.type == 'green') {
+        return {
+          'left': ['up', 'down'],
+          'right': ['up', 'down'],
+          'up': ['left', 'right'],
+          'down': ['left', 'right'],
+        }[this.direction].indexOf(direction) != -1;
+      }
+    },
+
+    move: function(x, y) {
+      var tweener = Tweener().attachTo(this);
+
+      tweener
+        .to({
+          x:x, y:y
+        }, 500, 'easeOutElastic')
+        .call(function() {
+          this.remove();
+        })
+        ;
+    },
+
+    disappear: function(direction) {
+      var v = {
+        'left': [-1, 0],
+        'right': [1, 0],
+        'up': [0,-1],
+        'down': [0,1],
+      }[direction];
+
+      this.tweener
+        .clear()
+        .by({
+          x: v[0] * 400,
+          y: v[1] * 400,
+          alpha: -1,
+        }, 200)
+        .call(function() {
+          this.remove();
+        }, this)
+        ;
+    },
+
+    blink: function() {
+      var tweener = Tweener().attachTo(this);
+
+      (3).times(function() {
+        tweener
+          .set({alpha:0})
+          .wait(20)
+          .set({alpha:1})
+          .wait(60)
+      }, this);
+
+      tweener.call(function() {
+        this.remove();
+      });
+    },
+
+
+    /*
+
+
+    blink: function() {
+        this.tweener
+            .clear()
+            .to({
+                scaleX: 1, scaleY: 1,
+            }, 1000, 'easeOutElastic')
+            ;
+
+        this.tweener.clear();
+
+        (3).times(function() {
+            this.tweener
+                .set({alpha:0})
+                .wait(30)
+                .set({alpha:1})
+                .wait(70)
+        }, this);
+    }
+    */
+});
+
+
 
