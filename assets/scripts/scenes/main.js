@@ -47,6 +47,8 @@ phina.define('MainScene', {
       },
     });
 
+    this.score = 0;
+    this.combo = 0;
     this.timer = 0;
     this.limitTime = TIME;
     this.xList = [];
@@ -76,13 +78,14 @@ phina.define('MainScene', {
     this.app.pushScene(scene);
   },
 
-  update: function() {
-    this.addTime(this.app.ticker.deltaTime);
-  },
-
   addTime: function(time) {
     this.timer += time;
     this.gaugeShape.value = (this.timer/this.limitTime);
+  },
+
+  addScore: function(v) {
+    this.score += v;
+    this.ui.scoreLabel.text = this.score + '';
   },
 
   setup: function() {
@@ -193,10 +196,12 @@ phina.define('MainScene', {
   },
 
   isTimeup: function() {
-    this.timer >= this.limitTime;
+    return this.timer >= this.limitTime;
   },
 
   update: function(app) {
+    this.addTime(this.app.ticker.deltaTime);
+
     var d = this.getFlickDirection(app);
 
     // support keyboard
@@ -207,11 +212,25 @@ phina.define('MainScene', {
     if (d) {
       if (this.arrow.check(d)) {
         this.arrow.disappear(d);
+        this.addScore(1);
         this.setQuestion();
+
+        // bonus
+        this.combo++;
+        if (this.combo % 10 === 0) {
+          var time = (this.combo * this.combo);
+          time = Math.min(MAX_RECOVERY, time);
+          this.addTime(-time);
+        }
       }
       else {
         this.arrow.move(SCREEN_CENTER_X, SCREEN_CENTER_Y+120);
         this.arrow.blink();
+
+        // penalty
+        this.addTime(PENALTY);
+
+        this.combo = 0;
       }
     }
 
