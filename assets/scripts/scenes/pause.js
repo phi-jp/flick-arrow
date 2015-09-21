@@ -8,7 +8,7 @@ phina.define('PauseScene', {
 
   init: function(options) {
     options = (options || {}).$safe({
-      backgroundColor: 'rgba(0, 0, 0, 0.95)',
+      backgroundColor: 'rgba(255, 255, 255, 0.95)',
     });
 
     this.superInit(options);
@@ -52,32 +52,6 @@ phina.define('PauseScene', {
       app.popScene();
       app.currentScene.exit('title');
     }.bind(this);
-
-    return ;
-
-    this.stage.homeButton.onpush = function() {
-      this.fill();
-    };
-    this.stage.homeButton.onfilled = function() {
-      this.nextLabel = 'title';
-      this.app.popScene();
-    }.bind(this);
-
-    this.stage.playButton.onpush = function() {
-      this.app.popScene();
-    }.bind(this);
-
-    // fade
-    this.bg.alpha = 0;
-    this.bg.tweener.wait(100).fadeIn(200);
-    this.stage.alpha = 0;
-    this.stage.children.each(function(elm) { elm.sleep(); });
-    this.stage.tweener
-      .wait(500)
-      .call(function() {
-        this.stage.children.each(function(elm) { elm.wakeUp(); });
-      }, this)
-      .fadeIn(200);
   },
 });
 

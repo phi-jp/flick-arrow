@@ -62,10 +62,7 @@ phina.define('MainScene', {
   },
 
   onenter: function() {
-    this.setQuestion();
-
-    return ;
-    CircleFilterEffect().addChildTo(this);
+    CircleFilterEffect({}).addChildTo(this);
 
     var scene = CountScene({
       count: ['Ready'],
