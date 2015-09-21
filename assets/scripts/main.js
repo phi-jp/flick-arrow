@@ -65,8 +65,7 @@ phina.main(function() {
       titlescene: 'assets/scripts/scenes/title.js',
       mainscene: 'assets/scripts/scenes/main.js',
       pausescene: 'assets/scripts/scenes/pause.js',
-      // resultscene: 'scripts/scenes/result.js',
-      // piece: 'scripts/elements/piece.js',
+      resultscene: 'assets/scripts/scenes/result.js',
     },
     image: {
       arrow: 'assets/images/arrow0.png',

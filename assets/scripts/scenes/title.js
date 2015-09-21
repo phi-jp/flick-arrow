@@ -75,5 +75,11 @@ phina.define('TitleScene', {
       }
     };
   },
+
+  onenter: function() {
+    CircleFilterEffect({
+      backgroundColor: HOME_COLOR,
+    }).addChildTo(this);
+  },
 });
 

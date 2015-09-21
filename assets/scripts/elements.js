@@ -29,7 +29,6 @@ phina.define('CircleButton', {
       }
     });
 
-    console.log(options.radius);
     this.width = options.radius*2;
     this.height = options.radius*2;
     this.setInteractive(true);
@@ -278,30 +277,42 @@ phina.define('Arrow', {
         this.remove();
       });
     },
+});
 
 
-    /*
+/*
+ * 最初の円のフィルター
+ */
+phina.define('CircleFilterEffect', {
+  superClass: 'Shape',
 
+  init: function(options) {
+    this.superInit({
+      width: SCREEN_WIDTH,
+      height: SCREEN_HEIGHT,
+      backgroundColor: options.backgroundColor || 'hsl(180, 60%, 50%)',
+    });
 
-    blink: function() {
-        this.tweener
-            .clear()
-            .to({
-                scaleX: 1, scaleY: 1,
-            }, 1000, 'easeOutElastic')
-            ;
+    this.origin.set(0, 0);
 
-        this.tweener.clear();
+    this.canvas.transformCenter();
 
-        (3).times(function() {
-            this.tweener
-                .set({alpha:0})
-                .wait(30)
-                .set({alpha:1})
-                .wait(70)
-        }, this);
-    }
-    */
+    this.circleRadius = 0;
+    this.tweener
+      .to({
+        circleRadius: 1000,
+      })
+      .call(function() {
+        this.target.remove();
+      })
+  },
+
+  update: function() {
+    var c = this.canvas;
+
+    c.context.globalCompositeOperation = 'destination-out';
+    c.fillCircle(0, 0, this.circleRadius);
+  },
 });
 
 
