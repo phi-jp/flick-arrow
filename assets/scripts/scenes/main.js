@@ -250,20 +250,15 @@ phina.define('MainScene', {
   },
 
 
-  // gameover: function() {
-  //   var app = this.app;
-  //   this.nextLabel = 'game';
+  gameover: function() {
+    var app = this.app;
 
-  //   var s = ResultScene({
-  //     score: this.score,
-  //     bgColor: 'rgba(255, 255, 255, 0.95)',
-  //   });
-  //   s.onexit = function() {
-  //     this.nextLabel = s.nextLabel;
-  //     app.popScene();
-  //   }.bind(this);
-  //   app.pushScene(s);
-  // },
+    var s = ResultScene({
+      score: this.score,
+    });
+
+    app.pushScene(s);
+  },
 
 });
 
