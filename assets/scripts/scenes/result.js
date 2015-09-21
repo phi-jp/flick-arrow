@@ -107,8 +107,9 @@ phina.define("ResultScene", {
     this.bg.tweener
       .wait(100)
       .fadeIn(200);
+    
+    this.ui.alpha = 0;
     this.ui.tweener
-      .set({alpha:0})
       .wait(200)
       .fadeIn(200)
   },
