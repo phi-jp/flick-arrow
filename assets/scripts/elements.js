@@ -5,6 +5,8 @@ phina.define('CircleButton', {
   init: function(options) {
     this.superInit();
 
+    options.radius = options.radius || 32;
+
     this.fromJSON({
       children: {
         bg: {
@@ -27,6 +29,7 @@ phina.define('CircleButton', {
       }
     });
 
+    console.log(options.radius);
     this.width = options.radius*2;
     this.height = options.radius*2;
     this.setInteractive(true);
@@ -82,9 +85,19 @@ phina.define('PlayButton', {
   }
 });
 
+phina.define('HomeButton', {
+  superClass: 'CircleButton',
 
+  init: function(options) {
+    options = (options || {}).$safe({
+      text: FONT_CODE.home,
+      fontFamily: 'FontAwesome',
+      backgroundColor: HOME_COLOR,
+    });
 
-
+    this.superInit(options);
+  }
+});
 
 phina.define('RankingButton', {
   superClass: 'CircleButton',
@@ -122,6 +135,21 @@ phina.define('AdButton', {
       text: FONT_CODE.buysellads,
       fontFamily: 'FontAwesome',
       backgroundColor: 'hsl(0, 100%, 64%)',
+    });
+
+    this.superInit(options);
+  }
+});
+
+
+phina.define('PauseButton', {
+  superClass: 'CircleButton',
+
+  init: function(options) {
+    options = (options || {}).$safe({
+      text: FONT_CODE.pause,
+      fontFamily: 'FontAwesome',
+      backgroundColor: 'hsl(0, 0%, 50%)',
     });
 
     this.superInit(options);

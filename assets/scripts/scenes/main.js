@@ -36,6 +36,14 @@ phina.define('MainScene', {
           x: this.gridX.center(),
           y: this.gridY.span(2),
         },
+        pauseButton: {
+          className: 'PauseButton',
+          init: {
+            radius: 60,
+          },
+          x: this.gridX.span(14),
+          y: this.gridX.span(2),
+        },
       },
     });
 
@@ -43,6 +51,10 @@ phina.define('MainScene', {
     this.limitTime = TIME;
     this.xList = [];
     this.yList = [];
+
+    this.ui.pauseButton.onpush = function() {
+      this.pause();
+    }.bind(this);
 
     this.setup();
   },
@@ -207,6 +219,17 @@ phina.define('MainScene', {
       this.gameover();
     }
   },
+
+  pause: function() {
+    var scene = PauseScene({});
+
+    scene.onexit = function() {
+
+    }.bind(this);
+
+    this.app.pushScene(scene);
+  },
+
 
   // gameover: function() {
   //   var app = this.app;
