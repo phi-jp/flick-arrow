@@ -5529,6 +5529,18 @@ phina.namespace(function() {
       return this;
     },
 
+    by: function(props, duration, easing) {
+      this._add({
+        type: 'tween',
+        mode: 'by',
+        props: props,
+        duration: duration,
+        easing: easing,
+      });
+
+      return this;
+    },
+
     from: function(props, duration, easing) {
       this._add({
         type: 'tween',
@@ -5584,6 +5596,13 @@ phina.namespace(function() {
       });
 
       return this;
+    },
+
+    moveTo: function(x, y, duration, easing) {
+      return this.to({x:x,y:y}, duration, easing);
+    },
+    moveBy: function(x, y, duration, easing) {
+      return this.by({x:x,y:y}, duration, easing);
     },
 
     fade: function(value, duration, easing) {
@@ -5701,6 +5720,9 @@ phina.namespace(function() {
 
         if (task.mode === 'to') {
           this._tween.to(this.target, task.props, task.duration, task.easing);
+        }
+        else if (task.mode === 'by') {
+          this._tween.by(this.target, task.props, task.duration, task.easing);
         }
         else {
           this._tween.from(this.target, task.props, task.duration, task.easing);
@@ -6934,8 +6956,20 @@ phina.namespace(function() {
 
     init: function(text, style) {
 
-      this.text = text || 'hoge';
+      if (arguments.length >= 2) {
+        style.text = text;
+      }
+      else {
+        if (typeof arguments[0] === 'string') {
+          style = { text: text, };
+        }
+        else {
+          style = arguments[0];
+        }
+      }
+
       style = (style || {}).$safe({
+        text: 'Hello, world!',
         color: 'black',
 
         stroke: true,
@@ -6985,7 +7019,7 @@ phina.namespace(function() {
 
       var fontSize = this.style.fontSize;
       var font = "{fontWeight} {fontSize}px {fontFamily}".format(this.style);
-      var lines = this._lines;
+      var lines = this._lines = this.style.text.split('\n');
       canvas.context.font = font;
 
       canvas.width = this.calcWidth() + style.padding*2;
@@ -7024,14 +7058,10 @@ phina.namespace(function() {
     _accessor: {
       text: {
         get: function() {
-          return this._text;
+          return this.style.text;
         },
         set: function(v) {
-          this._text = v;
-          this._lines = (v+'').split('\n');
-          if (this.canvas) {
-            this._render();
-          }
+          this.style.text = v;
         },
       },
     }
