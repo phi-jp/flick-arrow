@@ -57,33 +57,32 @@ var QUESTION_TABLE = {
 };
 
 
+var ASSETS = {
+  script: {
+    elements: 'assets/scripts/elements.js',
+    titlescene: 'assets/scripts/scenes/title.js',
+    mainscene: 'assets/scripts/scenes/main.js',
+    pausescene: 'assets/scripts/scenes/pause.js',
+    resultscene: 'assets/scripts/scenes/result.js',
+  },
+  image: {
+    arrow: 'assets/images/arrow0.png',
+  },
+  font: {
+    FontAwesome: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.ttf',
+    KaushanScript: 'assets/fonts/kaushan-script/KaushanScript-Regular.otf',
+  }
+};
+
 
 phina.main(function() {
-  var flow = AssetLoader().load({
-    script: {
-      elements: 'assets/scripts/elements.js',
-      titlescene: 'assets/scripts/scenes/title.js',
-      mainscene: 'assets/scripts/scenes/main.js',
-      pausescene: 'assets/scripts/scenes/pause.js',
-      resultscene: 'assets/scripts/scenes/result.js',
-    },
-    image: {
-      arrow: 'assets/images/arrow0.png',
-    },
-    font: {
-      FontAwesome: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.ttf',
-      KaushanScript: 'assets/fonts/kaushan-script/KaushanScript-Regular.otf',
-    }
-  });
-
-  flow.then(function() {
-    init();
-  });
+  init();
 });
 
 var init = function() {
   var app = GameApp({
     startLabel: location.search.substr(1).toObject().scene || 'title',
+    assets: ASSETS,
   });
   document.body.appendChild( app.domElement );
 
