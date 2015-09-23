@@ -3582,7 +3582,7 @@ phina.namespace(function() {
       this.src = path;
 
       var reg = /(.*)(?:\.([^.]+$))/;
-      var key = this.fontName || path.match(reg)[1];    //フォント名指定が無い場合はpathの拡張子前を使用
+      var key = this.fontName || path.match(reg)[1].split('/').last;    //フォント名指定が無い場合はpathの拡張子前を使用
       var type = path.match(reg)[2];
       var format = "unknown";
       switch (type) {
@@ -3641,8 +3641,11 @@ phina.namespace(function() {
 
       var timeoutCount = 30;
       var checkLoadFont = function () {
-        if (canvas.context.measureText(checkText).width !== before) {
-          callback && callback();
+        var after = canvas.context.measureText(checkText).width;
+        if (after !== before) {
+          setTimeout(function() {
+            callback && callback();
+          }, 100);
         } else {
           if (--timeoutCount > 0) {
             setTimeout(checkLoadFont, 100);
@@ -3657,16 +3660,17 @@ phina.namespace(function() {
     },
 
     setFontName: function(name) {
-        if (this.loaded) {
-            console.warn("フォント名はLoad前にのみ設定が出来ます(" + name + ")");
-            return this;
-        }
-        this.fontName = name;
+      if (this.loaded) {
+        console.warn("フォント名はLoad前にのみ設定が出来ます(" + name + ")");
         return this;
+      }
+      this.fontName = name;
+      
+      return this;
     },
 
     getFontName: function() {
-        return this.fontName;
+      return this.fontName;
     },
 
   });
@@ -8202,10 +8206,10 @@ phina.namespace(function() {
   phina.define('phina.game.GameApp', {
     superClass: 'phina.display.CanvasApp',
 
-    init: function(params) {
-      this.superInit(params);
+    init: function(options) {
+      this.superInit(options);
 
-      var startLabel = (params.assets) ? 'loading' : params.startLabel;
+      var startLabel = (options.assets) ? 'loading' : options.startLabel;
 
       var scene = ManagerScene({
         startLabel: startLabel,
@@ -8213,59 +8217,40 @@ phina.namespace(function() {
         scenes: [
           {
             className: 'LoadingScene',
-            arguments: {
-              width: params.width,
-              height: params.height,
-              assets: params.assets,
-            },
+            arguments: options,
             label: 'loading',
-            nextLabel: params.startLabel,
+            nextLabel: options.startLabel,
           },
 
           {
             className: 'SplashScene',
-            arguments: {
-              width: params.width,
-              height: params.height,
-            },
+            arguments: options,
             label: 'splash',
             nextLabel: 'title',
           },
 
           {
             className: 'TitleScene',
-            arguments: {
-              width: params.width,
-              height: params.height,
-            },
+            arguments: options,
             label: 'title',
             nextLabel: 'main',
           },
           {
             className: 'MainScene',
-            arguments: {
-              width: params.width,
-              height: params.height,
-            },
+            arguments: options,
             label: 'main',
             nextLabel: 'result',
           },
           {
             className: 'ResultScene',
-            arguments: {
-              width: params.width,
-              height: params.height,
-            },
+            arguments: options,
             label: 'result',
             nextLabel: 'title',
           },
 
           {
             className: 'PauseScene',
-            arguments: {
-              width: params.width,
-              height: params.height,
-            },
+            arguments: options,
             label: 'pause',
           },
 
