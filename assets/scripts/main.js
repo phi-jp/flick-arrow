@@ -71,8 +71,8 @@ phina.main(function() {
       arrow: 'assets/images/arrow0.png',
     },
     font: {
-      FontAwesome: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.woff2',
-      KaushanScript: 'http://fonts.gstatic.com/s/kaushanscript/v4/qx1LSqts-NtiKcLw4N03IJsM3FTMmj2kTPH3yX99Yaw.woff2',
+      FontAwesome: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.ttf',
+      KaushanScript: 'assets/fonts/kaushan-script/KaushanScript-Regular.otf',
     }
   });
 
