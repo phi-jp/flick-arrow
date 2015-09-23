@@ -5877,11 +5877,18 @@ phina.namespace(function() {
 
       this.ss = phina.asset.AssetManager.get('spritesheet', ss);
       this.paused = true;
+      this.finished = false;
     },
 
     update: function() {
       if (this.paused) return ;
       if (!this.currentAnimation) return ;
+
+      if (this.finished) {
+        this.finished = false;
+        this.currentFrameIndex = 0;
+        return ;
+      }
 
       ++this.frame;
       if (this.frame%this.currentAnimation.frequency === 0) {
@@ -5921,7 +5928,9 @@ phina.namespace(function() {
             return ;
           }
           else {
-            // TODO: 
+            this.paused = true;
+            this.finished = true;
+            return ;
           }
         }
       }
@@ -7096,6 +7105,8 @@ phina.namespace(function() {
       this.renderer = phina.display.CanvasRenderer(this.canvas);
       this.backgroundColor = (params.backgroundColor) ? params.backgroundColor : null;
       
+      this.width = params.width;
+      this.height = params.height;
       this.gridX = phina.util.Grid(params.width, 16);
       this.gridY = phina.util.Grid(params.height, 16);
 
@@ -8012,6 +8023,74 @@ phina.namespace(function() {
 });
 
 /*
+ * LoadingScene
+ */
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.game.LoadingScene
+   * 
+   */
+  phina.define('phina.game.LoadingScene', {
+    superClass: 'phina.display.CanvasScene',
+
+    /**
+     * @constructor
+     */
+    init: function(options) {
+      options = (options || {}).$safe(phina.game.LoadingScene.defaults);
+      this.superInit(options);
+
+      this.fromJSON({
+        children: {
+          bar: {
+            className: 'phina.display.Shape',
+            arguments: {
+              width: this.width,
+              height: 6,
+              backgroundColor: 'hsla(200, 100%, 80%, 0.8)',
+            },
+            originX: 0,
+            originY: 0,
+            x: 0,
+            y: 0,
+          },
+        }
+      });
+
+
+      var loader = phina.asset.AssetLoader();
+      
+      this.bar.scaleX = 0;
+      loader.onprogress = function(e) {
+        this.bar.scaleX = e.progress;
+      }.bind(this);
+      
+      loader.onload = function() {
+        if (options.exitType === 'auto') {
+          this.app.popScene();
+        }
+      }.bind(this);
+
+      loader.load(options.assets);
+    },
+
+    _static: {
+      defaults: {
+        width: 640,
+        height: 960,
+
+        exitType: 'auto',
+      },
+    },
+
+  });
+
+});
+
+/*
  * CountScene
  */
 
@@ -8126,39 +8205,68 @@ phina.namespace(function() {
     init: function(params) {
       this.superInit(params);
 
+      var startLabel = (params.assets) ? 'loading' : params.startLabel;
+
       var scene = ManagerScene({
-        startLabel: params.startLabel,
+        startLabel: startLabel,
 
         scenes: [
           {
-            className: "SplashScene",
+            className: 'LoadingScene',
+            arguments: {
+              width: params.width,
+              height: params.height,
+              assets: params.assets,
+            },
+            label: 'loading',
+            nextLabel: params.startLabel,
+          },
+
+          {
+            className: 'SplashScene',
             arguments: {
               width: params.width,
               height: params.height,
             },
-            label: "splash",
-            nextLabel: "title",
+            label: 'splash',
+            nextLabel: 'title',
           },
-          
+
           {
             className: 'TitleScene',
+            arguments: {
+              width: params.width,
+              height: params.height,
+            },
             label: 'title',
             nextLabel: 'main',
           },
           {
             className: 'MainScene',
+            arguments: {
+              width: params.width,
+              height: params.height,
+            },
             label: 'main',
             nextLabel: 'result',
           },
           {
             className: 'ResultScene',
+            arguments: {
+              width: params.width,
+              height: params.height,
+            },
             label: 'result',
             nextLabel: 'title',
           },
 
           {
-            className: "PauseScene",
-            label: "pause",
+            className: 'PauseScene',
+            arguments: {
+              width: params.width,
+              height: params.height,
+            },
+            label: 'pause',
           },
 
         ]
