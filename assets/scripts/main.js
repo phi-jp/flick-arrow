@@ -67,10 +67,11 @@ var ASSETS = {
   },
   image: {
     arrow: 'assets/images/arrow0.png',
+    title: 'assets/images/title.png',
   },
   font: {
     FontAwesome: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.ttf',
-    KaushanScript: 'assets/fonts/kaushan-script/KaushanScript-Regular.otf',
+    // KaushanScript: 'assets/fonts/kaushan-script/KaushanScript-Regular.otf',
   }
 };
 

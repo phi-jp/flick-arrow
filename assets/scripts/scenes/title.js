@@ -14,13 +14,9 @@ phina.define('TitleScene', {
 
     this.fromJSON({
       children: {
-        titleLabel: {
-          className: 'Label',
-          arguments: [TITLE, {
-            fontSize: 112,
-            fontFamily: MAIN_FONT,
-            padding: 16,
-          }],
+        titleSprite: {
+          className: 'Sprite',
+          arguments: 'title',
           x: this.gridX.span(8),
           y: this.gridY.span(3),
         },
