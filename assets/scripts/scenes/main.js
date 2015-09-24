@@ -212,6 +212,8 @@ phina.define('MainScene', {
         this.addScore(1);
         this.setQuestion();
 
+        AssetManager.get('sound', 'pinpon').play();
+
         // bonus
         this.combo++;
         if (this.combo % 10 === 0) {
@@ -223,6 +225,8 @@ phina.define('MainScene', {
       else {
         this.arrow.move(SCREEN_CENTER_X, SCREEN_CENTER_Y+120);
         this.arrow.blink();
+
+        AssetManager.get('sound', 'boo').play();
 
         // penalty
         this.addTime(PENALTY);
