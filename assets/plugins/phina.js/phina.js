@@ -4192,7 +4192,12 @@ phina.namespace(function() {
 
     _static: {
       /** ブラウザがGamepad APIに対応しているか. */
-      isAvailable: (!!navigator.getGamepads) || (!!navigator.webkitGetGamepads),
+      isAvailable: (function() {
+        var nav = phina.global.navigator;
+        if (!nav) return false;
+
+        return (!!nav.getGamepads) || (!!nav.webkitGetGamepads);
+      })(),
     },
 
   });
@@ -4404,7 +4409,12 @@ phina.namespace(function() {
 
     _static: {
       /** ブラウザがGamepad APIに対応しているか. */
-      isAvailable: (!!navigator.getGamepads) || (!!navigator.webkitGetGamepads),
+      isAvailable: (function() {
+        var nav = phina.global.navigator;
+        if (!nav) return false;
+
+        return (!!nav.getGamepads) || (!!nav.webkitGetGamepads);
+      })(),
 
       /** アナログ入力対応のボタンの場合、どの程度まで押し込むとonになるかを表すしきい値. */
       ANALOGUE_BUTTON_THRESHOLD: 0.5,
@@ -6602,6 +6612,20 @@ phina.namespace(function() {
       return this;
     },
 
+    /**
+     * 画像として保存
+     */
+    saveAsImage: function(mime_type) {
+      mime_type = mime_type || "image/png";
+      var data_url = this.canvas.toDataURL(mime_type);
+      // data_url = data_url.replace(mime_type, "image/octet-stream");
+      window.open(data_url, "save");
+      
+      // toDataURL を使えば下記のようなツールが作れるかも!!
+      // TODO: プログラムで絵をかいて保存できるツール
+    },
+
+
     _accessor: {
       /**
        * 幅
@@ -7492,8 +7516,8 @@ phina.namespace(function() {
      */
     init: function(params) {
       this.superInit({
-      	color: 'white',
-      	stroke: false,
+        color: 'white',
+        stroke: false,
       });
 
       var tweener = phina.accessory.Tweener().attachTo(this);
