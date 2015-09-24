@@ -70,6 +70,12 @@ phina.define('TitleScene', {
         this.getRoot().exit();
       }
     };
+
+    // AssetManager.get('sound', 'bgm_title').play();
+
+    this.onpointstart = function() {
+      AssetManager.get('sound', 'touch').play();
+    }
   },
 
   onenter: function() {

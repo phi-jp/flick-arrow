@@ -52,7 +52,7 @@ phina.define('CircleButton', {
           y: SCREEN_CENTER_Y,
       }, 300, 'easeOutQuint')
       .call(function() {
-          // tm.asset.Manager.get('sounds/warp').clone().play();
+        AssetManager.get('sound', 'warp').play();
       })
       .call(function() {
         this.bg.tweener

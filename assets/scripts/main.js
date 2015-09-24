@@ -69,6 +69,17 @@ var ASSETS = {
     arrow: 'assets/images/arrow0.png',
     title: 'assets/images/title.png',
   },
+  sound: {
+    touch: 'assets/sounds/fm006.m4a',
+    pinpon: 'assets/sounds/pinpon.mp3',
+    boo: 'assets/sounds/boo.mp3',
+    warp: 'assets/sounds/power16.m4a',
+
+    // bgm: 'assets/sounds/bgm.m4a',
+    bgm_title: 'assets/sounds/bgm/title.m4a',
+    bgm_game: 'assets/sounds/bgm/game.m4a',
+
+  },
   font: {
     FontAwesome: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.ttf',
     // KaushanScript: 'assets/fonts/kaushan-script/KaushanScript-Regular.otf',
