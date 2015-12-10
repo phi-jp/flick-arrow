@@ -287,7 +287,7 @@ phina.define('GaugeShape', {
       var rate = 1-((1.0-this.value)/0.1);
       var s = rate*100;
       var color = 'hsla(0, {0}%, 80%, 0.5)'.format(s);
-      this.style.backgroundColor = color;
+      this.backgroundColor = color;
     }
   },
 

@@ -14,17 +14,18 @@ phina.define('CircleButton', {
           arguments: {
             radius: options.radius,
             stroke: false,
-            color: options.backgroundColor,
+            fill: options.backgroundColor,
           },
         },
         label: {
           className: 'Label',
-          arguments: [options.text, {
-            color: 'white',
+          arguments: {
+            text: options.text,
+            fill: 'white',
             fontFamily: options.fontFamily,
             fontSize: options.radius,
             stroke: false,
-          }],
+          },
         },
       }
     });
@@ -39,7 +40,6 @@ phina.define('CircleButton', {
   },
 
   fill: function() {
-
     this.label.tweener
       .clear()
       .fadeOut(200)
@@ -65,7 +65,6 @@ phina.define('CircleButton', {
           }, this)
           ;
       }, this)
-
   },
 });
 
@@ -172,7 +171,7 @@ phina.define('Arrow', {
       this.superInit({
         radius: 128,
         stroke: false,
-        color: color,
+        fill: color,
         lineWidth: 8,
       });
 
@@ -295,8 +294,6 @@ phina.define('CircleFilterEffect', {
 
     this.origin.set(0, 0);
 
-    this.canvas.transformCenter();
-
     this.circleRadius = 0;
     this.tweener
       .to({
@@ -305,13 +302,29 @@ phina.define('CircleFilterEffect', {
       .call(function() {
         this.target.remove();
       })
+    this._render();
   },
 
-  update: function() {
+  _render: function() {
     var c = this.canvas;
 
+    this._renderBackground();
+
+    c.transformCenter();
     c.context.globalCompositeOperation = 'destination-out';
     c.fillCircle(0, 0, this.circleRadius);
+  },
+
+  _accessor: {
+    circleRadius: {
+      get: function() {
+        return this._circleRadius;
+      },
+      set: function(v) {
+        this._dirtyDraw = true;
+        this._circleRadius = v;
+      },
+    },
   },
 });
 
