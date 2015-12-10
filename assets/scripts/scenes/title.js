@@ -57,6 +57,8 @@ phina.define('TitleScene', {
 
     var self = this;
 
+    SoundManager.playMusic('bgm_title');
+
     this.playButton.onpush = function() {
 
       this.parent.children.each(function(child) {
@@ -71,11 +73,9 @@ phina.define('TitleScene', {
       }
     };
 
-    // AssetManager.get('sound', 'bgm_title').play();
-
     this.onpointstart = function() {
       AssetManager.get('sound', 'touch').play();
-    }
+    };
   },
 
   onenter: function() {

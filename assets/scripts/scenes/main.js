@@ -62,6 +62,8 @@ phina.define('MainScene', {
   },
 
   onenter: function() {
+    SoundManager.stopMusic(1000);
+
     CircleFilterEffect({}).addChildTo(this);
 
     var scene = CountScene({
@@ -69,6 +71,7 @@ phina.define('MainScene', {
       fontSize: 100,
     });
     scene.onexit = function() {
+      SoundManager.playMusic('bgm_game');
       this.setQuestion();
     }.bind(this);
 
