@@ -56,14 +56,15 @@ var QUESTION_TABLE = {
     32: ['blue', 'red', 'green'],
 };
 
+var NOW = Date.now();
 
 var ASSETS = {
   script: {
-    elements: 'assets/scripts/elements.js',
-    titlescene: 'assets/scripts/scenes/title.js',
-    mainscene: 'assets/scripts/scenes/main.js',
-    pausescene: 'assets/scripts/scenes/pause.js',
-    resultscene: 'assets/scripts/scenes/result.js',
+    elements: 'assets/scripts/elements.js?' + NOW,
+    titlescene: 'assets/scripts/scenes/title.js?' + NOW,
+    mainscene: 'assets/scripts/scenes/main.js?' + NOW,
+    pausescene: 'assets/scripts/scenes/pause.js?' + NOW,
+    resultscene: 'assets/scripts/scenes/result.js?' + NOW,
   },
   image: {
     arrow: 'assets/images/arrow0.png',
