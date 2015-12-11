@@ -80,9 +80,10 @@ phina.define("ResultScene", {
           y: this.gridY.span(12),
         },
         storeButton: {
-          className: 'AdButton',
+          className: 'LinkButton',
           arguments: {
             radius: this.gridX.span(1),
+            url: APP_URL,
           },
           x: this.gridX.span(12),
           y: this.gridY.span(11),
