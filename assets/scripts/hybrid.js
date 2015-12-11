@@ -1,4 +1,17 @@
 
+var hybrid = {
+  gamecenter: {
+    showLeaderboard: function(board_id) {
+      if (!window.gamecenter) return ;
+
+      var data = {
+        leaderboardId: board_id
+      };
+      gamecenter.showLeaderboard(null, null, data);
+    },
+  },
+};
+
 document.addEventListener('deviceready', function() {
   var admobid = {};
   // select the right Ad Id according to platform
@@ -32,7 +45,6 @@ document.addEventListener('deviceready', function() {
 
   // login gamecenter
   if (window.gamecenter) {
-    alert(window.gamecenter);
     gamecenter.auth();
   }
 });

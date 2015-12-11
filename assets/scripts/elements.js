@@ -108,6 +108,10 @@ phina.define('RankingButton', {
     });
 
     this.superInit(options);
+
+    this.onpush = function() {
+      hybrid.gamecenter.showLeaderboard(BOARD_ID);
+    };
   }
 });
 
