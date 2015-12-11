@@ -73,9 +73,11 @@ phina.define('TitleScene', {
       }
     };
 
-    this.onpointstart = function() {
+    this.onpointstart = function(e) {
+      var wave = Wave().addChildTo(this).setPosition(e.pointer.x, e.pointer.y);
       AssetManager.get('sound', 'touch').play();
     };
+
   },
 
   onenter: function() {
