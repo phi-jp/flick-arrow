@@ -24,7 +24,7 @@ var MAX_RECOVERY = 2*1000; // 回復量のマックス値
 var BASE_PATH = window.cordovaFlag ? 'http://junk.tmlife.net/flick-arrow/' : "./";
 var HOME_COLOR = "hsl(60, 90%, 50%)";
 var MAIN_FONT = "KaushanScript";
-var BOARD_ID = "board_normal";
+var BOARD_ID = "flickarrow_score_board";
 var FONT_CODE = {
     play: String.fromCharCode('0xf04b'),
     home: String.fromCharCode('0xf015'),

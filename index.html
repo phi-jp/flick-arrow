@@ -14,12 +14,17 @@
       }
     </style>
     
-    <script src="./assets/cordova/cordova.js"></script>
 
     <script src='./assets/plugins/phina.js/phina.js'></script>
     <script src="./assets/scripts/main.js"></script>
 
     <!-- for cordova -->
+    <script>
+    var q = location.search.substr(1).toObject();
+    if (q.platform === 'cordova') {
+      document.write('<scri' + 'pt src="./assets/cordova/cordova.js"></scrip' + 't>');
+    }
+    </script>
     <script src="./assets/scripts/hybrid.js"></script>
   </head>
   <body>

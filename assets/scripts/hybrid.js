@@ -1,5 +1,11 @@
 
 var hybrid = {
+  admob: {
+    prepareInterstitial: function() {
+      if (!window.AdMob) return ;
+      AdMob.prepareInterstitial( {adId:admobid.interstitial, autoShow:true} );
+    },
+  },
   gamecenter: {
     showLeaderboard: function(board_id) {
       if (!window.gamecenter) return ;
@@ -9,8 +15,23 @@ var hybrid = {
       };
       gamecenter.showLeaderboard(null, null, data);
     },
+    submitScore: function(board_id, score) {
+      if (!window.gamecenter) return ;
+
+      var data = {
+        score: score,
+        leaderboardId: board_id,
+      };
+
+      gamecenter.submitScore(function() {
+        // alert('success');
+      }, function() {
+        // alert('failure');
+      }, data);
+    },
   },
 };
+
 
 document.addEventListener('deviceready', function() {
   var admobid = {};
