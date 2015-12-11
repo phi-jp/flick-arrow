@@ -114,6 +114,11 @@ phina.define("ResultScene", {
       .fadeIn(200)
       ;
 
+    this.onpointstart = function(e) {
+      var wave = Wave().addChildTo(this).setPosition(e.pointer.x, e.pointer.y);
+      AssetManager.get('sound', 'touch').play();
+    };
+
     // gamecenter にスコアを送る
     hybrid.gamecenter.submitScore(BOARD_ID, options.score);
 
