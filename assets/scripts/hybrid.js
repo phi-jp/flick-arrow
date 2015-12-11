@@ -68,4 +68,9 @@ document.addEventListener('deviceready', function() {
   if (window.gamecenter) {
     gamecenter.auth();
   }
+
+  // 
+  if (window.StatusBar) {
+    StatusBar.hide();
+  }
 });

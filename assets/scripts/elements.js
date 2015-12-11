@@ -129,7 +129,7 @@ phina.define('ShareButton', {
   }
 });
 
-phina.define('AdButton', {
+phina.define('LinkButton', {
   superClass: 'CircleButton',
 
   init: function(options) {
@@ -140,6 +140,10 @@ phina.define('AdButton', {
     });
 
     this.superInit(options);
+
+    this.onclick = function() {
+      window.open(options.url);
+    }
   }
 });
 
