@@ -126,6 +126,10 @@ phina.define('ShareButton', {
     });
 
     this.superInit(options);
+
+    this.onclick = function() {
+      
+    };
   }
 });
 

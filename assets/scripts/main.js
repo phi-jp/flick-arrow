@@ -45,8 +45,9 @@ var FONT_CODE = {
 };
 var APP_URL = "https://itunes.apple.com/us/app/flick-arrow/id978643804?l=ja&ls=1&mt=8";
 var ITUNES_URL = "itms-apps://itunes.apple.com/app/id978643804";
-var TITLE_TWEET = "『FlickArrow』超簡単♪ 矢印をフリックするだけのカジュアルゲーム";
+var TITLE_TWEET = "『FlickArrow』矢印をフリックするだけのシンプルなゲームです.";
 var RESULT_URL = TITLE_TWEET + " SCORE: {score} flick";
+var HASH_TAGS = 'phina_js,FlickArrow';
 
 var QUESTION_TABLE = {
     0: ['blue'],
