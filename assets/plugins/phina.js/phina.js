@@ -4419,6 +4419,7 @@ phina.namespace(function() {
         if (!this.currentMusic) { return ; }
 
         var music = this.currentMusic;
+        this.currentMusic = null;
 
         if (fadeTime > 0) {
           var count = 32;
@@ -4433,7 +4434,6 @@ phina.namespace(function() {
             music.volume = volume*(1-rate);
 
             if (rate >= 1) {
-              // debugger;
               music.stop();
               clearInterval(id);
               return false;
@@ -4443,7 +4443,7 @@ phina.namespace(function() {
           }, unitTime);
         }
         else {
-          this.currentMusic.stop();
+          music.stop();
         }
       },
 
