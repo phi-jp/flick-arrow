@@ -79,8 +79,7 @@ var hybrid = {
     send: function(message) {
       if (!window.socialmessage) return ;
 
-      message.activityTypes = ["PostToTwitter", "PostToFacebook", "Mail", "AirDrop"];
-      debugger;
+      message.activityTypes = ["PostToTwitter", "PostToFacebook", "Mail", "Message", "AirDrop", "CopyToPasteboard"];
       // message.activityTypes = ["PostToTwitter", "PostToFacebook", "Message", "Mail"];
 
       socialmessage.send(message);
