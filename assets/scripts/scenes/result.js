@@ -125,7 +125,9 @@ phina.define("ResultScene", {
 
     // 広告を表示
     if (Random.randint(0, 2) === 0) {
-      hybrid.nend.showInterstitial();
+      setTimeout(function() {
+        hybrid.nend.showInterstitial();
+      }, 1024);
     }
   },
 });
