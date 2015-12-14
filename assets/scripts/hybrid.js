@@ -36,6 +36,33 @@ var hybrid = {
       }, data);
     },
   },
+
+  launchReview: {
+    init: function(idSet) {
+      if (!window.LaunchReview) return ;
+
+      var appId = null;
+      var platform = device.platform.toLowerCase();
+
+      switch(platform) {
+        case 'ios':
+          appId = idSet.ios;
+          break;
+        case 'android':
+          appId = idSet.android;
+          break;
+      }
+
+      this.appId = appId;
+    },
+    launch: function() {
+      if (!window.LaunchReview) return ;
+      
+      LaunchReview.launch(this.appId, function(){
+        console.log("Successfully launched store app");
+      });
+    },
+  },
   nend: {
     createBanner: function(apiKey, spotId) {
       if (!window.Nend) return ;
@@ -117,8 +144,14 @@ document.addEventListener('deviceready', function() {
     gamecenter.auth();
   }
 
-  // 
-  if (window.StatusBar) {
-    StatusBar.hide();
-  }
+  // StatusBar
+  // if (window.StatusBar) {
+  //   StatusBar.hide();
+  // }
+
+  // launchReview
+  hybrid.launchReview.init({
+    ios: '978643804',
+    ios: '585027354',
+  });
 });

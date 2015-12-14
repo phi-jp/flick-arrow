@@ -147,6 +147,7 @@ phina.define('LinkButton', {
 
     this.onclick = function() {
       window.open(options.url);
+      hybrid.launchReview.launch()
     }
   }
 });
