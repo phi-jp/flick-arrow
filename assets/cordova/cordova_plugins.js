@@ -23,6 +23,22 @@ module.exports = [
         "clobbers": [
             "Nend"
         ]
+    },
+    {
+        "file": "plugins/cordova-launch-review/www/launchreview.js",
+        "id": "cordova-launch-review.LaunchReview",
+        "pluginId": "cordova-launch-review",
+        "clobbers": [
+            "LaunchReview"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device/www/device.js",
+        "id": "cordova-plugin-device.device",
+        "pluginId": "cordova-plugin-device",
+        "clobbers": [
+            "device"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -31,7 +47,9 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.2.0",
     "cordova-plugin-statusbar": "2.0.0",
     "cordova-plugin-game-center": "0.4.2",
-    "com.effers.kaky.nend": "0.1.0"
+    "com.effers.kaky.nend": "0.1.0",
+    "cordova-launch-review": "1.0.2",
+    "cordova-plugin-device": "1.1.0"
 }
 // BOTTOM OF METADATA
 });
