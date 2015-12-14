@@ -1,4 +1,10 @@
 
+var NEND_BANNER_API_KEY = '8f4af98e1d2fb9ae6eb704f8182731a9c2bc1c67';
+var NEND_BANNER_SPOT_ID = '497147';
+var NEND_INTERSTITIAL_API_KEY = 'b41a30d6ce3eb4a1a34ae36c04636792b254bf68';
+var NEND_INTERSTITIAL_SPOT_ID = '497174';
+
+
 var hybrid = {
   admob: {
     prepareInterstitial: function() {
@@ -101,13 +107,9 @@ document.addEventListener('deviceready', function() {
       });
     }, 1000);
   }
-
-  var NEND_BANNER_API_KEY = '8f4af98e1d2fb9ae6eb704f8182731a9c2bc1c67';
-  var NEND_BANNER_SPOT_ID = '497147';
-  var NEND_INTERSTITIAL_API_KEY = 'b41a30d6ce3eb4a1a34ae36c04636792b254bf68';
-  var NEND_INTERSTITIAL_SPOT_ID = '497174';
   
   hybrid.nend.createBanner(NEND_BANNER_API_KEY, NEND_BANNER_SPOT_ID);
+  hybrid.nend.showBanner();
   hybrid.nend.createInterstitial(NEND_INTERSTITIAL_API_KEY, NEND_INTERSTITIAL_SPOT_ID);
 
   // login gamecenter

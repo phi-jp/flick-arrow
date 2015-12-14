@@ -102,7 +102,7 @@ var init = function() {
   document.body.appendChild( app.domElement );
 
   app.backgroundColor = BACKGROUND_COLOR;
-  app.enableStats();
+  // app.enableStats();
 
   app.run();
 };
