@@ -9,19 +9,19 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-admobpro/www/AdMob.js",
-        "id": "cordova-plugin-admobpro.AdMob",
-        "pluginId": "cordova-plugin-admobpro",
-        "clobbers": [
-            "window.AdMob"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-game-center/www/gamecenter.js",
         "id": "cordova-plugin-game-center.GameCenter",
         "pluginId": "cordova-plugin-game-center",
         "clobbers": [
             "gamecenter"
+        ]
+    },
+    {
+        "file": "plugins/com.effers.kaky.nend/www/nend.js",
+        "id": "com.effers.kaky.nend.Nend",
+        "pluginId": "com.effers.kaky.nend",
+        "clobbers": [
+            "Nend"
         ]
     }
 ];
@@ -30,9 +30,8 @@ module.exports.metadata =
 {
     "cordova-plugin-whitelist": "1.2.0",
     "cordova-plugin-statusbar": "2.0.0",
-    "cordova-plugin-extension": "1.2.2",
-    "cordova-plugin-admobpro": "2.9.9",
-    "cordova-plugin-game-center": "0.4.2"
+    "cordova-plugin-game-center": "0.4.2",
+    "com.effers.kaky.nend": "0.1.0"
 }
 // BOTTOM OF METADATA
 });
