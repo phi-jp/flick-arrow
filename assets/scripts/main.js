@@ -21,10 +21,16 @@ var TIME = 30*1000; // 50flick/20sec はいける!
 var PENALTY = 2*1000;
 var MAX_RECOVERY = 2*1000; // 回復量のマックス値
 
-var BASE_PATH = window.cordovaFlag ? 'http://junk.tmlife.net/flick-arrow/' : "./";
+
 var HOME_COLOR = "hsl(60, 90%, 50%)";
 var MAIN_FONT = "KaushanScript";
-var BOARD_ID = "flickarrow_score_board";
+var QUESTION_TABLE = {
+    0: ['blue'],
+    8: ['blue', 'blue', 'red'],
+    16: ['blue', 'red'],
+    24: ['blue', 'blue', 'blue', 'red', 'red', 'green'],
+    32: ['blue', 'red', 'green'],
+};
 var FONT_CODE = {
   play: String.fromCharCode('0xf04b'),
   home: String.fromCharCode('0xf015'),
@@ -52,13 +58,13 @@ var TITLE_TWEET = "『FlickArrow』 - 誰よりも速く, そして正確なフ�
 var RESULT_URL  = TITLE_TWEET + " SCORE: {score} flick";
 var HASH_TAGS   = 'phina_js,FlickArrow';
 
-var QUESTION_TABLE = {
-    0: ['blue'],
-    8: ['blue', 'blue', 'red'],
-    16: ['blue', 'red'],
-    24: ['blue', 'blue', 'blue', 'red', 'red', 'green'],
-    32: ['blue', 'red', 'green'],
-};
+// for cordova
+var BOARD_ID = "flickarrow_score_board";
+var NEND_BANNER_API_KEY = '8f4af98e1d2fb9ae6eb704f8182731a9c2bc1c67';
+var NEND_BANNER_SPOT_ID = '497147';
+var NEND_INTERSTITIAL_API_KEY = 'b41a30d6ce3eb4a1a34ae36c04636792b254bf68';
+var NEND_INTERSTITIAL_SPOT_ID = '497174';
+
 
 var NOW = Date.now();
 

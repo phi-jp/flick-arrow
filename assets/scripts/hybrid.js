@@ -1,9 +1,4 @@
 
-var NEND_BANNER_API_KEY = '8f4af98e1d2fb9ae6eb704f8182731a9c2bc1c67';
-var NEND_BANNER_SPOT_ID = '497147';
-var NEND_INTERSTITIAL_API_KEY = 'b41a30d6ce3eb4a1a34ae36c04636792b254bf68';
-var NEND_INTERSTITIAL_SPOT_ID = '497174';
-
 
 var hybrid = {
   admob: {
@@ -13,6 +8,12 @@ var hybrid = {
     },
   },
   gamecenter: {
+    auth: function() {
+      // login gamecenter
+      if (window.gamecenter) {
+        gamecenter.auth();
+      }
+    },
     showLeaderboard: function(board_id) {
       if (!window.gamecenter) return ;
 
@@ -34,6 +35,17 @@ var hybrid = {
       }, function() {
         // alert('failure');
       }, data);
+    },
+  },
+
+  statusBar: {
+    show: function() {
+      if (!window.StatusBar) return ;
+      StatusBar.show();
+    },
+    hide: function() {
+      if (!window.StatusBar) return ;
+      StatusBar.hide();
     },
   },
 
@@ -67,7 +79,8 @@ var hybrid = {
     send: function(message) {
       if (!window.socialmessage) return ;
 
-      message.activityTypes = ["PostToTwitter", "PostToFacebook", "Mail"];
+      message.activityTypes = ["PostToTwitter", "PostToFacebook", "Mail", "AirDrop"];
+      debugger;
       // message.activityTypes = ["PostToTwitter", "PostToFacebook", "Message", "Mail"];
 
       socialmessage.send(message);
@@ -117,49 +130,17 @@ var hybrid = {
 
 
 document.addEventListener('deviceready', function() {
-  var admobid = {};
-  // select the right Ad Id according to platform
-  if( /(android)/i.test(navigator.userAgent) ) { 
-    admobid = { // for Android
-      banner: '????',
-      interstitial: '????'
-    };
-  } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
-    admobid = { // for iOS
-      banner: 'ca-app-pub-1611962793956940/2978822116',
-      interstitial: 'ca-app-pub-1611962793956940/4455555319'
-    };
-  } else {
-    admobid = { // for Windows Phone
-      banner: 'ca-app-pub-1611962793956940/2978822116',
-      interstitial: 'ca-app-pub-1611962793956940/4455555319'
-    };
-  }
-
-  window.admobid = admobid;
-
-  if(window.AdMob) {
-    setTimeout(function() {
-      AdMob.createBanner({
-        adId:admobid.banner, 
-        position:AdMob.AD_POSITION.BOTTOM_CENTER, 
-      });
-    }, 1000);
-  }
   
+  // setup nend
   hybrid.nend.createBanner(NEND_BANNER_API_KEY, NEND_BANNER_SPOT_ID);
   hybrid.nend.showBanner();
   hybrid.nend.createInterstitial(NEND_INTERSTITIAL_API_KEY, NEND_INTERSTITIAL_SPOT_ID);
 
-  // login gamecenter
-  if (window.gamecenter) {
-    gamecenter.auth();
-  }
+  // login game center
+  hybrid.gamecenter.auth();
 
   // StatusBar
-  if (window.StatusBar) {
-    StatusBar.hide();
-  }
+  hybrid.statusBar.hide();
 
   // launchReview
   hybrid.launchReview.init({
