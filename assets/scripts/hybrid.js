@@ -57,7 +57,7 @@ var hybrid = {
     },
     launch: function() {
       if (!window.LaunchReview) return ;
-      
+
       LaunchReview.launch(this.appId, function(){
         console.log("Successfully launched store app");
       });
@@ -152,6 +152,5 @@ document.addEventListener('deviceready', function() {
   // launchReview
   hybrid.launchReview.init({
     ios: '978643804',
-    ios: '585027354',
   });
 });
