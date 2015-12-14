@@ -156,9 +156,9 @@ document.addEventListener('deviceready', function() {
   }
 
   // StatusBar
-  // if (window.StatusBar) {
-  //   StatusBar.hide();
-  // }
+  if (window.StatusBar) {
+    StatusBar.hide();
+  }
 
   // launchReview
   hybrid.launchReview.init({
