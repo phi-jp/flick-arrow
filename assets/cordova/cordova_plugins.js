@@ -39,6 +39,14 @@ module.exports = [
         "clobbers": [
             "device"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-social-message/www/socialmessage.js",
+        "id": "cordova-plugin-social-message.SocialMessage",
+        "pluginId": "cordova-plugin-social-message",
+        "clobbers": [
+            "socialmessage"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -49,7 +57,8 @@ module.exports.metadata =
     "cordova-plugin-game-center": "0.4.2",
     "com.effers.kaky.nend": "0.1.0",
     "cordova-launch-review": "1.0.2",
-    "cordova-plugin-device": "1.1.0"
+    "cordova-plugin-device": "1.1.0",
+    "cordova-plugin-social-message": "0.3.1"
 }
 // BOTTOM OF METADATA
 });

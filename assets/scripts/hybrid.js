@@ -63,6 +63,17 @@ var hybrid = {
       });
     },
   },
+  socialmessage: {
+    send: function(message) {
+      if (!window.socialmessage) return ;
+
+      message.activityTypes = ["PostToTwitter", "PostToFacebook", "Message", "Mail"];
+
+      socialmessage.send(message);
+      return this;
+    },
+  },
+
   nend: {
     createBanner: function(apiKey, spotId) {
       if (!window.Nend) return ;
