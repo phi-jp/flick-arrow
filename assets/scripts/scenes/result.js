@@ -124,8 +124,8 @@ phina.define("ResultScene", {
     hybrid.gamecenter.submitScore(BOARD_ID, options.score);
 
     // 広告を表示
-    if (Random.randint(0, 3) === 0) {
-      hybrid.admob.prepareInterstitial();
+    if (Random.randint(0, 2) === 0) {
+      hybrid.nend.showInterstitial();
     }
   },
 });

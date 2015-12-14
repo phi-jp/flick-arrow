@@ -37,6 +37,7 @@ var FONT_CODE = {
     buysellads: String.fromCharCode('0xf20d'),
     pause: String.fromCharCode('0xf04c'),
     apple: String.fromCharCode('0xf179'),
+    thumbsUp: String.fromCharCode('0xf164'),
 
     arrowRight: String.fromCharCode('0xf061'),
     longArrowRight: String.fromCharCode('0xf178'),
@@ -83,7 +84,7 @@ var ASSETS = {
 
   },
   font: {
-    FontAwesome: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.ttf',
+    FontAwesome: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/fonts/fontawesome-webfont.ttf',
     // KaushanScript: 'assets/fonts/kaushan-script/KaushanScript-Regular.otf',
   }
 };

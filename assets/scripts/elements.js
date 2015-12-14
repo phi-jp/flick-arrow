@@ -138,7 +138,7 @@ phina.define('LinkButton', {
 
   init: function(options) {
     options = (options || {}).$safe({
-      text: FONT_CODE.buysellads,
+      text: FONT_CODE.thumbsUp,
       fontFamily: 'FontAwesome',
       backgroundColor: 'hsl(0, 100%, 64%)',
     });
