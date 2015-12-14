@@ -26,28 +26,29 @@ var HOME_COLOR = "hsl(60, 90%, 50%)";
 var MAIN_FONT = "KaushanScript";
 var BOARD_ID = "flickarrow_score_board";
 var FONT_CODE = {
-    play: String.fromCharCode('0xf04b'),
-    home: String.fromCharCode('0xf015'),
-    comment: String.fromCharCode('0xf075'),
-    apple: String.fromCharCode('0xf179'),
-    android: String.fromCharCode('0xf17b'),
-    trophy: String.fromCharCode('0xf091'),
-    gamepad: String.fromCharCode('0xf11b'),
-    shareAlt: String.fromCharCode('0xf1e0'),
-    buysellads: String.fromCharCode('0xf20d'),
-    pause: String.fromCharCode('0xf04c'),
-    apple: String.fromCharCode('0xf179'),
-    thumbsUp: String.fromCharCode('0xf164'),
+  play: String.fromCharCode('0xf04b'),
+  home: String.fromCharCode('0xf015'),
+  comment: String.fromCharCode('0xf075'),
+  apple: String.fromCharCode('0xf179'),
+  android: String.fromCharCode('0xf17b'),
+  trophy: String.fromCharCode('0xf091'),
+  gamepad: String.fromCharCode('0xf11b'),
+  shareAlt: String.fromCharCode('0xf1e0'),
+  buysellads: String.fromCharCode('0xf20d'),
+  pause: String.fromCharCode('0xf04c'),
+  apple: String.fromCharCode('0xf179'),
+  thumbsUp: String.fromCharCode('0xf164'),
 
-    arrowRight: String.fromCharCode('0xf061'),
-    longArrowRight: String.fromCharCode('0xf178'),
-    handORight: String.fromCharCode('0xf0a4'),
-    angleRight: String.fromCharCode('0xf106'),
+  arrowRight: String.fromCharCode('0xf061'),
+  longArrowRight: String.fromCharCode('0xf178'),
+  handORight: String.fromCharCode('0xf0a4'),
+  angleRight: String.fromCharCode('0xf106'),
 };
 
+var WEB_SITE = 'http://flickarrow.phinajs.com/';
 var APP_URL = "https://itunes.apple.com/us/app/flick-arrow/id978643804?mt=8";
 var ITUNES_URL = "itms-apps://itunes.apple.com/app/id978643804";
-var TITLE_TWEET = "『FlickArrow』矢印をフリックするだけのシンプルなゲームです.";
+var TITLE_TWEET = "『FlickArrow』 - 誰よりも速く, そして正確なフリックを...";
 var RESULT_URL = TITLE_TWEET + " SCORE: {score} flick";
 var HASH_TAGS = 'phina_js,FlickArrow';
 

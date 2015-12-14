@@ -129,8 +129,8 @@ phina.define('ShareButton', {
 
     this.onclick = function() {
       hybrid.socialmessage.send({
-        text: 'Hello, world!',
-        url: 'http://phiary.me',
+        text: TITLE_TWEET,
+        url: WEB_SITE,
       });
     };
   }
