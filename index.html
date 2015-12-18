@@ -24,8 +24,14 @@
     <!-- for cordova -->
     <script>
     var q = location.search.substr(1).toObject();
-    if (q.platform === 'cordova') {
-      document.write('<scri' + 'pt src="./assets/cordova/cordova.js"></scrip' + 't>');
+    if (q.platform) {
+      if (q.platform === 'android') {
+
+      }
+      // ios
+      else {
+        document.write('<scri' + 'pt src="./assets/plugins/cordova/ios/cordova.js"></scrip' + 't>');
+      }
     }
     </script>
     <script src="./assets/scripts/hybrid.js"></script>
