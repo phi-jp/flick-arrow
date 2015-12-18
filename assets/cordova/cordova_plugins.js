@@ -58,7 +58,8 @@ module.exports.metadata =
     "com.effers.kaky.nend": "0.1.0",
     "cordova-launch-review": "1.0.2",
     "cordova-plugin-device": "1.1.0",
-    "cordova-plugin-social-message": "0.3.1"
+    "cordova-plugin-social-message": "0.3.1",
+    "cordova-plugin-crosswalk-webview": "1.4.0"
 }
 // BOTTOM OF METADATA
 });
