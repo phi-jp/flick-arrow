@@ -21,9 +21,10 @@
     <!-- for cordova -->
     <script>
     var q = location.search.substr(1).toObject();
+    
     if (q.platform) {
       if (q.platform === 'android') {
-
+        document.write('<scri' + 'pt src="./assets/plugins/cordova/android/cordova.js"></scrip' + 't>');
       }
       // ios
       else {
