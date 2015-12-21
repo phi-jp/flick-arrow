@@ -113,4 +113,11 @@ var init = function() {
   // app.enableStats();
 
   app.run();
+
+  hybrid.on('pause', function() {
+    SoundManager.pauseMusic();
+  });
+  hybrid.on('resume', function() {
+    SoundManager.resumeMusic();
+  });
 };
