@@ -125,11 +125,41 @@ var hybrid = {
       Nend.showInterstitial();
     },
   },
+
+  on: function(eventName, listener) {
+    if (!this._listener) {
+      this._listener = {};
+    }
+    if (!this._listener[eventName]) {
+      this._listener[eventName] = [];
+    }
+
+    this._listener[eventName].push(listener);
+  },
+
+  fire: function(eventName) {
+    if (!this._listener[eventName]) return ;
+
+    this._listener[eventName].forEach(function(listener) {
+      listener();
+    });
+  },
 };
 
+document.addEventListener('deviceready', function(e) {
+  hybrid.fire('deviceready');
+});
 
-document.addEventListener('deviceready', function() {
-  
+document.addEventListener('pause', function(e) {
+  hybrid.fire('pause');
+});
+
+document.addEventListener('resume', function() {
+  hybrid.fire('resume');
+});
+
+
+hybrid.on('deviceready', function() {
   // setup nend
   hybrid.nend.createBanner(NEND_BANNER_API_KEY, NEND_BANNER_SPOT_ID);
   hybrid.nend.showBanner();
