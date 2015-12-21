@@ -1,5 +1,5 @@
 /* 
- * phina.js 0.1.1
+ * phina.js 0.2.0
  * phina.js is a game library in javascript
  * MIT Licensed
  * 
@@ -212,6 +212,68 @@
     }
 
     return temp;
+  });
+
+  Object.prototype.method('$watch', function(key, callback) {
+    var target = this;
+    var descriptor = null;
+
+    while(target) {
+      descriptor = Object.getOwnPropertyDescriptor(target, key);
+      if (descriptor) {
+        break;
+      }
+      target = Object.getPrototypeOf(target);
+    }
+
+    // すでにアクセッサーとして存在する場合
+    if (descriptor) {
+      // データディスクリプタの場合
+      if (descriptor.value !== undefined) {
+        var tempKey = '__' + key;
+        var tempValue = this[key];
+
+        this[tempKey] = tempValue;
+
+        this.accessor(key, {
+          get: function() {
+            return this[tempKey];
+          },
+          set: function(v) {
+            var old = this[tempKey];
+            this[tempKey] = v;
+            callback.call(this, v, old);
+          },
+        });
+      }
+      // アクセサディスクリプタの場合
+      else {
+        this.accessor(key, {
+          get: function() {
+            return descriptor.get.call(this);
+          },
+          set: function(v) {
+            var old = descriptor.get.call(this);
+            descriptor.set.call(this, v);
+            callback.call(this, v, old);
+          },
+        });
+      }
+    }
+    else {
+      var accesskey = '__' + key;
+
+      this.accessor(key, {
+        get: function() {
+          return this[accesskey];
+        },
+        set: function(v) {
+          var old = this[accesskey];
+          this[accesskey] = v;
+          callback.call(this, v, old);
+        },
+      });
+    }
   });
 
   if (!Object.observe) {
@@ -1388,7 +1450,7 @@ var phina = phina || {};
   /**
    * バージョン
    */
-  phina.VERSION = '0.1.1';
+  phina.VERSION = '0.2.0';
 
   phina.method('isNode', function() {
     return (typeof module !== 'undefined');
@@ -1462,20 +1524,38 @@ phina.namespace(function() {
       _class.prototype.constructor = _class;
     }
 
+    // // 
+    // params.forIn(function(key, value) {
+    //   if (typeof value === 'function') {
+    //     _class.method(key, value);
+    //   }
+    //   else {
+    //     _class.prototype[key] = value;
+    //   }
+    // });
     _class.prototype.$extend(params);
+
+    // 
     _class.prototype.selfClass = _class;
 
     // accessor
     if (params._accessor) {
-      _class.prototype = Object.create(_class.prototype, params._accessor);
+      params._accessor.forIn(function(key, value) {
+        _class.prototype.accessor(key, value);
+      });
+      // _class.prototype = Object.create(_class.prototype, params._accessor);
     }
 
     _class.prototype._creator = function() { return this; };
     _class.prototype._creator.prototype = _class.prototype;
 
-    // static method
+    // static property/method
     if (params._static) {
       _class.$extend(params._static);
+    }
+
+    if (params._defined) {
+      params._defined.call(_class, _class);
     }
 
     return _class;
@@ -1595,13 +1675,14 @@ phina.namespace(function() {
 
   if (phina.global.addEventListener) {
     phina.global.addEventListener('load', function() {
-
-      phina._mainListeners.each(function(func) {
-        func();
+      // ちょっと遅延させる(画面サイズ問題)
+      setTimeout(function() {
+        phina._mainListeners.each(function(func) {
+          func();
+        });
+        phina._mainListeners.clear();
+        phina._mainLoaded = true;
       });
-      phina._mainListeners.clear();
-
-      phina._mainLoaded = true;
     });
   }
   else {
@@ -1767,12 +1848,13 @@ phina.namespace(function() {
     /**
      * ランダムベクトルをセット
      */
-    random: function(min, max) {
+    random: function(min, max, len) {
       var degree = phina.util.Random.randfloat(min || 0, max || 360);
       var rad = degree*Math.DEG_TO_RAD;
+      var len = len || 1;
 
-      this.x = Math.cos(rad);
-      this.y = Math.sin(rad);
+      this.x = Math.cos(rad)*len;
+      this.y = Math.sin(rad)*len;
 
       return this;
     },
@@ -1965,11 +2047,8 @@ phina.namespace(function() {
           // cos...
       },
 
-      random: function(len, min, max) {
-        min = min || 0;
-        max = max || 360;
-        len = len || 1;
-        return phina.geom.Vector2().setDegree(Math.randfloat(min, max), len);
+      random: function(min, max, len) {
+        return phina.geom.Vector2().random(min, max).mul(len||1);
       },
     },
 
@@ -1980,6 +2059,35 @@ phina.namespace(function() {
   phina.geom.Vector2.RIGHT= phina.geom.Vector2(1, 0);
   phina.geom.Vector2.UP   = phina.geom.Vector2(0, -1);
   phina.geom.Vector2.DOWN = phina.geom.Vector2(0, 1);
+
+});
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.geom.Vector3
+   * ベクトルクラス
+   */
+  phina.define('phina.geom.Vector3', {
+
+    /** x座標 */
+    x: 0,
+    /** y座標 */
+    y: 0,
+    /** z座標 */
+    y: 0,
+
+    /**
+     * @constructor
+     */
+    init: function(x, y, z) {
+      this.x = x;
+      this.y = y;
+      this.z = z;
+    },
+
+  });
 
 });
 
@@ -6119,6 +6227,70 @@ phina.namespace(function() {
 
 });
 
+/*
+ *
+ */
+
+
+phina.namespace(function() {
+
+  /**
+   * @class phina.input.Accelerometer
+   * スマートフォンのセンサー情報
+   */
+  phina.define('phina.input.Accelerometer', {
+
+    /** @property  gravity 重力センサー */
+    /** @property  acceleration 加速度センサー */
+    /** @property  rotation 回転加速度センサー */
+    /** @property  orientation スマートフォンの傾き */
+
+    /**
+     * @constructor
+     */
+    init: function() {
+
+      var self = this;
+      
+      this.gravity        = phina.geom.Vector3(0, 0, 0);
+      this.acceleration   = phina.geom.Vector3(0, 0, 0);
+      this.rotation       = phina.geom.Vector3(0, 0, 0);
+      this.orientation    = phina.geom.Vector3(0, 0, 0);
+
+      window.addEventListener("devicemotion", function(e) {
+        var acceleration = self.acceleration;
+        var gravity = self.gravity;
+        var rotation = self.rotation;
+        
+        if (e.acceleration) {
+          acceleration.x = e.acceleration.x;
+          acceleration.y = e.acceleration.y;
+          acceleration.z = e.acceleration.z;
+        }
+        if (e.accelerationIncludingGravity) {
+          gravity.x = e.accelerationIncludingGravity.x;
+          gravity.y = e.accelerationIncludingGravity.y;
+          gravity.z = e.accelerationIncludingGravity.z;
+        }
+        if (e.rotationRate) {
+          rotation.x = rotation.beta  = e.rotationRate.beta;
+          rotation.y = rotation.gamma = e.rotationRate.gamma;
+          rotation.z = rotation.alpha = e.rotationRate.alpha;
+        }
+      });
+      
+      window.addEventListener("deviceorientation", function(e) {
+        var orientation = self.orientation;
+        orientation.alpha   = e.alpha;  // z(0~360)
+        orientation.beta    = e.beta;   // x(-180~180)
+        orientation.gamma   = e.gamma;  // y(-90~90)
+      });
+    },
+
+  });
+
+});
+
 phina.namespace(function() {
 
 
@@ -7875,6 +8047,11 @@ phina.namespace(function() {
       this.velocity.x = x;
       this.velocity.y = y;
     },
+
+    addForce: function(x, y) {
+      this.velocity.x += x;
+      this.velocity.y += y;
+    },
   });
 
   phina.app.Element.prototype.getter('physical', function() {
@@ -8932,35 +9109,41 @@ phina.namespace(function() {
       this.shadowBlur = options.shadowBlur;
 
       this.canvas = phina.graphics.Canvas();
+      this.watchDraw = true;
       this._dirtyDraw = true;
-
-      this.on('enterframe', function() {
-        if (this._dirtyDraw === true) {
-          this._render();
-          this._dirtyDraw = false;
-        }
-      });
     },
 
-    _render: function() {
-      this._renderBackground();
-
-      return this;
+    calcCanvasWidth: function() {
+      return this.width + this.padding*2;
     },
 
-    _renderBackground: function(width, height, color) {
-      width = width || (this.width + this.padding*2);
-      height = height || (this.height + this.padding*2);
-      color = color || this.backgroundColor;
+    calcCanvasHeight: function() {
+      return this.height + this.padding*2;
+    },
 
-      this.canvas.width = width;
-      this.canvas.height= height;
-      this.canvas.clearColor(color);
+    isStrokable: function() {
+      return this.stroke && 0 < this.strokeWidth;
+    },
+
+    prerender: function() {
+      this.canvas.width = this.calcCanvasWidth();
+      this.canvas.height= this.calcCanvasHeight();
+    },
+
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
 
       return this;
     },
 
     draw: function(canvas) {
+      // render
+      if (this.watchDraw && this._dirtyDraw === true) {
+        this.prerender(this.canvas);
+        this.render(this.canvas);
+        this._dirtyDraw = false;
+      }
+
       var image = this.canvas.domElement;
       var w = image.width;
       var h = image.height;
@@ -8976,98 +9159,34 @@ phina.namespace(function() {
         );
     },
 
-    _accessor: {
-      width: {
-        get: function() {
-          return (this.boundingType === 'rect') ?
-            this._width : this._diameter;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._width = v;
-        },
+    _static: {
+      watchRenderProperty: function(key) {
+        this.prototype.$watch(key, function(newVal, oldVal) {
+          if (newVal !== oldVal) {
+            this._dirtyDraw = true;
+          }
+        });
       },
-      height: {
-        get: function() {
-          return (this.boundingType === 'rect') ?
-            this._height : this._diameter;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._height = v;
-        },
+      watchRenderProperties: function(keys) {
+        keys.each(function(key) {
+          this.watchRenderProperty(key);
+        }, this);
       },
-      radius: {
-        "get": function()   {
-          return (this.boundingType === 'rect') ?
-            (this.width+this.height)/4 : this._radius;
-        },
-        "set": function(v)  {
-          this._dirtyDraw = true;
-          this._radius = v;
-          this._diameter = v*2;
-        },
-      },
-      padding: {
-        get: function() {
-          return this._padding;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._padding = v;
-        },
-      },
-      backgroundColor: {
-        get: function() {
-          return this._backgroundColor;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._backgroundColor = v;
-        },
-      },
-      fill: {
-        get: function() {
-          return this._fill;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._fill = v;
-        },
-      },
-      stroke: {
-        get: function() {
-          return this._stroke;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._stroke = v;
-        },
-      },
-      strokeWidth: {
-        get: function() {
-          return this._strokeWidth;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._strokeWidth = v;
-        },
-      },
-      shadow: {
-        get: function() {
-          return this._shadow;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._shadow = v;
-        },
-      },
-      shadowBlur: {
-        get: function() {
-          return this._shadowBlur;
-        },
-        set: function(v) {
-          this._dirtyDraw = true;
-          this._shadowBlur = v;
-        },
-      },
+    },
+
+    _defined: function() {
+      this.watchRenderProperties([
+        'width',
+        'height',
+        'radius',
+        'padding',
+        'backgroundColor',
+        'fill',
+        'stroke',
+        'strokeWidth',
+        'shadow',
+        'shadowBlur',
+      ]);
     },
   });
 
@@ -9095,32 +9214,24 @@ phina.namespace(function() {
       this.cornerRadius = options.cornerRadius;
     },
 
-    _render: function() {
-      this._renderBackground();
-
-      this.canvas.transformCenter();
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
+      canvas.transformCenter();
 
       if (this.fill) {
-        this.canvas.context.fillStyle = this.fill;
-        this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+        canvas.context.fillStyle = this.fill;
+        canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
 
-      if (this.stroke) {
-        this.canvas.context.lineWidth = this.strokeWidth;
-        this.canvas.strokeStyle = this.stroke;
-        this.canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+      if (this.isStrokable()) {
+        canvas.context.lineWidth = this.strokeWidth;
+        canvas.strokeStyle = this.stroke;
+        canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
     },
 
-    _accessor: {
-      cornerRadius: {
-        get: function() {
-          return this._cornerRadius;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._cornerRadius = v;
-        },
-      }
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'cornerRadius');
     },
   });
 });
@@ -9146,21 +9257,19 @@ phina.namespace(function() {
       this.setBoundingType('circle');
     },
 
-    _render: function() {
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
-
-      this.canvas.transformCenter();
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
+      canvas.transformCenter();
 
       if (this.fill) {
-        this.canvas.context.fillStyle = this.fill;
-        this.canvas.fillCircle(0, 0, this.radius);
+        canvas.context.fillStyle = this.fill;
+        canvas.fillCircle(0, 0, this.radius);
       }
 
-      if (this.stroke) {
-        this.canvas.context.lineWidth = this.strokeWidth;
-        this.canvas.strokeStyle = this.stroke;
-        this.canvas.strokeCircle(0, 0, this.radius);
+      if (this.isStrokable()) {
+        canvas.context.lineWidth = this.strokeWidth;
+        canvas.strokeStyle = this.stroke;
+        canvas.strokeCircle(0, 0, this.radius);
       }
     },
   });
@@ -9187,12 +9296,8 @@ phina.namespace(function() {
       this.setBoundingType('circle');
     },
 
-    _render: function() {
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
-
-      var canvas = this.canvas;
-
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
 
       if (this.fill) {
@@ -9200,7 +9305,7 @@ phina.namespace(function() {
         canvas.fillPolygon(0, 0, this.radius, 3);
       }
 
-      if (this.stroke) {
+      if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
         canvas.strokeStyle = this.stroke;
         canvas.strokePolygon(0, 0, this.radius, 3);
@@ -9235,12 +9340,8 @@ phina.namespace(function() {
       this.sideIndent = options.sideIndent;
     },
 
-    _render: function() {
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
-
-      var canvas = this.canvas;
-
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
 
       if (this.fill) {
@@ -9248,22 +9349,16 @@ phina.namespace(function() {
         canvas.fillStar(0, 0, this.radius, this.sides, this.sideIndent);
       }
 
-      if (this.stroke) {
+      if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
         canvas.strokeStyle = this.stroke;
         canvas.strokeStar(0, 0, this.radius, this.sides, this.sideIndent);
       }
     },
 
-    _accessor: {
-      sides: {
-        get: function() { return this._sides; },
-        set: function(v) { this._dirtyDraw = true; this._sides = v; },
-      },
-      sideIndent: {
-        get: function() { return this._sideIndent; },
-        set: function(v) { this._dirtyDraw = true; this._sideIndent = v; },
-      },
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'sides');
+      phina.display.Shape.watchRenderProperty.call(this, 'sideIndent');
     },
   });
 
@@ -9292,12 +9387,8 @@ phina.namespace(function() {
       this.sides = options.sides;
     },
 
-    _render: function() {
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
-
-      var canvas = this.canvas;
-
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
 
       if (this.fill) {
@@ -9305,18 +9396,15 @@ phina.namespace(function() {
         canvas.fillPolygon(0, 0, this.radius, this.sides);
       }
 
-      if (this.stroke) {
+      if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
         canvas.strokeStyle = this.stroke;
         canvas.strokePolygon(0, 0, this.radius, this.sides);
       }
     },
 
-    _accessor: {
-      sides: {
-        get: function() { return this._sides; },
-        set: function(v) { this._dirtyDraw = true; this._sides = v; },
-      },
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'sides');
     },
   });
 
@@ -9346,12 +9434,8 @@ phina.namespace(function() {
       this.cornerAngle = options.cornerAngle;
     },
 
-    _render: function() {
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
-
-      var canvas = this.canvas;
-
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
 
       if (this.fill) {
@@ -9359,18 +9443,15 @@ phina.namespace(function() {
         canvas.fillHeart(0, 0, this.radius, this.cornerAngle);
       }
 
-      if (this.stroke) {
+      if (this.isStrokable()) {
         canvas.context.lineWidth = this.strokeWidth;
         canvas.strokeStyle = this.stroke;
         canvas.strokeHeart(0, 0, this.radius, this.cornerAngle);
       }
     },
 
-    _accessor: {
-      cornerAngle: {
-        get: function() { return this._cornerAngle; },
-        set: function(v) { this._dirtyDraw = true; this._cornerAngle = v; },
-      },
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'cornerAngle');
     },
   });
 
@@ -9507,9 +9588,10 @@ phina.namespace(function() {
       this.lineHeight = options.lineHeight;
     },
 
-    calcWidth: function() {
+    calcCanvasWidth: function() {
       var width = 0;
       var canvas = this.canvas;
+      canvas.context.font = this.font;
       this._lines.forEach(function(line) {
         var w = canvas.context.measureText(line).width;
         if (width < w) {
@@ -9517,34 +9599,30 @@ phina.namespace(function() {
         }
       }, this);
       if (this.align !== 'center') width*=2;
-      return width;
+
+      return width + this.padding*2;
     },
 
-    calcHeight: function() {
+    calcCanvasHeight: function() {
       var height = this.fontSize * this._lines.length;
       if (this.baseline !== 'middle') height*=2;
-      return height*this.lineHeight;
+      return height*this.lineHeight + this.padding*2;
     },
 
-    _render: function() {
-      var canvas = this.canvas;
+    render: function(canvas) {
       var context = canvas.context;
 
-      var fontSize = this.fontSize;
-      var font = "{fontWeight} {fontSize}px {fontFamily}".format(this);
       var text = this.text + '';
-      var lines = this._lines = text.split('\n');
-      canvas.context.font = font;
+      var lines = this._lines;
 
-      var w = this.calcWidth() + this.padding*2;
-      var h = this.calcHeight() + this.padding*2;
-      this._renderBackground(w, h);
-
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
-      context.font = font;
+
+      context.font = this.font;
       context.textAlign = this.align;
       context.textBaseline = this.baseline;
 
+      var fontSize = this.fontSize;
       var lineSize = fontSize*this.lineHeight;
       var offset = -Math.floor(lines.length/2)*lineSize;
       offset += ((lines.length+1)%2) * (lineSize/2);
@@ -9578,51 +9656,29 @@ phina.namespace(function() {
        */
       text: {
         get: function() { return this._text; },
-        set: function(v) { this._dirtyDraw = true; this._text = v; },
+        set: function(v) {
+          this._text = v;
+          this._lines = (this.text + '').split('\n');
+        },
       },
-      /**
-       * font size
-       */
-      fontSize: {
-        get: function() { return this._fontSize; },
-        set: function(v) { this._dirtyDraw = true; this._fontSize = v; },
-      },
-      /**
-       * font weight
-       */
-      fontWeight: {
-        get: function() { return this._fontWeight; },
-        set: function(v) { this._dirtyDraw = true; this._fontWeight = v; },
-      },
-      /**
-       * font family
-       */
-      fontFamily: {
-        get: function() { return this._fontFamily; },
-        set: function(v) { this._dirtyDraw = true; this._fontFamily = v; },
-      },
-      /**
-       * align
-       */
-      align: {
-        get: function() { return this._align; },
-        set: function(v) { this._dirtyDraw = true; this._align = v; },
-      },
-      /**
-       * baseline
-       */
-      baseline: {
-        get: function() { return this._baseline; },
-        set: function(v) { this._dirtyDraw = true; this._baseline = v; },
-      },
-      /**
-       * line height
-       */
-      lineHeight: {
-        get: function() { return this._lineHeight; },
-        set: function(v) { this._dirtyDraw = true; this._lineHeight = v; },
-      },
-    }
+
+      font: {
+        get: function() {
+          return "{fontWeight} {fontSize}px {fontFamily}".format(this);
+        },
+      }
+    },
+
+    _defined: function() {
+      var Shape = phina.display.Shape;
+      Shape.watchRenderProperty.call(this, 'text');
+      Shape.watchRenderProperty.call(this, 'fontSize');
+      Shape.watchRenderProperty.call(this, 'fontWeight');
+      Shape.watchRenderProperty.call(this, 'fontFamily');
+      Shape.watchRenderProperty.call(this, 'align');
+      Shape.watchRenderProperty.call(this, 'baseline');
+      Shape.watchRenderProperty.call(this, 'lineHeight');
+    },
   });
 
 });
@@ -9892,6 +9948,8 @@ phina.namespace(function() {
       this.touch = phina.input.Touch(this.domElement);
       this.touchList = phina.input.TouchList(this.domElement, 5);
       this.keyboard = phina.input.Keyboard(document);
+      // 加速度センサーを生成
+      this.accelerometer = phina.input.Accelerometer();
 
       // ポインタをセット(PC では Mouse, Mobile では Touch)
       this.pointer = this.touch;
@@ -10126,13 +10184,11 @@ phina.namespace(function() {
         this.flare('push');
       });
     },
-    _render: function() {
-      var canvas = this.canvas;
-      var context = canvas.context;
-
-      this._renderBackground();
-
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
       canvas.transformCenter();
+
+      var context = canvas.context;
 
       // stroke
       if (this.stroke) {
@@ -10156,29 +10212,14 @@ phina.namespace(function() {
       context.fillText(this.text, 0, 0);
     },
 
-    _accessor: {
-      cornerRadius: {
-        get: function() { return this._cornerRadius; },
-        set: function(v) { this._dirtyDraw = true; this._cornerRadius = v; },
-      },
-      text: {
-        get: function() { return this._text; },
-        set: function(v) { this._dirtyDraw = true; this._text = v; },
-      },
-      fontColor: {
-        get: function() { return this._fontColor; },
-        set: function(v) { this._dirtyDraw = true; this._fontColor = v; },
-      },
-      fontSize: {
-        get: function() { return this._fontSize; },
-        set: function(v) { this._dirtyDraw = true; this._fontSize = v; },
-      },
-      fontFamily: {
-        get: function() { return this._fontFamily; },
-        set: function(v) { this._dirtyDraw = true; this._fontFamily = v; },
-      },
-
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'cornerRadius');
+      phina.display.Shape.watchRenderProperty.call(this, 'text');
+      phina.display.Shape.watchRenderProperty.call(this, 'fontColor');
+      phina.display.Shape.watchRenderProperty.call(this, 'fontSize');
+      phina.display.Shape.watchRenderProperty.call(this, 'fontFamily');
     },
+
   });
 
 });
@@ -10204,7 +10245,7 @@ phina.namespace(function() {
         value: 100,
         maxValue: 100,
         gaugeColor: '#44f',
-        cornerRadius: 4,
+        cornerRadius: 0,
       });
 
       this.superInit(options);
@@ -10281,26 +10322,29 @@ phina.namespace(function() {
       return rate;
     },
 
-    _render: function() {
-      this._renderBackground();
-
-      this.canvas.transformCenter();
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
+      canvas.transformCenter();
 
       var rate = this.getRate();
 
       // draw color
       if (this.fill) {
         this.canvas.context.fillStyle = this.fill;
-        this.canvas.fillRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+        this.canvas.fillRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
       // draw gauge
       this.canvas.context.fillStyle = this.gaugeColor;
-      this.canvas.fillRect(-this.width/2, -this.height/2, this.width*rate, this.height, this.cornerRadius);
+      canvas.context.save();
+      canvas.context.clip();
+      this.canvas.fillRect(-this.width/2, -this.height/2, this.width*rate, this.height);
+      canvas.context.restore();
+
       // draw stroke
       if (this.stroke) {
         this.canvas.context.lineWidth = this.strokeWidth;
         this.canvas.strokeStyle = this.stroke;
-        this.canvas.strokeRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
+        this.canvas.strokeRoundRect(-this.width/2, -this.height/2, this.width, this.height, this.cornerRadius);
       }
     },
 
@@ -10310,35 +10354,17 @@ phina.namespace(function() {
           return this._value;
         },
         set: function(v) {
-          this._dirtyDraw = true;
           this.setValue(v);
         },
       },
-      maxValue: {
-        get: function() {
-          return this._maxValue;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._maxValue = v;
-        },
-      },
-      gaugeColor: {
-        get: function() {
-          return this._gaugeColor;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._gaugeColor = v;
-        },
-      },
-      cornerRadius: {
-        get: function() {
-          return this._cornerRadius;
-        },
-        set: function(v) {
-          this._dirtyDraw = true; this._cornerRadius = v;
-        },
-      },
-    }
+    },
+
+    _defined: function() {
+      phina.display.Shape.watchRenderProperty.call(this, 'value');
+      phina.display.Shape.watchRenderProperty.call(this, 'maxValue');
+      phina.display.Shape.watchRenderProperty.call(this, 'gaugeColor');
+      phina.display.Shape.watchRenderProperty.call(this, 'cornerRadius');
+    },
   });
 
 });
@@ -10366,18 +10392,17 @@ phina.namespace(function() {
 
       this.superInit(options);
 
+      this.setBoundingType('circle');
+
       this.radius = options.radius;
       this.anticlockwise = options.anticlockwise;
       this.showPercentage = options.showPercentage;
     },
 
-    _render: function() {
-      var canvas = this.canvas;
-
-      var size = this.radius*2 + this.padding*2;
-      this._renderBackground(size, size);
-
-      this.canvas.transformCenter();
+    render: function(canvas) {
+      canvas.clearColor(this.backgroundColor);
+      canvas.transformCenter();
+      
       this.canvas.rotate(-Math.PI*0.5);
       this.canvas.scale(1, -1);
 
@@ -10800,6 +10825,7 @@ phina.namespace(function() {
         var url = phina.social.Twitter.createURL({
           text: message,
           hashtags: params.hashtags,
+          url: params.url,
         });
         window.open(url, 'share window', 'width=480, height=320');
       };
@@ -11000,8 +11026,8 @@ phina.namespace(function() {
         height: 960,
 
         fontColor: 'white',
-        fontSize: 192,
-        backgroundColor: null,
+        fontSize: 164,
+        backgroundColor: 'rgba(50, 50, 50, 1)',
 
         exitType: 'auto',
       },
@@ -11126,7 +11152,7 @@ phina.namespace(function() {
       this.starting = false;
     },
 
-    _render: function() {
+    render: function() {
       this.canvas.width = this.radius*2 + this.padding*2;
       this.canvas.height= this.radius*2 + this.padding*2;
       this.canvas.clearColor(this.backgroundColor);
@@ -11159,7 +11185,7 @@ phina.namespace(function() {
         },
         set: function(time) {
           this._time = time;
-          this._render();
+          this._dirtyDraw = true;
         },
       }
     }

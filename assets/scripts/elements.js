@@ -318,17 +318,13 @@ phina.define('CircleFilterEffect', {
       .call(function() {
         this.target.remove();
       })
-    this._render();
   },
 
-  _render: function() {
-    var c = this.canvas;
-
-    this._renderBackground();
-
-    c.transformCenter();
-    c.context.globalCompositeOperation = 'destination-out';
-    c.fillCircle(0, 0, this.circleRadius);
+  render: function(canvas) {
+    canvas.clearColor(this.backgroundColor);
+    canvas.transformCenter();
+    canvas.context.globalCompositeOperation = 'destination-out';
+    canvas.fillCircle(0, 0, this.circleRadius);
   },
 
   _accessor: {

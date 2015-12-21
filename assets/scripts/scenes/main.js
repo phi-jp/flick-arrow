@@ -69,6 +69,7 @@ phina.define('MainScene', {
     var scene = CountScene({
       count: ['Ready'],
       fontSize: 100,
+      backgroundColor: 'hsl(180, 60%, 50%)',
     });
     scene.onexit = function() {
       SoundManager.playMusic('bgm_game');
