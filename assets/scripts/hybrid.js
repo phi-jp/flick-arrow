@@ -1,6 +1,16 @@
 
 
 var hybrid = {
+  init: function(callback) {
+    if (!window.cordova) return ;
+
+    if (navigator.appInfo) {
+      navigator.appInfo.getAppInfo(function(appInfo) {
+        hybrid.appInfo = appInfo;
+        callback && callback();
+      });
+    }
+  },
   admob: {
     init: function(options) {
       if (!window.AdMob) return ;
