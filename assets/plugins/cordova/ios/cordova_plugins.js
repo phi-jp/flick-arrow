@@ -57,11 +57,11 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-app-version/www/AppVersionPlugin.js",
-        "id": "cordova-plugin-app-version.AppVersionPlugin",
-        "pluginId": "cordova-plugin-app-version",
-        "clobbers": [
-            "cordova.getAppVersion"
+        "file": "plugins/cordova-plugin-appinfo/www/appinfo.js",
+        "id": "cordova-plugin-appinfo.AppInfo",
+        "pluginId": "cordova-plugin-appinfo",
+        "merges": [
+            "navigator.appInfo"
         ]
     }
 ];
@@ -78,7 +78,7 @@ module.exports.metadata =
     "cordova-plugin-crosswalk-webview": "1.4.0",
     "cordova-plugin-extension": "1.2.3",
     "cordova-plugin-admobpro": "2.10.0",
-    "cordova-plugin-app-version": "0.1.8"
+    "cordova-plugin-appinfo": "2.0.2"
 }
 // BOTTOM OF METADATA
 });
