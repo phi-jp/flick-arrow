@@ -130,7 +130,6 @@ hybrid.showBanner = function() {
     hybrid.admob.showBanner();
   }
   else {
-    alert('nend');
     hybrid.nend.showBanner();
   }
 };
@@ -143,7 +142,6 @@ hybrid.showInterstitial = function() {
     hybrid.admob.showInterstitial();
   }
   else {
-    alert('nend');
     hybrid.nend.showInterstitial();
   }
 };
