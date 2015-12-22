@@ -154,8 +154,8 @@ hybrid.on('deviceready', function() {
       interstitial: 'ca-app-pub-1611962793956940/4455555319'
     },
     android: {
-      banner: 'ca-app-pub-1611962793956940/2978822116',
-      interstitial: 'ca-app-pub-1611962793956940/4455555319'
+      banner: 'ca-app-pub-1611962793956940/9694900518',
+      interstitial: 'ca-app-pub-1611962793956940/3648366914'
     },
   })
   // setup nend
