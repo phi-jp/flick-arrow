@@ -121,3 +121,49 @@ var init = function() {
     SoundManager.resumeMusic();
   });
 };
+
+
+hybrid.showBanner = function() {
+  if (!cordova) return ;
+
+  if (device.platform === 'Android') {
+    hybrid.admob.showBanner();
+  }
+  else {
+    hybrid.nend.showBanner();
+  }
+};
+
+
+hybrid.showInterstitial = function() {
+  if (!cordova) return ;
+
+  if (device.platform === 'Android') {
+    hybrid.admob.showInterstitial();
+  }
+  else {
+    hybrid.nend.showInterstitial();
+  }
+};
+
+hybrid.on('deviceready', function() {
+  // setup admob
+  hybrid.admob.init({
+    ios: {
+      banner: 'ca-app-pub-1611962793956940/2978822116',
+      interstitial: 'ca-app-pub-1611962793956940/4455555319'
+    },
+    android: {
+      banner: 'ca-app-pub-1611962793956940/2978822116',
+      interstitial: 'ca-app-pub-1611962793956940/4455555319'
+    },
+  })
+  // setup nend
+  hybrid.nend.createBanner(NEND_BANNER_API_KEY, NEND_BANNER_SPOT_ID);
+  hybrid.nend.createInterstitial(NEND_INTERSTITIAL_API_KEY, NEND_INTERSTITIAL_SPOT_ID);
+
+  // show banner
+  hybrid.showBanner();
+});
+
+

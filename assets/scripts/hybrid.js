@@ -2,9 +2,39 @@
 
 var hybrid = {
   admob: {
-    prepareInterstitial: function() {
+    init: function(options) {
       if (!window.AdMob) return ;
-      AdMob.prepareInterstitial( {adId:admobid.interstitial, autoShow:true} );
+
+      var admobid = {};
+      // for android
+      if( /(android)/i.test(navigator.userAgent) ) {
+        admobid = options.android;
+      }
+      else {
+        admobid = options.ios;
+      }
+
+      AdMob.createBanner({
+        adId:admobid.banner,
+        position:AdMob.AD_POSITION.BOTTOM_CENTER,
+        autoShow: false,
+      });
+
+      this.admobid = admobid;
+      // 
+      AdMob.prepareInterstitial( {adId:admobid.interstitial, autoShow:false} );
+    },
+    showBanner: function() {
+      if (!window.AdMob) return ;
+      AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
+    },
+    showInterstitial: function() {
+      if (!window.AdMob) return ;
+
+      AdMob.showInterstitial(function() {
+        AdMob.prepareInterstitial( {adId:this.admobid.interstitial, autoShow:false} );
+        console.log('success');
+      }.bind(this));
     },
   },
   gamecenter: {
@@ -158,13 +188,7 @@ document.addEventListener('resume', function() {
   hybrid.fire('resume');
 });
 
-
 hybrid.on('deviceready', function() {
-  // setup nend
-  hybrid.nend.createBanner(NEND_BANNER_API_KEY, NEND_BANNER_SPOT_ID);
-  hybrid.nend.showBanner();
-  hybrid.nend.createInterstitial(NEND_INTERSTITIAL_API_KEY, NEND_INTERSTITIAL_SPOT_ID);
-
   // login game center
   hybrid.gamecenter.auth();
 
@@ -174,5 +198,6 @@ hybrid.on('deviceready', function() {
   // launchReview
   hybrid.launchReview.init({
     ios: '978643804',
+    android: 'jp.phi.FlickArrow_',
   });
 });
