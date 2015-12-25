@@ -19,6 +19,14 @@ gulp.task('download', function() {
     .pipe(gulp.dest('assets/plugins/phina.js/'));
 });
 
+gulp.task('copy', function() {
+  var ios = '../wrapp/platforms/ios/platform_www/**';
+  var android = '../wrapp/platforms/android/platform_www/**';
+
+  gulp.src(ios).pipe(gulp.dest('assets/plugins/cordova/ios'));
+  gulp.src(android).pipe(gulp.dest('assets/plugins/cordova/android'));
+});
+
 gulp.task('server', function() {
   express.run(['src/index.js']);
 });

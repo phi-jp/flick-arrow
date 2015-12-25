@@ -11,6 +11,24 @@ var hybrid = {
       });
     }
   },
+  unityads: {
+    setup: function(options) {
+      if (!window.unityads) return ;
+
+      var id = options.gameIds[device.platform.toLowerCase()];
+      window.unityads.setUp(id, options.videoAdPlacementId, options.rewardedVideoAdPlacementId, options.isTest);
+    },
+    showVideoAd: function() {
+      if (!window.unityads) return ;
+
+      window.unityads.showVideoAd();
+    },
+    showRewardedVideoAd: function() {
+      if (!window.unityads) return ;
+      
+      window.unityads.showRewardedVideoAd();
+    },
+  },
   admob: {
     init: function(options) {
       if (!window.AdMob) return ;
