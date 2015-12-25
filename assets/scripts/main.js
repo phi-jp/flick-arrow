@@ -147,6 +147,11 @@ hybrid.showInterstitial = function() {
 };
 
 hybrid.on('deviceready', function() {
+  // TODO: unityads がなければインストールページの飛ばす
+  // if (!window.unityads) {
+  //   return ;
+  // }
+  
   // 古い iOS の場合
   if (device.platform === 'iOS') {
     // setup nend
