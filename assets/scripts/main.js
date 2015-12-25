@@ -147,25 +147,33 @@ hybrid.showInterstitial = function() {
 };
 
 hybrid.on('deviceready', function() {
-  hybrid.init(function() {
-    // setup admob
-    hybrid.admob.init({
-      ios: {
-        banner: 'ca-app-pub-1611962793956940/2978822116',
-        interstitial: 'ca-app-pub-1611962793956940/4455555319'
-      },
-      android: {
-        banner: 'ca-app-pub-1611962793956940/9694900518',
-        interstitial: 'ca-app-pub-1611962793956940/3648366914'
-      },
-    })
+  // 古い iOS の場合
+  if (device.platform === 'iOS') {
     // setup nend
     hybrid.nend.createBanner(NEND_BANNER_API_KEY, NEND_BANNER_SPOT_ID);
     hybrid.nend.createInterstitial(NEND_INTERSTITIAL_API_KEY, NEND_INTERSTITIAL_SPOT_ID);
 
-    // show banner
-    hybrid.showBanner();
-  });
+    hybrid.nend.showBanner();
+  }
+  else {
+    hybrid.init(function() {
+      // setup admob
+      hybrid.admob.init({
+        ios: {
+          banner: 'ca-app-pub-1611962793956940/2978822116',
+          interstitial: 'ca-app-pub-1611962793956940/4455555319'
+        },
+        android: {
+          banner: 'ca-app-pub-1611962793956940/9694900518',
+          interstitial: 'ca-app-pub-1611962793956940/3648366914'
+        },
+      })
+      // show banner
+      setTimeout(function() {
+        hybrid.showBanner();
+      }, 100);
+    });
+  }
 });
 
 
