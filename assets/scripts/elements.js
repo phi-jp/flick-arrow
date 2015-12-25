@@ -127,11 +127,10 @@ phina.define('ShareButton', {
 
     this.superInit(options);
 
+    this.label.text = FONT_CODE.comment;
+
     this.onclick = function() {
-      hybrid.socialmessage.send({
-        text: TITLE_TWEET,
-        url: WEB_SITE,
-      });
+      hybrid.socialmessage.send(options);
     };
   }
 });

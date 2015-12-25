@@ -135,13 +135,14 @@ var hybrid = {
   },
   socialmessage: {
     send: function(message) {
-      if (!window.socialmessage) return ;
-
-      // message.activityTypes = ["PostToTwitter", "PostToFacebook", "Mail", "Message", "AirDrop", "CopyToPasteboard"];
-      // message.activityTypes = ["PostToTwitter", "PostToFacebook", "Message", "Mail"];
-
-      socialmessage.send(message);
-      return this;
+      if (!window.socialmessage) {
+        var url = Twitter.createURL(message);
+        window.open(url);
+      }
+      else {
+        socialmessage.send(message);
+        return this;
+      }
     },
   },
 

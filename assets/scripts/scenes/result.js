@@ -67,6 +67,9 @@ phina.define("ResultScene", {
           className: 'ShareButton',
           arguments: {
             radius: this.gridX.span(1),
+            text: 'Score: {0} '.format(options.score) + TITLE_TWEET,
+            url: WEB_SITE,
+            hashtags: HASH_TAGS,
           },
           x: this.gridX.span(4),
           y: this.gridY.span(11),

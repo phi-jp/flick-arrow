@@ -32,6 +32,9 @@ phina.define('TitleScene', {
           className: 'ShareButton',
           arguments: {
             radius: this.gridX.span(1),
+            text: TITLE_TWEET,
+            url: WEB_SITE,
+            hashtags: HASH_TAGS,
           },
           x: this.gridX.span(4),
           y: this.gridY.span(11),
