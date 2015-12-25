@@ -138,8 +138,21 @@ var hybrid = {
       if (!window.socialmessage) {
         var url = Twitter.createURL(message);
         window.open(url);
+
+        if (message.hashtags) {
+          var hashstr = message.hashtags.split(',').map(function(t) {
+            return '#' + t;
+          }).join(' ');
+          message.text += ' ' + hashstr;
+        }
       }
       else {
+        if (message.hashtags) {
+          var hashstr = message.hashtags.split(',').map(function(t) {
+            return '#' + t;
+          }).join(' ');
+          message.text += ' ' + hashstr;
+        }
         socialmessage.send(message);
         return this;
       }
